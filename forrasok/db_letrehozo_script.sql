@@ -29,6 +29,7 @@ create table [People]
 (
 	ID int identity primary key,
 	Name nvarchar(30),
+	Nickname nvarchar(30),
 	Username nvarchar(20),
 	Email nvarchar(20),
 	Password nvarchar(30),
@@ -54,6 +55,7 @@ create table [Jobs]
 create table [States]
 (
 	ID int identity primary key,
+	Title nvarchar(20),
 	Description nvarchar(100)
 )
 
@@ -74,7 +76,7 @@ create table [Dashboard]
 	ID int identity primary key,
 	Title nvarchar(20),
 	Message text,
-	CreationTime datetime2,
+	CreationTime datetime2 default GETDATE(),
 	JobID int references Jobs(ID),
 	PeopleID int references People(ID),
 	WageID int references Wages(ID)
