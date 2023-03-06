@@ -131,20 +131,45 @@ insert into Shifts values
 --	inner join People p on d.PeopleID = p.ID
 --	inner join Wages w on d.WageID = w.ID
 
---					|Dashboard uzenetek|
-select
-	j.Title as 'Munka megnevezése',
-	s.StartTime as 'Szolgálat kezdete',
-	s.EndTime as 'Szolgálat vége',
-	s.EarnedMoney as 'Megszerzett fizetés',
-	p.Name as 'Munkát teljesítő',
-	w.Name as 'Órabér neve',
-	w.Wage as 'Órabér (Ft/óra)',
-	st.Title as 'Szolgálat állapota',
-	st.Description as 'Állapot magyarázata'
-from Shifts s
-	inner join People p on s.PeopleID = p.ID
-	inner join Jobs j on s.JobID = j.ID
-	inner join Wages w on s.WageID = w.ID
-	inner join States  st on s.StatusID = st.ID
-where s.EndTime is not null
+--					|Dashboard uzenetek CSAK ADOTT FELHASZNALONAK|
+--go
+--DECLARE @JOBID int
+--select @JOBID = ID from Jobs where Title like '%FOO%'
+
+--DECLARE @WAGEID int
+--select @WAGEID = pj.WageID
+
+--from PeopleJobs pj
+--	inner join People p on pj.PeopleID = p.ID
+--where
+--	p.Name like '%János%'		-- János, Axel
+--	and pj.JobID = @JOBID
+
+--select
+--	d.Title,
+--	d.Message,
+--	p.Name as 'Feladó',
+--	w.Name as 'Címzettek'
+--from Dashboard d
+--	inner join People p on d.PeopleID = p.ID
+--	inner join Wages w on d.WageID = w.ID
+--where
+--	d.WageID in (@WAGEID, 1)		-- 1 az a MINDENKI csatorna
+
+--					|Szolgalatok listazasa|
+--select
+--	j.Title as 'Munka megnevezése',
+--	s.StartTime as 'Szolgálat kezdete',
+--	s.EndTime as 'Szolgálat vége',
+--	s.EarnedMoney as 'Megszerzett fizetés',
+--	p.Name as 'Munkát teljesítő',
+--	w.Name as 'Órabér neve',
+--	w.Wage as 'Órabér (Ft/óra)',
+--	st.Title as 'Szolgálat állapota',
+--	st.Description as 'Állapot magyarázata'
+--from Shifts s
+--	inner join People p on s.PeopleID = p.ID
+--	inner join Jobs j on s.JobID = j.ID
+--	inner join Wages w on s.WageID = w.ID
+--	inner join States  st on s.StatusID = st.ID
+--where s.EndTime is not null

@@ -1,0 +1,51 @@
+Megkötések:
+	(Egyszerre csak 1 munkának lehetsz része!)
+-----------------------------------------------
+Hogyan menne a szolgálat elkezdése, befejezése?
+A:
+	Adminnak megjelennek a "kérések" h légyszi hagyd jóvá a szolgálatomat.
+	Ekkor képes módosítani az adatokat mint pl: kezdő/vég időpontot kerekít, bérkategóriát módosít
+
+Hogyan jelentkeznének a Munkára?
+A:
+	???
+	Pinnel ami az adott munka birtokol. Ezután az emberke hozzá lesz társítva a munkához így az azzal kapcsolatos dolgokat láthatja.
+-----------------------------------------------
+User:
+- Regisztráció
+	Név, felhasználónév, email, születési dátum, jelszó, profilkép ...
+- Login
+- Profil mutatása, szerkesztése
+	regisztrációs adatok, profilkép, beosztás/munkabér
+	((QR kód => szolgálat megkapása, munkára jelentkezés))
+- Munka
+	Munkába jelentkezés / Munka neve, leírása
+	Statisztika
+		eddig dolgozott órák száma
+		eddig megkeresett pénz összege	
+		szolgálatok lebontva
+- Dashboard
+	Napi illetve csoportos hírek megjelenítése
+- Aktuális szolgálat
+	~ Mint amikor valami edzős programon elkezded az edzést és az aktuális értékeket írja
+	pozíció loggolásának elkezdése (GPS)
+	Aktuális szolgálat befejezése
+-----------------------------------------------
+Admin (user is egyben):
+- Munka létrehozása pl: FOO 2023
+	Bérkategóriák létrehozása a csoportoknak (kutyás, kerítés, sima, stb...)
+? Munkára meghívás
+	PIN megadása embereknek
+- Hír közlése Dashboard-ra
+	csoportok választása (kutyás, kerítés, sima, stb...)
+- Szolgálatok elfogadása
+- Jogosultságok kezelése
+	Alapesetben: Tulaj/Admin/Sima
+		+ Tulaj:
+			Admin, de nem lehet elvenni tőle admini jogot
+			Csak ő adhat és vehet el jogot
+		+ Admin:
+			Munkaszolgálatot fogadhat el
+			Dashboard-ra üzenetet küldhet
+		+ Sima:
+			Sima user

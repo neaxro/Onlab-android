@@ -29,8 +29,8 @@ create table [People]
 (
 	ID int identity primary key,
 	Name nvarchar(30),
+	Username nvarchar(20) unique,
 	Nickname nvarchar(30),
-	Username nvarchar(20),
 	Email nvarchar(20),
 	Password nvarchar(30),
 	ProfilePicture text	-- Ez meg elegge kerdeses...
@@ -39,7 +39,7 @@ create table [People]
 create table [Wages]
 (
 	ID int identity primary key,
-	Name nvarchar(30),
+	Name nvarchar(30) unique,
 	Wage real
 )
 
@@ -47,7 +47,7 @@ create table [Jobs]
 (
 	ID int identity primary key,
 	Pin varchar(6),
-	Title nvarchar(20),
+	Title nvarchar(20) unique,
 	Description nvarchar(100),
 	PeopleID int references People(ID) --creator
 )
@@ -55,7 +55,7 @@ create table [Jobs]
 create table [States]
 (
 	ID int identity primary key,
-	Title nvarchar(20),
+	Title nvarchar(20) unique,
 	Description nvarchar(100)
 )
 
@@ -85,12 +85,12 @@ create table [Dashboard]
 create table [Roles]
 (
 	ID int identity primary key,
-	Title nvarchar(20),
+	Title nvarchar(20) unique,
 	CanMakeMessage bit,
 	CanManageShifts bit,
+	CanChangeWage bit,
 	CanAddRole bit,
-	CanLoseRole bit,
-	CanChangeWage bit
+	CanLoseRole bit		-- Arra kell, hogy admin ne vehesse el a Tulajdonos jogat de visszafele mehessen
 )
 
 create table [Positions]

@@ -1,0 +1,94 @@
+Table people {
+  id int
+  name varchar
+  username varchar
+  email varchar
+  password varchar
+  profile_picture varchar
+}
+
+Table shifts {
+  id int
+  people_id int
+  job_id int
+  wage_id int
+  status_id int
+  start date
+  end date
+  earned_money int
+}
+
+Table wages {
+  id int
+  name varchar
+  wage double
+}
+
+Table jobs {
+  id int
+  pin varchar
+  title varchar
+  description varchar
+  creator int
+}
+
+Table dashboard {
+  job_id int
+  creator_id int
+  title varchar
+  message varchar
+  time_of_creation date
+  group_id int
+}
+
+Table roles {
+  id int
+  title varchar
+  can_make_message bool
+  can_accept_shifts bool
+  can_add_role bool
+  can_lose_role bool
+  can_change_wage bool
+}
+
+Table people_jobs {
+  id int
+  job_id int
+  people_id int
+  role_id int
+  wage_id int
+}
+
+Table states {
+  id int
+  description varchar
+}
+
+Table positions {
+  id int
+  position_time date
+  longitude double
+  langitude double
+  people_id int
+}
+
+// Tablak kozotti kapcsolatok
+// SHIFTS
+Ref: shifts.people_id > people.id
+Ref: shifts.job_id > jobs.id
+Ref: shifts.wage_id > wages.id
+ref: shifts.status_id > states.id
+
+// JOBS
+Ref: jobs.creator > people.id
+
+// DASHBOARD
+Ref: dashboard.job_id > jobs.id
+Ref: dashboard.creator_id > people.id
+Ref: dashboard.group_id > wages.id
+
+// PEOPLE_JOBS
+Ref: people_jobs.job_id > jobs.id
+Ref: people_jobs.people_id > people.id
+Ref: people_jobs.role_id > roles.id
+Ref: people_jobs.wage_id > wages.id
