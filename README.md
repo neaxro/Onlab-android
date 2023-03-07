@@ -2,6 +2,14 @@
 
 ## Projekt rövid leírása :clipboard:
 
+Nagyobb rendezvényeken, fesztiválokon nehézkes lehet a nagyobb szervezetek (pl. biztonsági őrök) órabér alapú fizetésének karbantartása. Ez az alkalmazás erre a problémára ad megoldást. **Az applikációnak alapvetően egy fesztiválon dolgozó biztonságiőrök szolgálatainak és fizetésének a karbantartása a feladata**.
+
+Az alkalmazásban lehet létrehozni tetszőleges számú projektet, munkát ahova meghívhatunk felhasználókat akik a feladaton (pl. feszitválon) fognak dolgozni. Több bérkategóriát lehet létrehozni és hozzárendelni az emberekhez adott munkán belül. Szolgálatot a felhasználók kezdhetnek el és végezhetnek be amit az alkalmazás rögzít. Ezeket a szolgálatokat a megfelelő joggal rendelkező szervezők képesek felülbírálni így elfogadhatják vagy elutasíthatják a befejezett szolgálatokat. Az alkalmazásban több jogosultság is fog lenni. Az elfogadott szolgálatokat a rendszer számon tartja és tudaja a felhasználókkal az eddig elért teljesítményeket.
+
+Mivel mindenhol a kommunikáció kulcsfontosságú hasonló méretű projekteknél ezért az alkalmazás tartalmaz egy üzenőfal rendszert. Ebben lehet létrehozni üzeneteket amiket lehet kategorizálni így csak a megfelelő emberek fogják csak látni az üzeneteket.
+
+Másik hasznos funkciója az alkalmazásnak az a lokáció megosztás. Amennyiben a felhasználó szolgálat közben szeretné lehetősége van a helyzetét megosztani így azt vissza lehet követni akár valós időben is. Így mégtisztább képet alkothatunk arról hogy ki hol járőrözik.
+
 ## Adatbázis :floppy_disk:
 
 | Tábla          | Oszlop          | Leírás                                                       |
