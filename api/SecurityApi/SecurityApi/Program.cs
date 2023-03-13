@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 ﻿
+=======
+>>>>>>> parent of d019ee9 (Hierarchia módosítás)
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
