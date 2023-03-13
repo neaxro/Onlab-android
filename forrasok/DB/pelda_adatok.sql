@@ -32,9 +32,9 @@ insert into States values
 
 -- Role-ok letrehozasa
 insert into Roles values
-	('Tulajdonos', 1, 1, 1, 0, 1),
-	('Admin', 1, 1, 1, 1, 1),
-	('Felhasználó', 0, 0, 0, 1, 0)
+	('Tulajdonos'),
+	('Admin'),
+	('Felhasználó')
 
 -- Pelda egy munkara
 insert into dbo.Jobs values

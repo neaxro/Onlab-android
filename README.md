@@ -46,11 +46,6 @@ Másik hasznos funkciója az alkalmazásnak az a lokáció megosztás. Amennyibe
 |                | WageID          | Azon bérkategória azonosítója akinek az üzenet szól                         |
 | **Roles**      | ID              | Automatikusan generált azonosító, elsődleges kulcs.                         |
 |                | Title           | Jogosultság címe (pl.: Admin, User, Owner)                                  |
-|                | CanMakeMessage  | Üzenet létrehozásának joga                                                  |
-|                | CanManageShifts | Szolgálatok kezelésének joga (pl.: Elfogadás, Elutasítás)                   |
-|                | CanChangeWages  | Bérkategória megváltoztathatóságának joga                                   |
-|                | CanAddRole      | Jogosultság adsának joga                                                    |
-|                | CanLoseRole     | Jogosultság elvesztésének joga                                              |
 | **PeopleJobs** | ID              | Automatikusan generált azonosító, elsődleges kulcs.                         |
 |                | JobID           | Munka azonosítója                                                           |
 |                | PeopleID        | Felhasználó azonosítója                                                     |
@@ -61,8 +56,8 @@ Másik hasznos funkciója az alkalmazásnak az a lokáció megosztás. Amennyibe
 |                | Description     | Állapot leírása, magyarázata                                                |
 | **Positions**  | ID              | Automatikusan generált azonosító, elsődleges kulcs.                         |
 |                | Time            | Létrehozás időpontja                                                        |
-|                | Longitude       |                                                                             |
-|                | Latitude        |                                                                             |
+|                | Longitude       | Földrajzi hosszúság                                                         |
+|                | Latitude        | Földrajzi szélesség                                                         |
 |                | PeopleID        | Felhasználó azonosítója akihez a pozíció tartozik                           |
 
 ## Feladatok :bookmark_tabs:

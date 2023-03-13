@@ -85,12 +85,7 @@ create table [Dashboard]
 create table [Roles]
 (
 	ID int identity primary key,
-	Title nvarchar(20) unique,
-	CanMakeMessage bit,
-	CanManageShifts bit,
-	CanChangeWage bit,
-	CanAddRole bit,
-	CanLoseRole bit		-- Arra kell, hogy admin ne vehesse el a Tulajdonos jogat de visszafele mehessen
+	Title nvarchar(20) unique
 )
 
 create table [Positions]
