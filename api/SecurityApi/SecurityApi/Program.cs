@@ -16,9 +16,14 @@ builder.Services.AddDbContext<OnlabContext>(options =>
 );
 
 builder.Services.AddScoped<IPeopleService, PeopleService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
+);
+
+builder.Services.AddSwaggerGen(options =>
+    options.CustomOperationIds(type => type.ToString())
 );
 
 var app = builder.Build();

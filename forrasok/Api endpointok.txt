@@ -1,4 +1,4 @@
-Felhasználó létrehozása [register]
+[DONE] Felhasználó létrehozása [register]
 
 Felhasználó belépetetése (usernam, pass) [login]
 
@@ -16,9 +16,9 @@ GPS lokáció mentése [Shift]
 ADOTT EMBER Szolgálatainak listázása [Stat]
 Adott ember szummázott szolgálat (Total Ft, Ora) [Stat]
 
-Ember adatainak listázása [Profile]
-Ember adatainak módosítása [Profile]
-Profilkép feltöltése [Profile]
+[DONE] Ember adatainak listázása [Profile]
+[DONE] Ember adatainak módosítása [Profile]
+[DONE] Profilkép feltöltése [Profile]
 
 Munkán dolgozó emberek listázása [People/ADmin]
 Munkán dolgozó emberek Jogainak változtatása [People/ADmin]
