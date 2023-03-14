@@ -1,7 +1,12 @@
-﻿namespace SecurityApi.Services
+﻿using SecurityApi.Dtos;
+using SecurityApi.Model;
+
+namespace SecurityApi.Services
 {
     public interface IPeopleService
     {
-        string probaUzenet();
+        Person Insert(CreatePerson newPerson);
+
+        Person FindById(int id);
     }
 }
