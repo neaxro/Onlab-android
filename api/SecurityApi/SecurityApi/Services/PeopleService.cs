@@ -3,6 +3,7 @@ using SecurityApi.Context;
 using SecurityApi.Dtos;
 using SecurityApi.Model;
 using System.Data;
+using Person = SecurityApi.Dtos.Person;
 
 namespace SecurityApi.Services
 {
@@ -15,36 +16,56 @@ namespace SecurityApi.Services
             _context = context;
         }
 
-        public Person FindById(int id)
+        public async Task<Person> FindById(int id)
         {
-            var talalat = _context.People.FirstOrDefault(p => p.Id == id);
-            return talalat == null ? null : talalat;
+            var result = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+            return result == null ? null : ToModel(result);
         }
 
-        public Person Insert(CreatePerson newPerson)
+        public IEnumerable<Person> GetAll()
         {
-            using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
+            return _context.People.Select(ToModel).ToList();
+            
+        }
 
-            if(_context.People.Any(p => EF.Functions.Like(p.Username, newPerson.Username)))
+        public async Task<Person> Insert(CreatePerson newPerson)
+        {
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+            var result = await _context.People.AnyAsync(p => EF.Functions.Like(p.Username, newPerson.Username));
+            
+            if (result)
             {
-                throw new Exception("Felhasználó már létezik!");
+                throw new Exception("User already exists!");
             }
 
-            var person = new Person()
+            var person = new DbPerson()
             {
                 Name = newPerson.FullName,
                 Username = newPerson.Username,
                 Nickname = newPerson.Nickname,
-                Email = newPerson.Email,
-                Password = newPerson.Password
+                Email = newPerson.Email
             };
 
-            _context.People.Add(person);
-            _context.SaveChanges();
+            await _context.People.AddAsync(person);
+            await _context.SaveChangesAsync();
 
-            tran.Commit();
+            await tran.CommitAsync();
 
-            return person;
+            return ToModel(person);
+        }
+
+        private Person ToModel(DbPerson person)
+        {
+            Person p = new Person(
+                person.Id,
+                person.Name,
+                person.Username,
+                person.Nickname,
+                person.Email,
+                person.ProfilePicture
+                );
+
+            return p;
         }
     }
 }

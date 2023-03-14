@@ -17,7 +17,7 @@ public partial class Job
 
     public virtual ICollection<Dashboard> Dashboards { get; } = new List<Dashboard>();
 
-    public virtual Person? People { get; set; }
+    public virtual DbPerson? People { get; set; }
 
     public virtual ICollection<PeopleJob> PeopleJobs { get; } = new List<PeopleJob>();
 

@@ -22,7 +22,7 @@ public partial class OnlabContext : DbContext
 
     public virtual DbSet<PeopleJob> PeopleJobs { get; set; }
 
-    public virtual DbSet<Person> People { get; set; }
+    public virtual DbSet<DbPerson> People { get; set; }
 
     public virtual DbSet<Position> Positions { get; set; }
 
@@ -115,7 +115,7 @@ public partial class OnlabContext : DbContext
                 .HasConstraintName("FK__PeopleJob__WageI__29221CFB");
         });
 
-        modelBuilder.Entity<Person>(entity =>
+        modelBuilder.Entity<DbPerson>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__People__3214EC272E84FF20");
 

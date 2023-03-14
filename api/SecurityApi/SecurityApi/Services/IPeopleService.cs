@@ -5,8 +5,8 @@ namespace SecurityApi.Services
 {
     public interface IPeopleService
     {
-        Person Insert(CreatePerson newPerson);
-
-        Person FindById(int id);
+        IEnumerable<Person> GetAll();
+        Task<Person> Insert(CreatePerson newPerson);
+        Task<Person> FindById(int id);
     }
 }

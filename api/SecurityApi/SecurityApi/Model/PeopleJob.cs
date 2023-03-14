@@ -17,7 +17,7 @@ public partial class PeopleJob
 
     public virtual Job? Job { get; set; }
 
-    public virtual Person? People { get; set; }
+    public virtual DbPerson? People { get; set; }
 
     public virtual Role? Role { get; set; }
 

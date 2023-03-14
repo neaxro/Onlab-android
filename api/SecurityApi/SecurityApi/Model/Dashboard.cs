@@ -21,7 +21,7 @@ public partial class Dashboard
 
     public virtual Job? Job { get; set; }
 
-    public virtual Person? People { get; set; }
+    public virtual DbPerson? People { get; set; }
 
     public virtual Wage? Wage { get; set; }
 }
