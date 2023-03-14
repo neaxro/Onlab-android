@@ -24,7 +24,10 @@ namespace SecurityApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Person>>> ListAll()
         {
-            var emberek = await _context.People.ToListAsync();
+            var emberek = await _context.People
+                .Include(p => p.Dashboards)
+                .Include(p => p.Shifts)
+                .ToListAsync();
 
             return Ok(emberek);
         }
