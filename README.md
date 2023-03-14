@@ -60,6 +60,13 @@ Másik hasznos funkciója az alkalmazásnak az a lokáció megosztás. Amennyibe
 |                | Latitude        | Földrajzi szélesség                                                         |
 |                | PeopleID        | Felhasználó azonosítója akihez a pozíció tartozik                           |
 
+## Web API :cloud:
+| Tábla | Típus | Endpoint | Leírás |
+| ----- | ----- | -------- | ------ |
+| **People** | GET | api/people | Az összes ember lekérdezése táblából |
+|            | GET | api/people/ | Az összes ember lekérdezése táblából |
+
+
 ## Feladatok :bookmark_tabs:
 1. Sprint
    - UI design ([figma](https://www.figma.com))

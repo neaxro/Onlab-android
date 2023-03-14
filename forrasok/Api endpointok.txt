@@ -1,0 +1,31 @@
+Felhasználó létrehozása [register]
+
+Felhasználó belépetetése (usernam, pass) [login]
+
+ADOTT EMBER munkáinak listázása [Jobs]
+Ember csatlakoztatása Munkához [Jobs]
+Új munka létrehozása [jobs]
+
+ADOTT EMBER üzeneteinek megtekintése [dsahboard]
+Üzenet létrehozása [Dashboard]
+
+Szolgálat elkezdése [Shift]
+Szolgálat befejezése [Shift]
+GPS lokáció mentése [Shift]
+
+ADOTT EMBER Szolgálatainak listázása [Stat]
+Adott ember szummázott szolgálat (Total Ft, Ora) [Stat]
+
+Ember adatainak listázása [Profile]
+Ember adatainak módosítása [Profile]
+Profilkép feltöltése [Profile]
+
+Munkán dolgozó emberek listázása [People/ADmin]
+Munkán dolgozó emberek Jogainak változtatása [People/ADmin]
+Munkán dolgozó emberek Órabérének változtatása [People/Admin]
+
+Órabérek létrehozása [Wages]
+Órabér módosítása [Wages]
+
+Pending szolgálatok listázása [Pending Shifts/Admin]
+Pending szolgálatok elfogadása/elutasítása [Pending shifts/Admin]

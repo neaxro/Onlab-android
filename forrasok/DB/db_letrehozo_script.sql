@@ -33,7 +33,7 @@ create table [People]
 	Nickname nvarchar(30),
 	Email nvarchar(20),
 	Password nvarchar(30),
-	ProfilePicture text	-- Ez meg elegge kerdeses...
+	ProfilePicture image
 )
 
 create table [Wages]
