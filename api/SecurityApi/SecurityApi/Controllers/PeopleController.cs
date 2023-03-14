@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Model;
+using SecurityApi.Services;
 
 namespace SecurityApi.Controllers
 {
@@ -14,22 +15,19 @@ namespace SecurityApi.Controllers
     [ApiController]
     public class PeopleController : ControllerBase
     {
-        private readonly OnlabContext _context;
+        private readonly IPeopleService _service;
 
-        public PeopleController(OnlabContext context)
+        public PeopleController(IPeopleService service)
         {
-            _context = context;
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> ListAll()
+        public async Task<ActionResult<string>> ListAll()
         {
-            var emberek = await _context.People
-                .Include(p => p.Dashboards)
-                .Include(p => p.Shifts)
-                .ToListAsync();
+            string uzi = _service.probaUzenet();
 
-            return Ok(emberek);
+            return Ok(uzi);
         }
     }
 }
