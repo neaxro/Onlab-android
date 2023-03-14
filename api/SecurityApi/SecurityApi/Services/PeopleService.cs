@@ -54,6 +54,11 @@ namespace SecurityApi.Services
             return ToModel(person);
         }
 
+        public Task<Person> Update(CreatePerson newData)
+        {
+            throw new NotImplementedException();
+        }
+
         private Person ToModel(DbPerson person)
         {
             Person p = new Person(

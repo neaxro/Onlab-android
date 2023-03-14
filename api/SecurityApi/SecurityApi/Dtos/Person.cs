@@ -6,5 +6,5 @@ public record Person(
     string Username,
     string Nickname,
     string Email,
-    string ProfilePicture
+    byte[] ProfilePicture
     );

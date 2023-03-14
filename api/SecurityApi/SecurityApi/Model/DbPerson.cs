@@ -17,7 +17,7 @@ public partial class DbPerson
 
     public string? Password { get; set; }
 
-    public string? ProfilePicture { get; set; }
+    public byte[]? ProfilePicture { get; set; }
 
     public virtual ICollection<Dashboard> Dashboards { get; } = new List<Dashboard>();
 
