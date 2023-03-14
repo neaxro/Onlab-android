@@ -23,7 +23,7 @@ public partial class Shift
 
     public virtual Job? Job { get; set; }
 
-    public virtual DbPerson? People { get; set; }
+    public virtual Person? People { get; set; }
 
     public virtual State? Status { get; set; }
 

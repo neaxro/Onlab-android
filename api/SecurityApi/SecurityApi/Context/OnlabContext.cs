@@ -22,7 +22,7 @@ public partial class OnlabContext : DbContext
 
     public virtual DbSet<PeopleJob> PeopleJobs { get; set; }
 
-    public virtual DbSet<DbPerson> People { get; set; }
+    public virtual DbSet<Person> People { get; set; }
 
     public virtual DbSet<Position> Positions { get; set; }
 
@@ -42,7 +42,7 @@ public partial class OnlabContext : DbContext
     {
         modelBuilder.Entity<Dashboard>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Dashboar__3214EC2724CE1DDD");
+            entity.HasKey(e => e.Id).HasName("PK__Dashboar__3214EC271DE10989");
 
             entity.ToTable("Dashboard");
 
@@ -56,22 +56,22 @@ public partial class OnlabContext : DbContext
 
             entity.HasOne(d => d.Job).WithMany(p => p.Dashboards)
                 .HasForeignKey(d => d.JobId)
-                .HasConstraintName("FK__Dashboard__JobID__41EDCAC5");
+                .HasConstraintName("FK__Dashboard__JobID__662B2B3B");
 
             entity.HasOne(d => d.People).WithMany(p => p.Dashboards)
                 .HasForeignKey(d => d.PeopleId)
-                .HasConstraintName("FK__Dashboard__Peopl__42E1EEFE");
+                .HasConstraintName("FK__Dashboard__Peopl__671F4F74");
 
             entity.HasOne(d => d.Wage).WithMany(p => p.Dashboards)
                 .HasForeignKey(d => d.WageId)
-                .HasConstraintName("FK__Dashboard__WageI__43D61337");
+                .HasConstraintName("FK__Dashboard__WageI__681373AD");
         });
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Jobs__3214EC27433AE975");
+            entity.HasKey(e => e.Id).HasName("PK__Jobs__3214EC27652C1185");
 
-            entity.HasIndex(e => e.Title, "UQ__Jobs__2CB664DCA4025C8F").IsUnique();
+            entity.HasIndex(e => e.Title, "UQ__Jobs__2CB664DC8DA9517A").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Description).HasMaxLength(100);
@@ -83,12 +83,12 @@ public partial class OnlabContext : DbContext
 
             entity.HasOne(d => d.People).WithMany(p => p.Jobs)
                 .HasForeignKey(d => d.PeopleId)
-                .HasConstraintName("FK__Jobs__PeopleID__3587F3E0");
+                .HasConstraintName("FK__Jobs__PeopleID__59C55456");
         });
 
         modelBuilder.Entity<PeopleJob>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PeopleJo__3214EC270AC63FE6");
+            entity.HasKey(e => e.Id).HasName("PK__PeopleJo__3214EC2754186BAD");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.JobId).HasColumnName("JobID");
@@ -98,26 +98,26 @@ public partial class OnlabContext : DbContext
 
             entity.HasOne(d => d.Job).WithMany(p => p.PeopleJobs)
                 .HasForeignKey(d => d.JobId)
-                .HasConstraintName("FK__PeopleJob__JobID__4C6B5938");
+                .HasConstraintName("FK__PeopleJob__JobID__70A8B9AE");
 
             entity.HasOne(d => d.People).WithMany(p => p.PeopleJobs)
                 .HasForeignKey(d => d.PeopleId)
-                .HasConstraintName("FK__PeopleJob__Peopl__4D5F7D71");
+                .HasConstraintName("FK__PeopleJob__Peopl__719CDDE7");
 
             entity.HasOne(d => d.Role).WithMany(p => p.PeopleJobs)
                 .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__PeopleJob__RoleI__4E53A1AA");
+                .HasConstraintName("FK__PeopleJob__RoleI__72910220");
 
             entity.HasOne(d => d.Wage).WithMany(p => p.PeopleJobs)
                 .HasForeignKey(d => d.WageId)
-                .HasConstraintName("FK__PeopleJob__WageI__4F47C5E3");
+                .HasConstraintName("FK__PeopleJob__WageI__73852659");
         });
 
-        modelBuilder.Entity<DbPerson>(entity =>
+        modelBuilder.Entity<Person>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__People__3214EC27A6BA1D9E");
+            entity.HasKey(e => e.Id).HasName("PK__People__3214EC272A1B0EEE");
 
-            entity.HasIndex(e => e.Username, "UQ__People__536C85E43DDCEEC5").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__People__536C85E4FC461098").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Email).HasMaxLength(20);
@@ -130,21 +130,21 @@ public partial class OnlabContext : DbContext
 
         modelBuilder.Entity<Position>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Position__3214EC27BE98AA82");
+            entity.HasKey(e => e.Id).HasName("PK__Position__3214EC274F93830D");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.PeopleId).HasColumnName("PeopleID");
 
             entity.HasOne(d => d.People).WithMany(p => p.Positions)
                 .HasForeignKey(d => d.PeopleId)
-                .HasConstraintName("FK__Positions__Peopl__498EEC8D");
+                .HasConstraintName("FK__Positions__Peopl__6DCC4D03");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Roles__3214EC27328BC743");
+            entity.HasKey(e => e.Id).HasName("PK__Roles__3214EC27EEA22C25");
 
-            entity.HasIndex(e => e.Title, "UQ__Roles__2CB664DCF49F7188").IsUnique();
+            entity.HasIndex(e => e.Title, "UQ__Roles__2CB664DCA06DE592").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Title).HasMaxLength(20);
@@ -152,7 +152,7 @@ public partial class OnlabContext : DbContext
 
         modelBuilder.Entity<Shift>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Shifts__3214EC2799175283");
+            entity.HasKey(e => e.Id).HasName("PK__Shifts__3214EC2730CB3811");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.JobId).HasColumnName("JobID");
@@ -162,26 +162,26 @@ public partial class OnlabContext : DbContext
 
             entity.HasOne(d => d.Job).WithMany(p => p.Shifts)
                 .HasForeignKey(d => d.JobId)
-                .HasConstraintName("FK__Shifts__JobID__3C34F16F");
+                .HasConstraintName("FK__Shifts__JobID__607251E5");
 
             entity.HasOne(d => d.People).WithMany(p => p.Shifts)
                 .HasForeignKey(d => d.PeopleId)
-                .HasConstraintName("FK__Shifts__PeopleID__3B40CD36");
+                .HasConstraintName("FK__Shifts__PeopleID__5F7E2DAC");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Shifts)
                 .HasForeignKey(d => d.StatusId)
-                .HasConstraintName("FK__Shifts__StatusID__3E1D39E1");
+                .HasConstraintName("FK__Shifts__StatusID__625A9A57");
 
             entity.HasOne(d => d.Wage).WithMany(p => p.Shifts)
                 .HasForeignKey(d => d.WageId)
-                .HasConstraintName("FK__Shifts__WageID__3D2915A8");
+                .HasConstraintName("FK__Shifts__WageID__6166761E");
         });
 
         modelBuilder.Entity<State>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__States__3214EC27BBD22DBD");
+            entity.HasKey(e => e.Id).HasName("PK__States__3214EC27CDE8CA39");
 
-            entity.HasIndex(e => e.Title, "UQ__States__2CB664DCD995C264").IsUnique();
+            entity.HasIndex(e => e.Title, "UQ__States__2CB664DCCD74DA51").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Description).HasMaxLength(100);
@@ -190,13 +190,12 @@ public partial class OnlabContext : DbContext
 
         modelBuilder.Entity<Wage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Wages__3214EC2743945115");
+            entity.HasKey(e => e.Id).HasName("PK__Wages__3214EC27D10E925C");
 
-            entity.HasIndex(e => e.Name, "UQ__Wages__737584F690805AF8").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__Wages__737584F6B54ECFBB").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Name).HasMaxLength(30);
-            entity.Property(e => e.Wage1).HasColumnName("Wage");
         });
 
         OnModelCreatingPartial(modelBuilder);

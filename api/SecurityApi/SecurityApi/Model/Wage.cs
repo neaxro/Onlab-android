@@ -9,7 +9,7 @@ public partial class Wage
 
     public string? Name { get; set; }
 
-    public float? Wage1 { get; set; }
+    public float? Price { get; set; }
 
     public virtual ICollection<Dashboard> Dashboards { get; } = new List<Dashboard>();
 

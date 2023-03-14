@@ -10,6 +10,7 @@ using SecurityApi.Context;
 using SecurityApi.Dtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
+using Person = SecurityApi.Dtos.Person;
 
 namespace SecurityApi.Controllers
 {
@@ -64,6 +65,33 @@ namespace SecurityApi.Controllers
 
                 return BadRequest(ex);
             }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                var result = await _service.DeleteById(id);
+                return result == null ? NotFound() : NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Person>> Update(int id, [FromBody] CreatePerson newData)
+        {
+            var person = await _service.Update(id, newData);
+
+            return person == null ? NotFound() : Ok(person);
         }
     }
 }

@@ -16,6 +16,19 @@ namespace SecurityApi.Services
             _context = context;
         }
 
+        public async Task<Person> DeleteById(int id)
+        {
+            var result = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (result != null)
+            {
+                _context.People.Remove(result);
+                await _context.SaveChangesAsync();
+            }
+
+            return result == null ? null : ToModel(result);
+        }
+
         public async Task<Person> FindById(int id)
         {
             var result = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
@@ -28,6 +41,20 @@ namespace SecurityApi.Services
             
         }
 
+        /*
+         * Ez majd masik kontollerbe
+        public IEnumerable<PersonDetailed> GetAllOnJob(int jobId)
+        {
+            var people = _context.PeopleJobs
+                .Where(pj => pj.JobId == jobId)
+                .Include(pj => pj.Wage)
+                .Include(pj => pj.People)
+                .Include(pj => pj.Role)
+                .ToList();
+
+            throw new NotImplementedException();
+        }*/
+
         public async Task<Person> Insert(CreatePerson newPerson)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
@@ -38,7 +65,7 @@ namespace SecurityApi.Services
                 throw new Exception("User already exists!");
             }
 
-            var person = new DbPerson()
+            var person = new Model.Person()
             {
                 Name = newPerson.FullName,
                 Username = newPerson.Username,
@@ -54,14 +81,32 @@ namespace SecurityApi.Services
             return ToModel(person);
         }
 
-        public Task<Person> Update(CreatePerson newData)
+        public async Task<Person> Update(int id, CreatePerson newData)
+        {
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+
+            if(person != null)
+            {
+                person.Name = newData.FullName;
+                person.Username = newData.Username;
+                person.Nickname = newData.Nickname;
+                person.Email = newData.Email;
+                person.Password = newData.Password;
+
+                await _context.SaveChangesAsync();
+            }
+
+            return person == null ? null : ToModel(person);
+        }
+
+        public Task UploadImage(byte[] image)
         {
             throw new NotImplementedException();
         }
 
-        private Person ToModel(DbPerson person)
+        private Person ToModel(Model.Person person)
         {
-            Person p = new Person(
+            return new Person(
                 person.Id,
                 person.Name,
                 person.Username,
@@ -69,8 +114,6 @@ namespace SecurityApi.Services
                 person.Email,
                 person.ProfilePicture
                 );
-
-            return p;
         }
     }
 }

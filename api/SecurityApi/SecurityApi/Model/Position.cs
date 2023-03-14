@@ -15,5 +15,5 @@ public partial class Position
 
     public int? PeopleId { get; set; }
 
-    public virtual DbPerson? People { get; set; }
+    public virtual Person? People { get; set; }
 }

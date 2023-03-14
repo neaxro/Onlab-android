@@ -40,7 +40,7 @@ create table [Wages]
 (
 	ID int identity primary key,
 	Name nvarchar(30) unique,
-	Wage real
+	Price real
 )
 
 create table [Jobs]

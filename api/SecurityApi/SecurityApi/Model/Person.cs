@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SecurityApi.Model;
 
-public partial class DbPerson
+public partial class Person
 {
     public int Id { get; set; }
 
