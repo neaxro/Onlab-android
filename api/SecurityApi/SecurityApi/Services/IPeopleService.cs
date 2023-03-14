@@ -15,6 +15,6 @@ namespace SecurityApi.Services
         Task<Person> FindById(int id);
         Task<Person> Update(int id, CreatePerson newData);
         Task<Person> DeleteById(int id);
-        Task UploadImage(byte[] image);
+        Task<Person> UploadImage(int id, IFormFile image);
     }
 }

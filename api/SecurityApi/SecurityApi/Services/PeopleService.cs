@@ -99,9 +99,21 @@ namespace SecurityApi.Services
             return person == null ? null : ToModel(person);
         }
 
-        public Task UploadImage(byte[] image)
+        public async Task<Person> UploadImage(int id, IFormFile image)
         {
-            throw new NotImplementedException();
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+            if(person != null)
+            {
+                using(var ms = new MemoryStream())
+                {
+                    image.CopyTo(ms);
+                    person.ProfilePicture = ms.ToArray();
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            return person == null ? null : ToModel(person);
         }
 
         private Person ToModel(Model.Person person)
