@@ -26,10 +26,19 @@ namespace SecurityApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Dashboard> GetAll()
+        public ActionResult<IEnumerable<Dashboard>> GetAll()
         {
             var dboards = _service.ListAll();
             return Ok(dboards);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Dashboard>> GetById(int id)
+        {
+            var dboard = await _service.GetById(id);
+            return dboard == null ? NotFound() : Ok(dboard);
         }
     }
 }

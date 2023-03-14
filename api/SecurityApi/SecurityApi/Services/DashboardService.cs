@@ -17,7 +17,13 @@ namespace SecurityApi.Services
         }
         public async Task<Dashboard> GetById(int id)
         {
-            throw new NotImplementedException();
+            var dboard = await _context.Dashboards
+                .Where(d => d.Id == id)
+                .Include(d => d.Wage)
+                .Include(d => d.People)
+                .FirstOrDefaultAsync();
+
+            return dboard == null ? null : ToModel(dboard);
         }
 
         public Task Insert(Dashboard dashboard)
