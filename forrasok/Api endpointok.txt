@@ -6,7 +6,7 @@ ADOTT EMBER munkáinak listázása [Jobs]
 Ember csatlakoztatása Munkához [Jobs]
 Új munka létrehozása [jobs]
 
-ADOTT EMBER üzeneteinek megtekintése [dsahboard]
+[DONE] ADOTT EMBER üzeneteinek megtekintése [dsahboard]
 Üzenet létrehozása [Dashboard]
 
 Szolgálat elkezdése [Shift]

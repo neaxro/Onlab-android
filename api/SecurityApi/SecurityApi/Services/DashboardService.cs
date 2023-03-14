@@ -2,6 +2,7 @@
 using SecurityApi.Context;
 using SecurityApi.Dtos;
 using SecurityApi.Model;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Dashboard = SecurityApi.Dtos.Dashboard;
 
@@ -38,12 +39,41 @@ namespace SecurityApi.Services
                 .Include(d => d.People)
                 .Select(ToModel)
                 .ToList();
+
             return dboards;
         }
 
-        public Task<Dashboard> ListForPerson(int personId)
+        public IEnumerable<Dashboard> ListForPersonByCategoryID(int categoryId)
         {
-            throw new NotImplementedException();
+            const int BROADCAST_MESSAGE_ID = 1;
+
+            var dboards = _context.Dashboards
+                .Where(d => d.WageId == categoryId || d.WageId == BROADCAST_MESSAGE_ID)
+                .Include(d => d.Wage)
+                .Include(d => d.People)
+                .Select(ToModel)
+                .ToList();
+
+            return dboards;
+        }
+
+        public async Task<IEnumerable<Dashboard>> ListForPersonByPersonID(int personId)
+        {
+            const int BROADCAST_MESSAGE_ID = 1;
+
+            var person = await _context.People.SingleOrDefaultAsync(p => p.Id == personId);
+            
+            if (person == null)
+                return null;
+
+            var dboards = _context.Dashboards
+                .Where(d => d.PeopleId == person.Id || d.WageId == BROADCAST_MESSAGE_ID)
+                .Include(d => d.Wage)
+                .Include(d => d.People)
+                .Select(ToModel)
+                .ToList();
+
+            return dboards;
         }
 
         public Task Update(int id)

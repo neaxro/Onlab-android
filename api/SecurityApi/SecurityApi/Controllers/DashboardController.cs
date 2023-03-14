@@ -40,5 +40,23 @@ namespace SecurityApi.Controllers
             var dboard = await _service.GetById(id);
             return dboard == null ? NotFound() : Ok(dboard);
         }
+
+        [HttpGet("forperson/{categoryId}/category")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByCategoryId(int categoryId)
+        {
+            IEnumerable<Dashboard> dboards = _service.ListForPersonByCategoryID(categoryId);
+            return (dboards == null || dboards.Count() == 0) ? NotFound() : Ok(dboards);
+        }
+
+        [HttpGet("forperson/{personId}/person")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByPersonId(int personId)
+        {
+            var dboards = await _service.ListForPersonByPersonID(personId);
+            return (dboards == null || dboards.Count() == 0) ? NotFound() : Ok(dboards);
+        }
     }
 }
