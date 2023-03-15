@@ -64,7 +64,24 @@ namespace SecurityApi.Services
 
         public IEnumerable<Shift> GetAllForPerson(int personId)
         {
-            throw new NotImplementedException();
+            var person = _context.People.FirstOrDefault(p => p.Id == personId);
+
+            // Person doesnt exist
+            if (person == null)
+            {
+                return null;
+            }
+
+            var shifts = _context.Shifts
+                .Where(s => s.PeopleId == personId)
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .Select(ToModel)
+                .ToList();
+            return shifts;
         }
 
         public IEnumerable<Shift> GetAllForPersonInJob(int personId, int jobId)
@@ -104,7 +121,6 @@ namespace SecurityApi.Services
 
             Job j = new Job(
                 shift.Job.Id,
-                shift.Job.Pin,
                 shift.Job.Title,
                 shift.Job.Description,
                 owner

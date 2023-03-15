@@ -31,10 +31,16 @@ namespace SecurityApi.Controllers
             return Ok(shifts);
         }
 
-        [HttpGet("all/{jobId}")]
+        [HttpGet("all/forjob/{jobId}")]
         public ActionResult<IEnumerable<Shift>> GetAllForJob(int jobId)
         {
             var shifts = _service.GetAllForJob(jobId);
+            return shifts == null ? NotFound() : Ok(shifts);
+        }
+        [HttpGet("all/forperson/{personId}")]
+        public ActionResult<IEnumerable<Shift>> GetAllForPerson(int personId)
+        {
+            var shifts = _service.GetAllForPerson(personId);
             return shifts == null ? NotFound() : Ok(shifts);
         }
     }
