@@ -17,6 +17,7 @@ builder.Services.AddDbContext<OnlabContext>(options =>
 
 builder.Services.AddScoped<IPeopleService, PeopleService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IWageService, WageService>();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
