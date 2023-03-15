@@ -89,11 +89,6 @@ namespace SecurityApi.Services
             return wage == null ? null : ToModel(wage);
         }
 
-        private Wage ToModel(Model.Wage wage)
-        {
-            return new Wage(wage.Id, wage.Name, wage.Price);
-        }
-
         public IEnumerable<Wage> GetWages()
         {
             var wages = _context.Wages
@@ -101,6 +96,11 @@ namespace SecurityApi.Services
                 .Select(ToModel)
                 .ToList();
             return wages;
+        }
+
+        private Wage ToModel(Model.Wage wage)
+        {
+            return new Wage(wage.Id, wage.Name, wage.Price);
         }
     }
 }

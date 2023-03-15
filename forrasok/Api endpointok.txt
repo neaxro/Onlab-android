@@ -24,8 +24,8 @@ Munkán dolgozó emberek listázása [People/ADmin]
 Munkán dolgozó emberek Jogainak változtatása [People/ADmin]
 Munkán dolgozó emberek Órabérének változtatása [People/Admin]
 
-Órabérek létrehozása [Wages]
-Órabér módosítása [Wages]
+[DONE] Órabérek létrehozása [Wages]
+[DONE] Órabér módosítása [Wages]
 
 Pending szolgálatok listázása [Pending Shifts/Admin]
 Pending szolgálatok elfogadása/elutasítása [Pending shifts/Admin]

@@ -62,7 +62,7 @@ create table [States]
 create table [Shifts]
 (
 	ID int identity primary key,
-	StartTime datetime2,
+	StartTime datetime2 default GETDATE(),
 	EndTime datetime2,
 	EarnedMoney real,
 	PeopleID int references People(ID),
