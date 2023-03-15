@@ -2,6 +2,7 @@
 
 namespace SecurityApi.Dtos;
 public record Dashboard(
+    int Id,
     string Title,
     string Message,
     DateTime? CreationTime,

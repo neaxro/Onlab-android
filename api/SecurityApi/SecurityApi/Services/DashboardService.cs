@@ -2,6 +2,7 @@
 using SecurityApi.Context;
 using SecurityApi.Dtos;
 using SecurityApi.Model;
+using System.Data;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Dashboard = SecurityApi.Dtos.Dashboard;
@@ -27,9 +28,33 @@ namespace SecurityApi.Services
             return dboard == null ? null : ToModel(dboard);
         }
 
-        public Task Insert(Dashboard dashboard)
+        public async Task<Dashboard> Insert(CreateDashboard dashboard)
         {
-            throw new NotImplementedException();
+            Model.Dashboard newMessage = null;
+            using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
+
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Name == dashboard.GroupName);
+            var creator = await _context.People.FirstOrDefaultAsync(p => p.Name == dashboard.CreatorName);
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Title == dashboard.JobName);
+
+            if(wage != null && creator != null && job != null)
+            {
+                newMessage = new Model.Dashboard()
+                {
+                    Title = dashboard.Title,
+                    Message = dashboard.Message,
+                    Job = job,
+                    People = creator,
+                    Wage = wage
+                };
+
+                await _context.Dashboards.AddAsync(newMessage);
+                await _context.SaveChangesAsync();
+            }
+
+            await tran.CommitAsync();
+
+            return newMessage == null ? null : ToModel(newMessage);
         }
 
         public IEnumerable<Dashboard> ListAll()
@@ -76,7 +101,7 @@ namespace SecurityApi.Services
             return dboards;
         }
 
-        public Task Update(int id)
+        public Task<Dashboard> Update(int id)
         {
             throw new NotImplementedException();
         }
@@ -84,6 +109,7 @@ namespace SecurityApi.Services
         private Dashboard ToModel(Model.Dashboard dashboard)
         {
             return new Dashboard(
+                dashboard.Id,
                 dashboard.Title,
                 dashboard.Message,
                 dashboard.CreationTime,

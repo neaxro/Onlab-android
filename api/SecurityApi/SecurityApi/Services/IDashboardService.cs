@@ -9,7 +9,7 @@ namespace SecurityApi.Services
         Task<Dashboard> GetById(int id);
         IEnumerable<Dashboard> ListForPersonByCategoryID(int categoryId);
         Task<IEnumerable<Dashboard>> ListForPersonByPersonID(int personId);
-        Task Insert(Dashboard dashboard);
-        Task Update(int id);
+        Task<Dashboard> Insert(CreateDashboard dashboard);
+        Task<Dashboard> Update(int id);
     }
 }

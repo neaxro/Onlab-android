@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Dtos;
@@ -57,6 +58,28 @@ namespace SecurityApi.Controllers
         {
             var dboards = await _service.ListForPersonByPersonID(personId);
             return (dboards == null || dboards.Count() == 0) ? NotFound() : Ok(dboards);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> InsertNewMessage([FromBody] CreateDashboard createDashboard)
+        {
+            try
+            {
+                var result = await _service.Insert(createDashboard);
+
+                if(result == null)
+                {
+                    // This means that the server couldnt make a new message
+                    return NotFound();
+                }
+
+                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(nameof(CreateDashboard.Title), ex.Message);
+                return ValidationProblem(ModelState);
+            }
         }
     }
 }
