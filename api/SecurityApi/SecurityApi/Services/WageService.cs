@@ -43,9 +43,17 @@ namespace SecurityApi.Services
             return wage == null ? null : ToModel(wage);
         }
 
-        public Task<Wage> Delete(int id)
+        public async Task<Wage> Delete(int id)
         {
-            throw new NotImplementedException();
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == id);
+            
+            if(wage != null)
+            {
+                _context.Wages.Remove(wage);
+                await _context.SaveChangesAsync();
+            }
+
+            return wage == null ? null : ToModel(wage);
         }
 
         public async Task<Wage> GetById(int id)

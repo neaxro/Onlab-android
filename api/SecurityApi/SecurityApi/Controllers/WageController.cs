@@ -74,5 +74,14 @@ namespace SecurityApi.Controllers
                 return ValidationProblem(ModelState);
             }
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Wage>> Delete(int id)
+        {
+            var result = await _service.Delete(id);
+            return result == null ? NotFound() : NoContent();
+        }
     }
 }
