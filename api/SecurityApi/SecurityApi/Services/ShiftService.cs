@@ -1,7 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Dtos;
+using SecurityApi.Model;
 using Shift = SecurityApi.Dtos.Shift;
+using Person = SecurityApi.Dtos.Person;
+using Job = SecurityApi.Dtos.Job;
+using State = SecurityApi.Dtos.State;
+using Wage = SecurityApi.Dtos.Wage;
+using Azure.Identity;
 
 namespace SecurityApi.Services
 {
@@ -107,9 +113,28 @@ namespace SecurityApi.Services
             return shifts;
         }
 
-        public IEnumerable<Shift> GetAllPendingInJob(int jobId)
+        public async Task<IEnumerable<Shift>> GetAllPendingInJob(int jobId)
         {
-            throw new NotImplementedException();
+            const int PENDING_STATUS_ID = 1;
+
+            var job = await _context.Jobs.FirstOrDefaultAsync(job => job.Id == jobId);
+
+            // Job doesnt exist
+            if (job == null)
+            {
+                return null;
+            }
+
+            var shifts = _context.Shifts
+                .Where(s => s.JobId == jobId && s.StatusId == PENDING_STATUS_ID)
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .Select(ToModel)
+                .ToList();
+            return shifts;
         }
 
         public Task<Shift> Update(UpdateShift newShift)

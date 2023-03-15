@@ -25,6 +25,7 @@ insert into dbo.Wages values
 
 -- Allapotok letrehozasa
 insert into States values
+	('Elbírálásra vár', 'A szolgálatot még nem bírálták el! (Elutasítás/Elfogadás)'),
 	('Folyamatban', 'A szolgálat elvégzése folyamatban van...'),
 	('Befejezve', 'A szolgálatot befejezték'),
 	('Elfogadva', 'A szolgálatot sikeresen elfogadták!'),
@@ -58,10 +59,10 @@ insert into Dashboard (Title, Message, JobID, PeopleID, WageID) values
 
 -- Szolgalatok peldak
 insert into Shifts values
-	(GETDATE(), null, null, 3, 1, 3, 1),
-	(GETDATE(), GETDATE(), 2400.9, 4, 1, 2, 2),
-	(GETDATE(), GETDATE(), 1230.9, 3, 1, 2, 3),
-	(GETDATE(), GETDATE(), 11230.9, 3, 1, 4, 4)
+	(GETDATE(), null, null, 3, 1, 3, 2),		 -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Speciális, Elbírálásra vár
+	(GETDATE(), GETDATE(), 2400.9, 4, 1, 2, 1),  -- StartTime, EndTime, EarnedMoney, Kovács János, FOO 2023, Sima, Folyamatban
+	(GETDATE(), GETDATE(), 1230.9, 3, 1, 2, 1),  -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Sima, Folyamatban
+	(GETDATE(), GETDATE(), 11230.9, 3, 1, 4, 4)  -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Kutyás, Elfogadva
 
 --###############################################################################
 -- _____     _     _       _      _                _                        _    
@@ -173,3 +174,6 @@ insert into Shifts values
 --	inner join Wages w on s.WageID = w.ID
 --	inner join States  st on s.StatusID = st.ID
 --where s.EndTime is not null
+
+--select* from Shifts s
+--	inner join States st on s.StatusID = st.ID

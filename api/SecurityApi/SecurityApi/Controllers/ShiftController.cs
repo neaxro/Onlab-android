@@ -51,5 +51,12 @@ namespace SecurityApi.Controllers
             var shifts = _service.GetAllForPersonInJob(personId, jobId);
             return shifts == null ? NotFound() : Ok(shifts);
         }
+
+        [HttpGet("pending/{jobId}")]
+        public async Task<ActionResult<IEnumerable<Shift>>> GetAllPendingInJob(int jobId)
+        {
+            var pendingShifts = await _service.GetAllPendingInJob(jobId);
+            return pendingShifts == null ? NotFound() : Ok(pendingShifts);
+        }
     }
 }
