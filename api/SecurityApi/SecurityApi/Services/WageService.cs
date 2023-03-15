@@ -1,14 +1,15 @@
-﻿using SecurityApi.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using SecurityApi.Context;
 using SecurityApi.Dtos;
 
 namespace SecurityApi.Services
 {
     public class WageService : IWageService
     {
-        private readonly OnlabContext _content;
-        public WageService(OnlabContext content)
+        private readonly OnlabContext _context;
+        public WageService(OnlabContext context)
         {
-            _content = content;
+            _context = context;
         }
 
         public Task<Wage> Create(CreateWage newWage)
@@ -26,14 +27,29 @@ namespace SecurityApi.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Wage>> ListAll()
+        public IEnumerable<Wage> GetAll()
         {
-            throw new NotImplementedException();
+            var wages = _context.Wages.Select(ToModel).ToList();
+            return wages;
         }
 
         public Task<Wage> Update(int id, CreateWage newContent)
         {
             throw new NotImplementedException();
+        }
+
+        private Wage ToModel(Model.Wage wage)
+        {
+            return new Wage(wage.Id, wage.Name, wage.Price);
+        }
+
+        public IEnumerable<Wage> GetWages()
+        {
+            var wages = _context.Wages
+                .Where(w => w.Id > 1)
+                .Select(ToModel)
+                .ToList();
+            return wages;
         }
     }
 }

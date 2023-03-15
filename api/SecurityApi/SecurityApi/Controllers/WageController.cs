@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Model;
 using SecurityApi.Services;
+using Wage = SecurityApi.Dtos.Wage;
 
 namespace SecurityApi.Controllers
 {
@@ -22,6 +23,17 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
-        
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<Wage>> GetAll()
+        {
+            var wages = _service.GetAll();
+            return Ok(wages);
+        }
+        [HttpGet]
+        public ActionResult<IEnumerable<Wage>> GetWages()
+        {
+            var wages = _service.GetWages();
+            return Ok(wages);
+        }
     }
 }
