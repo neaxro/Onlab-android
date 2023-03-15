@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Dtos;
+using System.Data;
 
 namespace SecurityApi.Services
 {
@@ -12,9 +13,28 @@ namespace SecurityApi.Services
             _context = context;
         }
 
-        public Task<Wage> Create(CreateWage newWage)
+        public async Task<Wage> Create(CreateWage newWage)
         {
-            throw new NotImplementedException();
+            Model.Wage wage = null;
+            using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
+
+            var result = await _context.Wages.FirstOrDefaultAsync(w => w.Name== newWage.Name);
+
+            if(result == null)
+            {
+                wage = new Model.Wage()
+                {
+                    Name = newWage.Name,
+                    Price = newWage.Price
+                };
+
+                await _context.Wages.AddAsync(wage);
+            }
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return wage == null ? null : ToModel(wage);
         }
 
         public Task<Wage> Delete(int id)
@@ -22,9 +42,10 @@ namespace SecurityApi.Services
             throw new NotImplementedException();
         }
 
-        public Task<Wage> GetById(int id)
+        public async Task<Wage> GetById(int id)
         {
-            throw new NotImplementedException();
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == id);
+            return wage == null ? null : ToModel(wage);
         }
 
         public IEnumerable<Wage> GetAll()

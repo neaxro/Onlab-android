@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Dtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
 using Wage = SecurityApi.Dtos.Wage;
@@ -34,6 +36,31 @@ namespace SecurityApi.Controllers
         {
             var wages = _service.GetWages();
             return Ok(wages);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Wage>> GetWageById(int id)
+        {
+            var result = await _service.GetById(id);
+            return result == null ? NotFound() : Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<Wage>> Insert([FromBody] CreateWage newWage)
+        {
+            try
+            {
+                var created = await _service.Create(newWage);
+                return CreatedAtAction(nameof(GetWageById), new { id = created.Id }, created);
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(nameof(CreateWage.Name), ex.Message);
+                return ValidationProblem(ModelState);
+            }
         }
     }
 }
