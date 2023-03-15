@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Dtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
+using Shift = SecurityApi.Dtos.Shift;
 
 namespace SecurityApi.Controllers
 {
@@ -22,6 +24,18 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
-        
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<Shift>> GetAll()
+        {
+            var shifts = _service.GetAll();
+            return Ok(shifts);
+        }
+
+        [HttpGet("all/{jobId}")]
+        public ActionResult<IEnumerable<Shift>> GetAllForJob(int jobId)
+        {
+            var shifts = _service.GetAllForJob(jobId);
+            return shifts == null ? NotFound() : Ok(shifts);
+        }
     }
 }
