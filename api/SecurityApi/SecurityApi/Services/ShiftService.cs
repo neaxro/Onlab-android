@@ -86,7 +86,25 @@ namespace SecurityApi.Services
 
         public IEnumerable<Shift> GetAllForPersonInJob(int personId, int jobId)
         {
-            throw new NotImplementedException();
+            var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);
+            var person = _context.People.FirstOrDefault(p => p.Id == personId);
+
+            // Job or Person doesnt exist
+            if (job == null || person == null)
+            {
+                return null;
+            }
+
+            var shifts = _context.Shifts
+                .Where(s => s.JobId == jobId && s.PeopleId == personId)
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .Select(ToModel)
+                .ToList();
+            return shifts;
         }
 
         public IEnumerable<Shift> GetAllPendingInJob(int jobId)
