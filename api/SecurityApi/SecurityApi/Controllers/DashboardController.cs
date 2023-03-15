@@ -41,7 +41,7 @@ namespace SecurityApi.Controllers
             return dboard == null ? NotFound() : Ok(dboard);
         }
 
-        [HttpGet("forperson/{categoryId}/category")]
+        [HttpGet("forperson/bycategoryid/{categoryId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByCategoryId(int categoryId)
@@ -50,7 +50,7 @@ namespace SecurityApi.Controllers
             return (dboards == null || dboards.Count() == 0) ? NotFound() : Ok(dboards);
         }
 
-        [HttpGet("forperson/{personId}/person")]
+        [HttpGet("forperson/bypersonid/{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByPersonId(int personId)
