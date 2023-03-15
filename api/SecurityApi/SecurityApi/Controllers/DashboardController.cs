@@ -81,5 +81,25 @@ namespace SecurityApi.Controllers
                 return ValidationProblem(ModelState);
             }
         }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Dashboard>> Update(int id, [FromBody] CreateDashboard newContent)
+        {
+            var result = await _service.Update(id, newContent);
+
+            return result == null ? NotFound() : Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Dashboard>> Remove(int id)
+        {
+            var result = await _service.Delete(id);
+
+            return result == null ? NotFound() : NoContent();
+        }
     }
 }

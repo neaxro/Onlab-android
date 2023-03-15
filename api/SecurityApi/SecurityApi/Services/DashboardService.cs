@@ -17,6 +17,24 @@ namespace SecurityApi.Services
         {
             _context = context;
         }
+
+        public async Task<Dashboard> Delete(int id)
+        {
+            var dboard = await _context.Dashboards
+                .Include(d => d.Wage)
+                .Include(d => d.Job)
+                .Include(d => d.People)
+                .FirstOrDefaultAsync(d => d.Id == id);
+            
+            if(dboard != null)
+            {
+                _context.Dashboards.Remove(dboard);
+                await _context.SaveChangesAsync();
+            }
+
+            return dboard == null ? null : ToModel(dboard);
+        }
+
         public async Task<Dashboard> GetById(int id)
         {
             var dboard = await _context.Dashboards
@@ -34,7 +52,7 @@ namespace SecurityApi.Services
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
             var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Name == dashboard.GroupName);
-            var creator = await _context.People.FirstOrDefaultAsync(p => p.Name == dashboard.CreatorName);
+            var creator = await _context.People.FirstOrDefaultAsync(p => p.Id == dashboard.CreatorId);
             var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Title == dashboard.JobName);
 
             if(wage != null && creator != null && job != null)
@@ -101,9 +119,33 @@ namespace SecurityApi.Services
             return dboards;
         }
 
-        public Task<Dashboard> Update(int id)
+        public async Task<Dashboard> Update(int id, CreateDashboard newContent)
         {
-            throw new NotImplementedException();
+            using var tarn = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
+
+            var dboard = await _context.Dashboards
+                .Include(d => d.Wage)
+                .Include(d => d.People)
+                .Include(d => d.Job)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            // Not found
+            if (dboard == null)
+                return null;
+
+            var group = await _context.Wages.FirstOrDefaultAsync(w => w.Name == newContent.GroupName);
+
+            dboard.Title = newContent.Title;
+            dboard.Message = newContent.Message;
+            if(group != null)
+            {
+                dboard.Wage = group;
+            }
+
+            await _context.SaveChangesAsync();
+            await tarn.CommitAsync();
+
+            return ToModel(dboard);
         }
 
         private Dashboard ToModel(Model.Dashboard dashboard)

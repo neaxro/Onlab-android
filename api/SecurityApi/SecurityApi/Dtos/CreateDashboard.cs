@@ -3,6 +3,6 @@ public record CreateDashboard(
     string Title,
     string Message,
     string JobName,
-    string CreatorName,
+    int CreatorId,
     string GroupName
     );

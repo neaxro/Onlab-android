@@ -7,7 +7,7 @@ Ember csatlakoztatása Munkához [Jobs]
 Új munka létrehozása [jobs]
 
 [DONE] ADOTT EMBER üzeneteinek megtekintése [dsahboard]
-Üzenet létrehozása [Dashboard]
+[DONE] Üzenet létrehozása [Dashboard]
 
 Szolgálat elkezdése [Shift]
 Szolgálat befejezése [Shift]
