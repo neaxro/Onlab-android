@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +55,18 @@ namespace SecurityApi.Controllers
             try
             {
                 var created = await _service.Create(newWage);
+
+                if (created == null)
+                {
+                    // This means that the server couldnt make a new message
+                    return NotFound();
+                }
+
                 return CreatedAtAction(nameof(GetWageById), new { id = created.Id }, created);
+            }
+            catch(ArgumentOutOfRangeException ec)
+            {
+                return BadRequest(ec.Message);
             }
             catch (ArgumentException ex)
             {

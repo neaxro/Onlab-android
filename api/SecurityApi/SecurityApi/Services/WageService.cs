@@ -15,6 +15,12 @@ namespace SecurityApi.Services
 
         public async Task<Wage> Create(CreateWage newWage)
         {
+            // It doesnt make sense...
+            if(newWage.Price <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(newWage.Price));
+            }
+
             Model.Wage wage = null;
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
