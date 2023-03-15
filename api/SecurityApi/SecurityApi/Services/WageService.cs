@@ -68,9 +68,25 @@ namespace SecurityApi.Services
             return wages;
         }
 
-        public Task<Wage> Update(int id, CreateWage newContent)
+        public async Task<Wage> Update(int id, CreateWage newWage)
         {
-            throw new NotImplementedException();
+            // It doesnt make sense...
+            if (newWage.Price <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(newWage.Price));
+            }
+
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == id);
+            
+            if(wage != null)
+            {
+                wage.Name = newWage.Name;
+                wage.Price = newWage.Price;
+
+                await _context.SaveChangesAsync();
+            }
+
+            return wage == null ? null : ToModel(wage);
         }
 
         private Wage ToModel(Model.Wage wage)
