@@ -58,5 +58,28 @@ namespace SecurityApi.Controllers
             var pendingShifts = await _service.GetAllPendingInJob(jobId);
             return pendingShifts == null ? NotFound() : Ok(pendingShifts);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Shift>> Get(int id)
+        {
+            var result = await _service.Get(id);
+            return result == null ? NotFound() : Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Shift>> CreateShift([FromBody] CreateShift shift)
+        {
+            try
+            {
+                var created = await _service.Create(shift);
+                return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

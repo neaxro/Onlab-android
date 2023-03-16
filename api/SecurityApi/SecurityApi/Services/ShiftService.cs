@@ -8,19 +8,61 @@ using Job = SecurityApi.Dtos.Job;
 using State = SecurityApi.Dtos.State;
 using Wage = SecurityApi.Dtos.Wage;
 using Azure.Identity;
+using System.Data;
 
 namespace SecurityApi.Services
 {
     public class ShiftService : IShiftService
     {
         private readonly OnlabContext _context;
+        private const int PENDING_STATUS_ID = 1;
         public ShiftService(OnlabContext context)
         {
             _context = context;
         }
-        public Task<Shift> Create(CreateShift newShift)
+        public async Task<Shift> Create(CreateShift newShift)
         {
-            throw new NotImplementedException();
+            using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
+
+            var itsPerson = await _context.People.FirstOrDefaultAsync(p => p.Id == newShift.PersonId);
+
+            if( itsPerson == null )
+            {
+                throw new Exception("User doesnt exist!");
+            }
+
+            var itsJob = await _context.Jobs.Include(j => j.People).FirstOrDefaultAsync(j => j.Id == newShift.JobId);
+
+            if( itsJob == null )
+            {
+                throw new Exception("Job doesnt exist!");
+            }
+
+            var itsWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
+
+            if(itsWage == null || itsWage.Id == PENDING_STATUS_ID)
+            {
+                throw new Exception("Wage doesnt exist!");
+            }
+
+            var pendingState = await _context.States.FirstOrDefaultAsync(s => s.Id == 1);
+
+            var shift = new Model.Shift()
+            {
+                StartTime = DateTime.Now,
+                People = itsPerson,
+                Job = itsJob,
+                Wage = itsWage,
+                Status = pendingState
+            };
+
+            _context.Shifts.Add(shift);
+
+            await _context.SaveChangesAsync();
+
+            await tran.CommitAsync();
+
+            return ToModel(shift);
         }
 
         public Task<Shift> Delete(int id)
@@ -28,9 +70,16 @@ namespace SecurityApi.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Shift> Get(int id)
+        public async Task<Shift> Get(int id)
         {
-            throw new NotImplementedException();
+            var result = await _context.Shifts
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            return result == null ? null : ToModel(result);
         }
 
         public IEnumerable<Shift> GetAll()
@@ -115,8 +164,6 @@ namespace SecurityApi.Services
 
         public async Task<IEnumerable<Shift>> GetAllPendingInJob(int jobId)
         {
-            const int PENDING_STATUS_ID = 1;
-
             var job = await _context.Jobs.FirstOrDefaultAsync(job => job.Id == jobId);
 
             // Job doesnt exist
