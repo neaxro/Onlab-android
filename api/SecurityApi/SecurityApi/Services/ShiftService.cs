@@ -65,6 +65,46 @@ namespace SecurityApi.Services
             return ToModel(shift);
         }
 
+        private float CalculateEarnedMoney(Model.Shift shift)
+        {
+            DateTime start = (DateTime)shift.StartTime;
+            DateTime end = (DateTime)shift.EndTime;
+
+            return 0f;
+        }
+
+        public async Task<Shift> Finish(int personId)
+        {
+            using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
+
+            var shift = await _context.Shifts
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .FirstOrDefaultAsync(s =>
+                s.PeopleId == personId && s.EndTime == null);
+
+            // TODO: Esetleg leellenorizni h van-e ilyen ember, van-e befejezetlen szolgalata?
+
+            if(shift == null)
+            {
+                return null;
+            }
+
+            shift.EndTime = DateTime.Now;
+
+            float earnedMoney = CalculateEarnedMoney(shift);
+
+            shift.EarnedMoney = earnedMoney;
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return ToModel(shift);
+        }
+
         public Task<Shift> Delete(int id)
         {
             throw new NotImplementedException();

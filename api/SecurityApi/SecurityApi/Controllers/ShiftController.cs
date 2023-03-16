@@ -81,5 +81,14 @@ namespace SecurityApi.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPatch("{personId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Shift>> EndShift(int personId)
+        {
+            var result = await _service.Finish(personId);
+            return result == null ? NotFound() : Ok(result);
+        }
     }
 }
