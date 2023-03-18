@@ -59,7 +59,7 @@ insert into Dashboard (Title, Message, JobID, PeopleID, WageID) values
 
 -- Szolgalatok peldak
 insert into Shifts values
-	(GETDATE(), null, null, 3, 1, 3, 2),		 -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Speciális, Elbírálásra vár
+	(DATEADD(hh,-1,GETDATE()), null, null, 3, 1, 3, 2),		 -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Speciális, Elbírálásra vár
 	(GETDATE(), GETDATE(), 2400.9, 4, 1, 2, 1),  -- StartTime, EndTime, EarnedMoney, Kovács János, FOO 2023, Sima, Folyamatban
 	(GETDATE(), GETDATE(), 1230.9, 3, 1, 2, 1),  -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Sima, Folyamatban
 	(GETDATE(), GETDATE(), 11230.9, 3, 1, 4, 4)  -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Kutyás, Elfogadva

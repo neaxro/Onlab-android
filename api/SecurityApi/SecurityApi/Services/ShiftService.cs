@@ -69,8 +69,11 @@ namespace SecurityApi.Services
         {
             DateTime start = (DateTime)shift.StartTime;
             DateTime end = (DateTime)shift.EndTime;
+            double wagePrice = (double)shift.Wage.Price;
 
-            return 0f;
+            double hours = (end - start).TotalHours;
+
+            return (float)(wagePrice * Math.Round(hours, 1));
         }
 
         public async Task<Shift> Finish(int personId)
@@ -105,9 +108,23 @@ namespace SecurityApi.Services
             return ToModel(shift);
         }
 
-        public Task<Shift> Delete(int id)
+        public async Task<Shift> Delete(int id)
         {
-            throw new NotImplementedException();
+            var shift = await _context.Shifts
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (shift == null)
+                return null;
+
+            _context.Shifts.Remove(shift);
+            await _context.SaveChangesAsync();
+
+            return ToModel(shift);
         }
 
         public async Task<Shift> Get(int id)
