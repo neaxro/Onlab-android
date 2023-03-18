@@ -82,7 +82,7 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [HttpPatch("{personId}")]
+        [HttpPatch("finish/{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Shift>> EndShift(int personId)
@@ -99,6 +99,22 @@ namespace SecurityApi.Controllers
             var result = await _service.Delete(id);
 
             return result == null ? NotFound() : Ok(result);
+        }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateShift updateShift)
+        {
+            try
+            {
+                var res = await _service.Update(id, updateShift);
+                return res == null ? NotFound() : Ok();
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
         }
     }
 }

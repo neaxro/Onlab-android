@@ -7,7 +7,6 @@ using Person = SecurityApi.Dtos.Person;
 using Job = SecurityApi.Dtos.Job;
 using State = SecurityApi.Dtos.State;
 using Wage = SecurityApi.Dtos.Wage;
-using Azure.Identity;
 using System.Data;
 
 namespace SecurityApi.Services
@@ -16,6 +15,7 @@ namespace SecurityApi.Services
     {
         private readonly OnlabContext _context;
         private const int PENDING_STATUS_ID = 1;
+        private const int BROADCAST_WAGE_ID = 1;
         public ShiftService(OnlabContext context)
         {
             _context = context;
@@ -65,10 +65,16 @@ namespace SecurityApi.Services
             return ToModel(shift);
         }
 
-        private float CalculateEarnedMoney(Model.Shift shift)
+        private float? CalculateEarnedMoney(Model.Shift shift)
         {
             DateTime start = (DateTime)shift.StartTime;
             DateTime end = (DateTime)shift.EndTime;
+
+            if(end == null)
+            {
+                return null;
+            }
+
             double wagePrice = (double)shift.Wage.Price;
 
             double hours = (end - start).TotalHours;
@@ -98,7 +104,7 @@ namespace SecurityApi.Services
 
             shift.EndTime = DateTime.Now;
 
-            float earnedMoney = CalculateEarnedMoney(shift);
+            float? earnedMoney = CalculateEarnedMoney(shift);
 
             shift.EarnedMoney = earnedMoney;
 
@@ -241,9 +247,54 @@ namespace SecurityApi.Services
             return shifts;
         }
 
-        public Task<Shift> Update(UpdateShift newShift)
+        public async Task<Shift> Update(int id, UpdateShift newShift)
         {
-            throw new NotImplementedException();
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
+            var state = await _context.States.FirstOrDefaultAsync(s => s.Id == newShift.StatusId);
+
+            if(wage == null || wage.Id == BROADCAST_WAGE_ID)
+            {
+                throw new ArgumentException("New Wage doesnt exist!");
+            }
+            if(state == null)
+            {
+                throw new ArgumentException("New State doesnt exist!");
+            }
+            if(newShift.EndTime < newShift.StartTime)
+            {
+                throw new ArgumentException("Invalid Start or End Time!");
+            }
+
+
+            var shift = await _context.Shifts
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if(shift != null)
+            {
+                shift.StartTime = newShift.StartTime;
+                shift.EndTime = newShift.EndTime;
+                shift.WageId = newShift.WageId;
+                shift.StatusId = newShift.StatusId;
+
+                // Because of the changes
+                shift.EarnedMoney = CalculateEarnedMoney(shift);
+
+                await _context.SaveChangesAsync();
+                await tran.CommitAsync();
+            }
+            else
+            {
+                await tran.RollbackAsync();
+            }
+
+            return shift == null ? null : ToModel(shift);
         }
 
         private Shift ToModel(Model.Shift shift)

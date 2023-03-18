@@ -13,6 +13,6 @@ namespace SecurityApi.Services
         Task<Shift> Create(CreateShift newShift);
         Task<Shift> Finish(int personId);
         Task<Shift> Delete(int id);
-        Task<Shift> Update(UpdateShift newShift);
+        Task<Shift> Update(int id, UpdateShift newShift);
     }
 }
