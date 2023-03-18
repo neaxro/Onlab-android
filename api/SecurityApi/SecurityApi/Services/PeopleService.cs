@@ -41,20 +41,6 @@ namespace SecurityApi.Services
             
         }
 
-        /*
-         * Ez majd masik kontollerbe
-        public IEnumerable<PersonDetailed> GetAllOnJob(int jobId)
-        {
-            var people = _context.PeopleJobs
-                .Where(pj => pj.JobId == jobId)
-                .Include(pj => pj.Wage)
-                .Include(pj => pj.People)
-                .Include(pj => pj.Role)
-                .ToList();
-
-            throw new NotImplementedException();
-        }*/
-
         public async Task<Person> Insert(CreatePerson newPerson)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);

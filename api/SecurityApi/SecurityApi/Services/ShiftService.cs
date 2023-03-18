@@ -21,13 +21,13 @@ namespace SecurityApi.Services
         {
             _context = context;
         }
-        public async Task<Shift> Create(int id, CreateShift newShift)
+        public async Task<Shift> Create(int personId, CreateShift newShift)
         {
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
             var itsPerson = await _context.People
                 .Include(p => p.Shifts)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == personId);
 
             var inProcessShift = itsPerson.Shifts.FirstOrDefault(s => s.EndTime == null);
 
@@ -41,7 +41,9 @@ namespace SecurityApi.Services
                 throw new Exception("User doesnt exist!");
             }
 
-            var itsJob = await _context.Jobs.Include(j => j.People).FirstOrDefaultAsync(j => j.Id == newShift.JobId);
+            var itsJob = await _context.Jobs
+                .Include(j => j.People)
+                .FirstOrDefaultAsync(j => j.Id == newShift.JobId);
 
             if( itsJob == null )
             {

@@ -13,6 +13,8 @@ namespace SecurityApi.Services
     public class DashboardService : IDashboardService
     {
         private readonly OnlabContext _context;
+        const int BROADCAST_MESSAGE_ID = 1;
+
         public DashboardService(OnlabContext context)
         {
             _context = context;
@@ -88,8 +90,6 @@ namespace SecurityApi.Services
 
         public IEnumerable<Dashboard> ListForPersonByCategoryID(int categoryId)
         {
-            const int BROADCAST_MESSAGE_ID = 1;
-
             var dboards = _context.Dashboards
                 .Where(d => d.WageId == categoryId || d.WageId == BROADCAST_MESSAGE_ID)
                 .Include(d => d.Wage)
@@ -102,8 +102,6 @@ namespace SecurityApi.Services
 
         public async Task<IEnumerable<Dashboard>> ListForPersonByPersonID(int personId)
         {
-            const int BROADCAST_MESSAGE_ID = 1;
-
             var person = await _context.People.SingleOrDefaultAsync(p => p.Id == personId);
             
             if (person == null)
@@ -137,6 +135,7 @@ namespace SecurityApi.Services
 
             dboard.Title = newContent.Title;
             dboard.Message = newContent.Message;
+
             if(group != null)
             {
                 dboard.Wage = group;
