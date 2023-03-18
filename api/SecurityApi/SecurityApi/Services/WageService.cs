@@ -8,9 +8,11 @@ namespace SecurityApi.Services
     public class WageService : IWageService
     {
         private readonly OnlabContext _context;
+        private IShiftService _shiftService;
         public WageService(OnlabContext context)
         {
             _context = context;
+            _shiftService = new ShiftService(context);
         }
 
         public async Task<Wage> Create(CreateWage newWage)
@@ -80,10 +82,22 @@ namespace SecurityApi.Services
             
             if(wage != null)
             {
+                bool priceChange = false;
+                if(wage.Price != newWage.Price)
+                {
+                    priceChange = true;
+                }
+
                 wage.Name = newWage.Name;
                 wage.Price = newWage.Price;
 
                 await _context.SaveChangesAsync();
+
+                // Update all shifts prices where needed
+                if (priceChange)
+                {
+                    await _shiftService.WageChangedUpdate(wage.Id);
+                }
             }
 
             return wage == null ? null : ToModel(wage);

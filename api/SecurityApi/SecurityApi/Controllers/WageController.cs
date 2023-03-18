@@ -26,16 +26,17 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
-        [HttpGet("all")]
-        public ActionResult<IEnumerable<Wage>> GetAll()
-        {
-            var wages = _service.GetAll();
-            return Ok(wages);
-        }
         [HttpGet]
         public ActionResult<IEnumerable<Wage>> GetWages()
         {
             var wages = _service.GetWages();
+            return Ok(wages);
+        }
+
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<Wage>> GetAll()
+        {
+            var wages = _service.GetAll();
             return Ok(wages);
         }
 
@@ -75,15 +76,6 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Wage>> Delete(int id)
-        {
-            var result = await _service.Delete(id);
-            return result == null ? NotFound() : NoContent();
-        }
-
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -95,11 +87,20 @@ namespace SecurityApi.Controllers
                 var result = await _service.Update(id, newContent);
                 return result == null ? NotFound() : Ok();
             }
-            catch(ArgumentOutOfRangeException ec)
+            catch (ArgumentOutOfRangeException ec)
             {
                 return BadRequest(ec.Message);
             }
-            
+
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Wage>> Delete(int id)
+        {
+            var result = await _service.Delete(id);
+            return result == null ? NotFound() : NoContent();
         }
     }
 }

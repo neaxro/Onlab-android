@@ -92,16 +92,6 @@ namespace SecurityApi.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Shift>> Delete(int id)
-        {
-            var result = await _service.Delete(id);
-
-            return result == null ? NotFound() : Ok(result);
-        }
-
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -128,7 +118,7 @@ namespace SecurityApi.Controllers
                 var res = await _service.AcceptShift(id);
                 return res == null ? NotFound() : Ok();
             }
-            catch(DataException de)
+            catch (DataException de)
             {
                 return BadRequest(de.Message);
             }
@@ -148,6 +138,16 @@ namespace SecurityApi.Controllers
             {
                 return BadRequest(de.Message);
             }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Shift>> Delete(int id)
+        {
+            var result = await _service.Delete(id);
+
+            return result == null ? NotFound() : Ok(result);
         }
     }
 }

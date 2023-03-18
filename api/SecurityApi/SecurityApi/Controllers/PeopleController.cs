@@ -67,6 +67,26 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [HttpPost("picture/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [RequestSizeLimit(20000000)]  // ~20 MB
+        public async Task<ActionResult> UploadProfilePicture(int id, [FromForm] IFormFile image)
+        {
+            var result = await _service.UploadImage(id, image);
+            return result == null ? NotFound() : Ok();
+        }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Person>> Update(int id, [FromBody] CreatePerson newData)
+        {
+            var person = await _service.Update(id, newData);
+
+            return person == null ? NotFound() : Ok(person);
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -82,26 +102,6 @@ namespace SecurityApi.Controllers
             {
                 return BadRequest();
             }
-        }
-
-        [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Person>> Update(int id, [FromBody] CreatePerson newData)
-        {
-            var person = await _service.Update(id, newData);
-
-            return person == null ? NotFound() : Ok(person);
-        }
-
-        [HttpPost("picture/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [RequestSizeLimit(20000000)]  // ~20 MB
-        public async Task<ActionResult> UploadProfilePicture(int id, [FromForm] IFormFile image)
-        {
-            var result = await _service.UploadImage(id, image);
-            return result == null ? NotFound() : Ok();
-        }
+        }        
     }
 }

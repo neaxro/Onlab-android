@@ -382,6 +382,24 @@ namespace SecurityApi.Services
             return shift == null ? null : ToModel(shift);
         }
 
+        public async Task WageChangedUpdate(int wageId)
+        {
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            var shifts = await _context.Shifts
+                .Include(s => s.Wage)
+                .Where(s => s.WageId == wageId)
+                .ToListAsync();
+
+            foreach ( var shift in shifts)
+            {
+                shift.EarnedMoney = CalculateEarnedMoney(shift);
+            }
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+        }
+
         private Shift ToModel(Model.Shift shift)
         {
             Person p = new Person(

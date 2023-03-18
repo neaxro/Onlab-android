@@ -16,5 +16,6 @@ namespace SecurityApi.Services
         Task<Shift> Update(int id, UpdateShift newShift);
         Task<Shift> AcceptShift(int id);
         Task<Shift> DenyShift(int id);
+        Task WageChangedUpdate(int wageId);
     }
 }
