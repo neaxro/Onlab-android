@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -114,6 +115,38 @@ namespace SecurityApi.Controllers
             catch (ArgumentException ae)
             {
                 return BadRequest(ae.Message);
+            }
+        }
+
+        [HttpPatch("accept/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> AcceptShift(int id)
+        {
+            try
+            {
+                var res = await _service.AcceptShift(id);
+                return res == null ? NotFound() : Ok();
+            }
+            catch(DataException de)
+            {
+                return BadRequest(de.Message);
+            }
+        }
+
+        [HttpPatch("deny/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DenyShift(int id)
+        {
+            try
+            {
+                var res = await _service.DenyShift(id);
+                return res == null ? NotFound() : Ok();
+            }
+            catch (DataException de)
+            {
+                return BadRequest(de.Message);
             }
         }
     }

@@ -310,14 +310,76 @@ namespace SecurityApi.Services
             return shift == null ? null : ToModel(shift);
         }
 
-        public Task<Shift> AcceptShift(int id)
+        public async Task<Shift> AcceptShift(int id)
         {
-            throw new NotImplementedException();
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            const int ACCEPT_STATUS_ID = 4;
+
+            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == ACCEPT_STATUS_ID);
+
+            if(status == null)
+            {
+                throw new DataException(String.Format("Status with ID({0}) doesnt exist!", ACCEPT_STATUS_ID));
+            }
+
+            var shift = await _context.Shifts
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if(shift != null && shift.StatusId == PENDING_STATUS_ID)
+            {
+                shift.Status = status;
+
+                await _context.SaveChangesAsync();
+                await tran.CommitAsync();
+            }
+            else if(shift != null)
+            {
+                throw new DataException("Shift's status is not Pending!");
+            }
+
+            return shift == null ? null : ToModel(shift);
         }
 
-        public Task<Shift> DenyShift(int id)
+        public async Task<Shift> DenyShift(int id)
         {
-            throw new NotImplementedException();
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            const int DENY_STATUS_ID = 5;
+
+            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == DENY_STATUS_ID);
+
+            if (status == null)
+            {
+                throw new DataException(String.Format("Status with ID({0}) doesnt exist!", DENY_STATUS_ID));
+            }
+
+            var shift = await _context.Shifts
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (shift != null && shift.StatusId == PENDING_STATUS_ID)
+            {
+                shift.Status = status;
+
+                await _context.SaveChangesAsync();
+                await tran.CommitAsync();
+            }
+            else if (shift != null)
+            {
+                throw new DataException("Shift's status is not Pending!");
+            }
+
+            return shift == null ? null : ToModel(shift);
         }
 
         private Shift ToModel(Model.Shift shift)
