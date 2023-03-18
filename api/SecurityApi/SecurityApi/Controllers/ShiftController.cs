@@ -45,7 +45,7 @@ namespace SecurityApi.Controllers
             return shifts == null ? NotFound() : Ok(shifts);
         }
 
-        [HttpGet("all/{personId}/{jobId}")]
+        [HttpGet("all/{jobId}/{personId}")]
         public ActionResult<IEnumerable<Shift>> GetAllFroPeronInJob(int personId, int jobId)
         {
             var shifts = _service.GetAllForPersonInJob(personId, jobId);
@@ -66,14 +66,14 @@ namespace SecurityApi.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Shift>> CreateShift([FromBody] CreateShift shift)
+        public async Task<ActionResult<Shift>> CreateShift(int personId, [FromBody] CreateShift shift)
         {
             try
             {
-                var created = await _service.Create(shift);
+                var created = await _service.Create(personId, shift);
                 return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
             }
             catch (Exception ex)

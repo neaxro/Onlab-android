@@ -15,16 +15,26 @@ namespace SecurityApi.Services
     {
         private readonly OnlabContext _context;
         private const int PENDING_STATUS_ID = 1;
+        private const int PROCESSING_STATUS_ID = 2;
         private const int BROADCAST_WAGE_ID = 1;
         public ShiftService(OnlabContext context)
         {
             _context = context;
         }
-        public async Task<Shift> Create(CreateShift newShift)
+        public async Task<Shift> Create(int id, CreateShift newShift)
         {
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
-            var itsPerson = await _context.People.FirstOrDefaultAsync(p => p.Id == newShift.PersonId);
+            var itsPerson = await _context.People
+                .Include(p => p.Shifts)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            var inProcessShift = itsPerson.Shifts.FirstOrDefault(s => s.EndTime == null);
+
+            if(inProcessShift != null)
+            {
+                throw new Exception("Not finished shift!");
+            }
 
             if( itsPerson == null )
             {
@@ -40,12 +50,12 @@ namespace SecurityApi.Services
 
             var itsWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
 
-            if(itsWage == null || itsWage.Id == PENDING_STATUS_ID)
+            if(itsWage == null || itsWage.Id == BROADCAST_WAGE_ID)
             {
                 throw new Exception("Wage doesnt exist!");
             }
 
-            var pendingState = await _context.States.FirstOrDefaultAsync(s => s.Id == 1);
+            var inProcessState = await _context.States.FirstOrDefaultAsync(s => s.Id == PROCESSING_STATUS_ID);
 
             var shift = new Model.Shift()
             {
@@ -53,7 +63,7 @@ namespace SecurityApi.Services
                 People = itsPerson,
                 Job = itsJob,
                 Wage = itsWage,
-                Status = pendingState
+                Status = inProcessState
             };
 
             _context.Shifts.Add(shift);
@@ -95,14 +105,17 @@ namespace SecurityApi.Services
                 .FirstOrDefaultAsync(s =>
                 s.PeopleId == personId && s.EndTime == null);
 
-            // TODO: Esetleg leellenorizni h van-e ilyen ember, van-e befejezetlen szolgalata?
+            var pendingStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == PENDING_STATUS_ID);
 
-            if(shift == null)
+            // TODO: Esetleg leellenorizni h van-e ilyen ember, van-e befejezetlen szolgalata?
+            if (shift == null)
             {
                 return null;
             }
 
             shift.EndTime = DateTime.Now;
+
+            shift.Status = pendingStatus;
 
             float? earnedMoney = CalculateEarnedMoney(shift);
 
@@ -295,6 +308,16 @@ namespace SecurityApi.Services
             }
 
             return shift == null ? null : ToModel(shift);
+        }
+
+        public Task<Shift> AcceptShift(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Shift> DenyShift(int id)
+        {
+            throw new NotImplementedException();
         }
 
         private Shift ToModel(Model.Shift shift)
