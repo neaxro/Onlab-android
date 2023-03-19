@@ -94,7 +94,8 @@ create table [Positions]
 	Time datetime2,
 	Longitude real,
 	Latitude real,
-	PeopleID int references People(ID)
+	PeopleID int references People(ID),
+	JobID int references Jobs(ID)
 )
 
 create table [PeopleJobs]
