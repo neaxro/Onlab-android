@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp.Formatting;
+using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Dtos;
 using System.Data;
@@ -40,9 +41,19 @@ namespace SecurityApi.Services
             return ToModel(position);
         }
 
-        public Task<Position> Delete(int positionId)
+        public async Task<Position> Delete(int positionId)
         {
-            throw new NotImplementedException();
+            var position = await _context.Positions
+                .Include(p => p.People)
+                .FirstOrDefaultAsync(p => p.Id == positionId);
+            
+            if(position != null)
+            {
+                _context.Positions.Remove(position);
+                await _context.SaveChangesAsync();
+            }
+            
+            return position == null ? null : ToModel(position);
         }
 
         public async Task<Position> Get(int positionId)
