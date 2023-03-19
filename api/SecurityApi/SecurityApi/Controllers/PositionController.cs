@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Dtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
 using Position = SecurityApi.Dtos.Position;
@@ -30,13 +31,34 @@ namespace SecurityApi.Controllers
             return Ok(positions);
         }
 
-        [HttpGet("byid/{positionId}")]
+        [HttpGet("{positionId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Position>>> GetById(int positionId)
         {
             var position = await _service.Get(positionId);
             return position == null ? NotFound() : Ok(position);
+        }
+
+        [HttpPost("{personId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Position>> Create(int personId, [FromBody] CreatePosition newPosition)
+        {
+            try
+            {
+                var created = await _service.Create(personId, newPosition);
+                return CreatedAtAction(nameof(GetById), new { positionId = created.Id }, created);
+            }
+            catch (ArgumentException ae)
+            {
+                return NotFound(ae.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }
