@@ -102,23 +102,103 @@ namespace SecurityApi.Services
             return positions;
         }
 
-        public Task<IEnumerable<Position>> GetAllLatestForAll(int jobId)
+        public IEnumerable<Position> GetAllLatestForAll(int jobId)
         {
-            var latestPositions = _context.Positions
+            var grouppedPositions = _context.Positions
+                .Include(p => p.People)
+                .Where(p => p.JobId == jobId)
+                .GroupBy(pos => pos.People.Id)
+                .Select(g => new
+                {
+                    Id = g.Key,
+                    Time = g.Max(row => row.Time),
+                })
+                .ToList();
+
+            var pos = _context.Positions
+                .Include(p => p.People)
+                .Include(p => p.Job)
+                    .ThenInclude(j => j.People)
+                .ToList();
+
+            var joined = from positions in pos
+                         join groupped in grouppedPositions on new
+                         {
+                             PeopleID = (int)positions.PeopleId,
+                             Time = positions.Time
+                         } equals new
+                         {
+                             PeopleID =  groupped.Id,
+                             Time = groupped.Time
+                         }
+                         select new
+                         {
+                             Id = positions.Id,
+                             Time = positions.Time,
+                             Longitude = positions.Longitude,
+                             Latitude = positions.Latitude,
+                             Person = positions.People,
+                             Job = positions.Job
+                         };
+
+            List<Position> positionsForReturn = new List<Position>();
+
+            foreach(var entity in joined)
+            {
+                var person = new Person(
+                    entity.Person.Id,
+                    entity.Person.Name,
+                    entity.Person.Username,
+                    entity.Person.Nickname,
+                    entity.Person.Email,
+                    entity.Person.ProfilePicture);
+
+                var owner = new Person(
+                    entity.Job.People.Id,
+                    entity.Job.People.Name,
+                    entity.Job.People.Username,
+                    entity.Job.People.Nickname,
+                    entity.Job.People.Email,
+                    entity.Job.People.ProfilePicture);
+
+
+                var job = new Job(entity.Job.Id, entity.Job.Title, entity.Job.Description, owner);
+
+                positionsForReturn.Add(new Position(
+                    entity.Id,
+                    entity.Time,
+                    entity.Longitude,
+                    entity.Latitude,
+                    person,
+                    job));
+            }
+
+            return positionsForReturn;
+        }
+
+        public async Task<Position> Update(int positionId, CreatePosition newPosition)
+        {
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            var position = await _context.Positions
                 .Include(p => p.Job)
                     .ThenInclude(j => j.People)
                 .Include(p => p.People)
-                .Where(p => p.JobId == jobId)
-                .GroupBy(pos => pos.Time)
-                .OrderByDescending(group => group.Max(g => g.Time))
-                .ToList();
+                .FirstOrDefaultAsync(p => p.Id == positionId);
 
-            throw new NotImplementedException();
-        }
+            if(position == null)
+            {
+                await tran.RollbackAsync();
+                return null;
+            }
 
-        public Task<Position> Update(int positionId, CreatePosition newPosition)
-        {
-            throw new NotImplementedException();
+            position.Longitude = newPosition.Longitude;
+            position.Latitude = newPosition.Latitude;
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return ToModel(position);
         }
 
         private Position ToModel(Model.Position position)

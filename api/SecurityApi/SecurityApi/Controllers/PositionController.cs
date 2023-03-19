@@ -40,11 +40,18 @@ namespace SecurityApi.Controllers
             return position == null ? NotFound() : Ok(position);
         }
 
-        [HttpGet("/forperson/{jobId}/{personId}")]
+        [HttpGet("forperson/{jobId}/{personId}")]
         public ActionResult<IEnumerable<Position>> GetAllForPerson(int jobId, int personId)
         {
             var positions = _service.GetAllForPerson(jobId, personId);
             return Ok(positions);
+        }
+
+        [HttpGet("latest/{jobId}")]
+        public ActionResult<IEnumerable<Position>> GetLatestPositionsForJob(int jobId)
+        {
+            var result = _service.GetAllLatestForAll(jobId);
+            return Ok(result);
         }
 
         [HttpPost("{jobId}/{personId}")]
@@ -66,6 +73,15 @@ namespace SecurityApi.Controllers
             {
                 return BadRequest(ex);
             }
+        }
+
+        [HttpPatch("{positionId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Position>> Update(int positionId, [FromBody] CreatePosition position)
+        {
+            var positon = await _service.Update(positionId, position);
+            return position == null ? NotFound() : Ok(positon);
         }
 
         [HttpDelete("{id}")]
