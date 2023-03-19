@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Dtos;
 using System.Data;
+using System.Runtime.CompilerServices;
 using Position = SecurityApi.Dtos.Position;
 
 namespace SecurityApi.Services
@@ -15,7 +16,7 @@ namespace SecurityApi.Services
             _context = context;
         }
 
-        public async Task<Position> Create(int personId, CreatePosition newPosition)
+        public async Task<Position> Create(int jobId, int personId, CreatePosition newPosition)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
@@ -25,12 +26,21 @@ namespace SecurityApi.Services
                 throw new ArgumentException(String.Format("Person with ID({0}) not found!", personId));
             }
 
+            var job = await _context.Jobs
+                .Include(j => j.People)
+                .FirstOrDefaultAsync(j => j.Id == jobId);
+            if(job == null)
+            {
+                throw new ArgumentException(String.Format("Job with ID({0}) not found!", jobId));
+            }
+
             var position = new Model.Position()
             {
                 Time = DateTime.Now,
                 Longitude = newPosition.Longitude,
                 Latitude = newPosition.Latitude,
-                People = person
+                People = person,
+                Job = job
             };
 
             await _context.Positions.AddAsync(position);
@@ -44,6 +54,8 @@ namespace SecurityApi.Services
         public async Task<Position> Delete(int positionId)
         {
             var position = await _context.Positions
+                .Include(p => p.Job)
+                    .ThenInclude(j => j.People)
                 .Include(p => p.People)
                 .FirstOrDefaultAsync(p => p.Id == positionId);
             
@@ -59,6 +71,8 @@ namespace SecurityApi.Services
         public async Task<Position> Get(int positionId)
         {
             var position = await _context.Positions
+                .Include(p => p.Job)
+                    .ThenInclude(j => j.People)
                 .Include(p => p.People)
                 .FirstOrDefaultAsync(p => p.Id == positionId);
             return position == null ? null : ToModel(position);
@@ -67,25 +81,38 @@ namespace SecurityApi.Services
         public IEnumerable<Position> GetAll()
         {
             var positions = _context.Positions
+                .Include(p => p.Job)
+                    .ThenInclude(j => j.People)
                 .Include(p => p.People)
                 .Select(ToModel)
                 .ToList();
             return positions;
         }
 
-        public IEnumerable<Position> GetAllForPerson(int personId)
+        public IEnumerable<Position> GetAllForPerson(int jobId, int personId)
         {
             var positions = _context.Positions
+                .Include(p => p.Job)
+                    .ThenInclude(j => j.People)
                 .Include(p => p.People)
-                .Where(p => p.PeopleId == personId)
+                .Where(p => p.PeopleId == personId && p.JobId == jobId)
                 .Select(ToModel)
                 .ToList();
 
             return positions;
         }
 
-        public Task<IEnumerable<Position>> GetAllLatestForAll()
+        public Task<IEnumerable<Position>> GetAllLatestForAll(int jobId)
         {
+            var latestPositions = _context.Positions
+                .Include(p => p.Job)
+                    .ThenInclude(j => j.People)
+                .Include(p => p.People)
+                .Where(p => p.JobId == jobId)
+                .GroupBy(pos => pos.Time)
+                .OrderByDescending(group => group.Max(g => g.Time))
+                .ToList();
+
             throw new NotImplementedException();
         }
 
@@ -106,7 +133,24 @@ namespace SecurityApi.Services
                 //position.People.ProfilePicture
                 );
 
-            return new Position(position.Id, (DateTime)position.Time, (float)position.Longitude, (float)position.Latitude, p);
+            var owner = new Person(
+                position.Job.People.Id,
+                position.Job.People.Name,
+                position.Job.People.Username,
+                position.Job.People.Nickname,
+                position.Job.People.Email,
+                null
+                //position.Job.People.ProfilePicture
+                );
+
+            var j = new Job(
+                position.Job.Id,
+                position.Job.Title,
+                position.Job.Description,
+                owner
+                );
+
+            return new Position(position.Id, (DateTime)position.Time, (float)position.Longitude, (float)position.Latitude, p, j);
         }
     }
 }

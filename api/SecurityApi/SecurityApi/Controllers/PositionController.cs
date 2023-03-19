@@ -40,22 +40,22 @@ namespace SecurityApi.Controllers
             return position == null ? NotFound() : Ok(position);
         }
 
-        [HttpGet("/forperson/{personId}")]
-        public ActionResult<IEnumerable<Position>> GetAllForPerson(int personId)
+        [HttpGet("/forperson/{jobId}/{personId}")]
+        public ActionResult<IEnumerable<Position>> GetAllForPerson(int jobId, int personId)
         {
-            var positions = _service.GetAllForPerson(personId);
+            var positions = _service.GetAllForPerson(jobId, personId);
             return Ok(positions);
         }
 
-        [HttpPost("{personId}")]
+        [HttpPost("{jobId}/{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Position>> Create(int personId, [FromBody] CreatePosition newPosition)
+        public async Task<ActionResult<Position>> Create(int jobId, int personId, [FromBody] CreatePosition newPosition)
         {
             try
             {
-                var created = await _service.Create(personId, newPosition);
+                var created = await _service.Create(jobId, personId, newPosition);
                 return CreatedAtAction(nameof(GetById), new { positionId = created.Id }, created);
             }
             catch (ArgumentException ae)
