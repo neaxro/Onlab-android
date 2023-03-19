@@ -8,7 +8,7 @@ namespace SecurityApi.Services
     {
         Task<Position> Get(int positionId);
         IEnumerable<Position> GetAll();
-        Task<IEnumerable<Position>> GetAllForPerson(int personId);
+        IEnumerable<Position> GetAllForPerson(int personId);
         Task<IEnumerable<Position>> GetAllLatestForAll();
         Task<Position> Create(int personId, CreatePosition newPosition);
         Task<Position> Update(int positionId, CreatePosition newPosition);

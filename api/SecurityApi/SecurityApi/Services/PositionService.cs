@@ -73,9 +73,15 @@ namespace SecurityApi.Services
             return positions;
         }
 
-        public Task<IEnumerable<Position>> GetAllForPerson(int personId)
+        public IEnumerable<Position> GetAllForPerson(int personId)
         {
-            throw new NotImplementedException();
+            var positions = _context.Positions
+                .Include(p => p.People)
+                .Where(p => p.PeopleId == personId)
+                .Select(ToModel)
+                .ToList();
+
+            return positions;
         }
 
         public Task<IEnumerable<Position>> GetAllLatestForAll()

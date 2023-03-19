@@ -40,6 +40,13 @@ namespace SecurityApi.Controllers
             return position == null ? NotFound() : Ok(position);
         }
 
+        [HttpGet("/forperson/{personId}")]
+        public ActionResult<IEnumerable<Position>> GetAllForPerson(int personId)
+        {
+            var positions = _service.GetAllForPerson(personId);
+            return Ok(positions);
+        }
+
         [HttpPost("{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
