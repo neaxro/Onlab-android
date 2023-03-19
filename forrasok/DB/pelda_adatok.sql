@@ -64,6 +64,19 @@ insert into Shifts values
 	(GETDATE(), GETDATE(), 1230.9, 3, 1, 2, 1),  -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Sima, Folyamatban
 	(GETDATE(), GETDATE(), 11230.9, 3, 1, 4, 4)  -- StartTime, EndTime, EarnedMoney, Kiss Emese, FOO 2023, Kutyás, Elfogadva
 
+insert into dbo.Positions values
+	(DATEADD(mi, 1,GETDATE()), 47.104096, 20.120625, 1),
+	(DATEADD(mi, 2,GETDATE()), 47.104169, 20.119295, 1),
+	(DATEADD(mi, 3,GETDATE()), 47.104278, 20.117493, 1),
+	(DATEADD(mi, 4,GETDATE()), 47.104409, 20.115358, 1),
+	(DATEADD(mi, 5,GETDATE()), 47.104555, 20.112815, 1),
+	(DATEADD(mi, 6,GETDATE()), 47.104774, 20.109232, 1),
+	(DATEADD(mi, 0,GETDATE()), 47.089864, 20.139410, 5),
+	(DATEADD(mi, 1,GETDATE()), 47.089224, 20.139975, 5),
+	(DATEADD(mi, 2,GETDATE()), 47.088310, 20.140716, 5),
+	(DATEADD(mi, 0,GETDATE()), 47.107776, 20.170542, 4),
+	(DATEADD(mi, 1,GETDATE()), 47.108236, 20.173652, 4)
+
 --###############################################################################
 -- _____     _     _       _      _                _                        _    
 --|  __ \   | |   | |     | |    | |              | |                      | |   
