@@ -9,11 +9,11 @@ Ember csatlakoztatása Munkához [Jobs]
 [DONE] ADOTT EMBER üzeneteinek megtekintése [dsahboard]
 [DONE] Üzenet létrehozása [Dashboard]
 
-Szolgálat elkezdése [Shift]
-Szolgálat befejezése [Shift]
-GPS lokáció mentése [Shift]
+[DONE] Szolgálat elkezdése [Shift]
+[DONE] Szolgálat befejezése [Shift]
+[DONE] GPS lokáció mentése [Shift]
 
-ADOTT EMBER Szolgálatainak listázása [Stat]
+[DONE] ADOTT EMBER Szolgálatainak listázása [Stat]
 Adott ember szummázott szolgálat (Total Ft, Ora) [Stat]
 
 [DONE] Ember adatainak listázása [Profile]
@@ -27,5 +27,5 @@ Munkán dolgozó emberek Órabérének változtatása [People/Admin]
 [DONE] Órabérek létrehozása [Wages]
 [DONE] Órabér módosítása [Wages]
 
-Pending szolgálatok listázása [Pending Shifts/Admin]
-Pending szolgálatok elfogadása/elutasítása [Pending shifts/Admin]
+[DONE] Pending szolgálatok listázása [Pending Shifts/Admin]
+[DONE] Pending szolgálatok elfogadása/elutasítása [Pending shifts/Admin]

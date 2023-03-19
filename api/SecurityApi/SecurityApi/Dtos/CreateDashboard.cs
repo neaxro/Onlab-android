@@ -4,5 +4,5 @@ public record CreateDashboard(
     string Message,
     string JobName,
     int CreatorId,
-    string GroupName
+    int GroupId
     );

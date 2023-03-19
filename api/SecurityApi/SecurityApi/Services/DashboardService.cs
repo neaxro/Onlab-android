@@ -53,7 +53,7 @@ namespace SecurityApi.Services
             Model.Dashboard newMessage = null;
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
-            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Name == dashboard.GroupName);
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == dashboard.GroupId);
             var creator = await _context.People.FirstOrDefaultAsync(p => p.Id == dashboard.CreatorId);
             var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Title == dashboard.JobName);
 
@@ -131,7 +131,7 @@ namespace SecurityApi.Services
             if (dboard == null)
                 return null;
 
-            var group = await _context.Wages.FirstOrDefaultAsync(w => w.Name == newContent.GroupName);
+            var group = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newContent.GroupId);
 
             dboard.Title = newContent.Title;
             dboard.Message = newContent.Message;
