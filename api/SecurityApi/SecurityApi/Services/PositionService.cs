@@ -1,5 +1,7 @@
-﻿using SecurityApi.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using SecurityApi.Context;
 using SecurityApi.Dtos;
+using Position = SecurityApi.Dtos.Position;
 
 namespace SecurityApi.Services
 {
@@ -11,39 +13,56 @@ namespace SecurityApi.Services
             _context = context;
         }
 
-        public Task<Model.Position> Cerate(int personId, CreatePosition newPosition)
+        public Task<Position> Cerate(int personId, CreatePosition newPosition)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Model.Position> Delete(int positionId)
+        public Task<Position> Delete(int positionId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Model.Position> Get(int positionId)
+        public async Task<Position> Get(int positionId)
+        {
+            var position = await _context.Positions.FirstOrDefaultAsync(p => p.Id == positionId);
+            return position == null ? null : ToModel(position);
+        }
+
+        public IEnumerable<Position> GetAll()
+        {
+            var positions = _context.Positions.Select(ToModel).ToList();
+            return positions;
+        }
+
+        public Task<IEnumerable<Position>> GetAllForPerson(int personId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Model.Position>> GetAll()
+        public Task<IEnumerable<Position>> GetAllLatestForAll()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Model.Position>> GetAllForPerson(int personId)
+        public Task<Position> Update(int positionId, CreatePosition newPosition)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Model.Position>> GetAllLatestForAll()
+        private Position ToModel(Model.Position position)
         {
-            throw new NotImplementedException();
-        }
+            var p = new Person(
+                position.People.Id,
+                position.People.Name,
+                position.People.Username,
+                position.People.Nickname,
+                position.People.Email,
+                null
+                //position.People.ProfilePicture
+                );
 
-        public Task<Model.Position> Update(int positionId, CreatePosition newPosition)
-        {
-            throw new NotImplementedException();
+            return new Position(position.Id, (DateTime)position.Time, (float)position.Longitude, (float)position.Latitude, p);
         }
     }
 }
