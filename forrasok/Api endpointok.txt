@@ -22,7 +22,8 @@ Adott ember szummázott szolgálat (Total Ft, Ora) [Stat]
 
 Munkán dolgozó emberek listázása [People/ADmin]
 Munkán dolgozó emberek Jogainak változtatása [People/ADmin]
-Munkán dolgozó emberek Órabérének változtatása [People/Admin]
+??? Munkán dolgozó emberek Órabérének változtatása [People/Admin]
+	--> Lehet h ezt érdemesebb lenne kivenni mert majd a Shift start-nál lehetne kiválasztania. Kevesebb adminisztráció lenne vele. Max felülírja egy admin.
 
 [DONE] Órabérek létrehozása [Wages]
 [DONE] Órabér módosítása [Wages]
