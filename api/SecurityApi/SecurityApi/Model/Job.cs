@@ -21,5 +21,7 @@ public partial class Job
 
     public virtual ICollection<PeopleJob> PeopleJobs { get; } = new List<PeopleJob>();
 
+    public virtual ICollection<Position> Positions { get; } = new List<Position>();
+
     public virtual ICollection<Shift> Shifts { get; } = new List<Shift>();
 }
