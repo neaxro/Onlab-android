@@ -67,6 +67,13 @@ namespace SecurityApi.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
+        [HttpGet("inprogress/{jobId}")]
+        public ActionResult<IEnumerable<Shift>> GetAllInProgressShifts(int jobId)
+        {
+            var result = _service.GetAllInProgress(jobId);
+            return Ok(result);
+        }
+
         [HttpPost("{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -299,8 +299,11 @@ namespace SecurityApi.Services
                 shift.WageId = newShift.WageId;
                 shift.StatusId = newShift.StatusId;
 
+                await _context.SaveChangesAsync();
+
                 // Because of the changes
-                shift.EarnedMoney = CalculateEarnedMoney(shift);
+                float? money = CalculateEarnedMoney(shift);
+                shift.EarnedMoney = money;
 
                 await _context.SaveChangesAsync();
                 await tran.CommitAsync();
@@ -397,6 +400,21 @@ namespace SecurityApi.Services
 
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
+        }
+
+        public IEnumerable<Shift> GetAllInProgress(int jobId)
+        {
+            var inProgress = _context.Shifts
+                .Where(s => s.EndTime == null || s.Status.Id == DatabaseConstants.PROCESSING_STATUS_ID)
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return inProgress;
         }
     }
 }
