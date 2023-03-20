@@ -95,7 +95,7 @@ namespace SecurityApi.Services
             return (float)(wagePrice * Math.Round(hours, 1));
         }
 
-        public async Task<Shift> Finish(int personId)
+        public async Task<Shift> Finish(int shiftId)
         {
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
@@ -106,7 +106,7 @@ namespace SecurityApi.Services
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
                 .FirstOrDefaultAsync(s =>
-                s.PeopleId == personId && s.EndTime == null);
+                s.Id == shiftId && s.EndTime == null);
 
             var pendingStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.PENDING_STATUS_ID);
 

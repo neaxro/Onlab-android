@@ -79,16 +79,16 @@ namespace SecurityApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPatch("finish/{personId}")]
+        [HttpPatch("finish/{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Shift>> EndShift(int personId)
+        public async Task<ActionResult<Shift>> EndShift(int shiftId)
         {
-            var result = await _service.Finish(personId);
+            var result = await _service.Finish(shiftId);
             return result == null ? NotFound() : Ok(result);
         }
 
