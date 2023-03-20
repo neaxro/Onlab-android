@@ -10,5 +10,7 @@
 
         static public readonly int PENDING_STATUS_ID = 1;
         static public readonly int PROCESSING_STATUS_ID = 2;
+        static public readonly int ACCEPTED_STATUS_ID = 4;
+        static public readonly int DENY_STATUS_ID = 5;
     }
 }

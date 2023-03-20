@@ -17,9 +17,6 @@ namespace SecurityApi.Services
     {
         private readonly OnlabContext _context;
         private readonly ModelToDtoConverter _converter;
-        //private const int PENDING_STATUS_ID = 1;
-        //private const int PROCESSING_STATUS_ID = 2;
-        //private const int BROADCAST_WAGE_ID = 1;
         public ShiftService(OnlabContext context)
         {
             _context = context;
@@ -320,13 +317,11 @@ namespace SecurityApi.Services
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
-            const int ACCEPT_STATUS_ID = 4;
-
-            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == ACCEPT_STATUS_ID);
+            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.ACCEPTED_STATUS_ID);
 
             if(status == null)
             {
-                throw new DataException(String.Format("Status with ID({0}) doesnt exist!", ACCEPT_STATUS_ID));
+                throw new DataException(String.Format("Status with ID({0}) doesnt exist!", DatabaseConstants.ACCEPTED_STATUS_ID));
             }
 
             var shift = await _context.Shifts
@@ -356,13 +351,11 @@ namespace SecurityApi.Services
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
-            const int DENY_STATUS_ID = 5;
-
-            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == DENY_STATUS_ID);
+            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.DENY_STATUS_ID);
 
             if (status == null)
             {
-                throw new DataException(String.Format("Status with ID({0}) doesnt exist!", DENY_STATUS_ID));
+                throw new DataException(String.Format("Status with ID({0}) doesnt exist!", DatabaseConstants.DENY_STATUS_ID));
             }
 
             var shift = await _context.Shifts
