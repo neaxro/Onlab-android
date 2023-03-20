@@ -41,6 +41,13 @@ namespace SecurityApi.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
+        [HttpGet("availablefor/{personId}")]
+        public ActionResult<IEnumerable<Job>> GetAllAvailableForPerson(int personId)
+        {
+            var result = _service.GetAllAwailableForPerson(personId);
+            return Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

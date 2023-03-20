@@ -2,6 +2,7 @@
 using SecurityApi.Context;
 using SecurityApi.Converters;
 using SecurityApi.Dtos;
+using SecurityApi.Enums;
 using System.Data;
 
 namespace SecurityApi.Services
@@ -103,7 +104,14 @@ namespace SecurityApi.Services
 
         public IEnumerable<Job> GetAllAwailableForPerson(int personId)
         {
-            throw new NotImplementedException();
+            var jobs = _context.PeopleJobs
+                .Include(pj => pj.Job)
+                .Where(pj => pj.PeopleId == personId)
+                .Select(pj => pj.Job)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return jobs;
         }
 
         private string GeneratePin(int length = 6)

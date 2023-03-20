@@ -9,6 +9,7 @@ using State = SecurityApi.Dtos.State;
 using Wage = SecurityApi.Dtos.Wage;
 using System.Data;
 using SecurityApi.Converters;
+using SecurityApi.Enums;
 
 namespace SecurityApi.Services
 {
@@ -16,9 +17,9 @@ namespace SecurityApi.Services
     {
         private readonly OnlabContext _context;
         private readonly ModelToDtoConverter _converter;
-        private const int PENDING_STATUS_ID = 1;
-        private const int PROCESSING_STATUS_ID = 2;
-        private const int BROADCAST_WAGE_ID = 1;
+        //private const int PENDING_STATUS_ID = 1;
+        //private const int PROCESSING_STATUS_ID = 2;
+        //private const int BROADCAST_WAGE_ID = 1;
         public ShiftService(OnlabContext context)
         {
             _context = context;
@@ -55,12 +56,12 @@ namespace SecurityApi.Services
 
             var itsWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
 
-            if(itsWage == null || itsWage.Id == BROADCAST_WAGE_ID)
+            if(itsWage == null || itsWage.Id == DatabaseConstants.BROADCAST_MESSAGE_ID)
             {
                 throw new Exception("Wage doesnt exist!");
             }
 
-            var inProcessState = await _context.States.FirstOrDefaultAsync(s => s.Id == PROCESSING_STATUS_ID);
+            var inProcessState = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.PROCESSING_STATUS_ID);
 
             var shift = new Model.Shift()
             {
@@ -110,7 +111,7 @@ namespace SecurityApi.Services
                 .FirstOrDefaultAsync(s =>
                 s.PeopleId == personId && s.EndTime == null);
 
-            var pendingStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == PENDING_STATUS_ID);
+            var pendingStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.PENDING_STATUS_ID);
 
             // TODO: Esetleg leellenorizni h van-e ilyen ember, van-e befejezetlen szolgalata?
             if (shift == null)
@@ -254,7 +255,7 @@ namespace SecurityApi.Services
             }
 
             var shifts = _context.Shifts
-                .Where(s => s.JobId == jobId && s.StatusId == PENDING_STATUS_ID)
+                .Where(s => s.JobId == jobId && s.StatusId == DatabaseConstants.PENDING_STATUS_ID)
                 .Include(s => s.People)
                 .Include(s => s.Wage)
                 .Include(s => s.Job)
@@ -272,7 +273,7 @@ namespace SecurityApi.Services
             var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
             var state = await _context.States.FirstOrDefaultAsync(s => s.Id == newShift.StatusId);
 
-            if(wage == null || wage.Id == BROADCAST_WAGE_ID)
+            if(wage == null || wage.Id == DatabaseConstants.BROADCAST_MESSAGE_ID)
             {
                 throw new ArgumentException("New Wage doesnt exist!");
             }
@@ -336,7 +337,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if(shift != null && shift.StatusId == PENDING_STATUS_ID)
+            if(shift != null && shift.StatusId == DatabaseConstants.PENDING_STATUS_ID)
             {
                 shift.Status = status;
 
@@ -372,7 +373,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if (shift != null && shift.StatusId == PENDING_STATUS_ID)
+            if (shift != null && shift.StatusId == DatabaseConstants.PENDING_STATUS_ID)
             {
                 shift.Status = status;
 

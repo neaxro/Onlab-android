@@ -2,6 +2,7 @@
 using SecurityApi.Context;
 using SecurityApi.Converters;
 using SecurityApi.Dtos;
+using SecurityApi.Enums;
 using SecurityApi.Model;
 using System.Data;
 using System.Runtime.InteropServices;
@@ -15,7 +16,6 @@ namespace SecurityApi.Services
     {
         private readonly OnlabContext _context;
         private readonly ModelToDtoConverter _converter;
-        const int BROADCAST_MESSAGE_ID = 1;
 
         public DashboardService(OnlabContext context)
         {
@@ -94,7 +94,7 @@ namespace SecurityApi.Services
         public IEnumerable<Dashboard> ListForPersonByCategoryID(int categoryId)
         {
             var dboards = _context.Dashboards
-                .Where(d => d.WageId == categoryId || d.WageId == BROADCAST_MESSAGE_ID)
+                .Where(d => d.WageId == categoryId || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID)
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Select(_converter.ToModel)
@@ -111,7 +111,7 @@ namespace SecurityApi.Services
                 return null;
 
             var dboards = _context.Dashboards
-                .Where(d => d.PeopleId == person.Id || d.WageId == BROADCAST_MESSAGE_ID)
+                .Where(d => d.PeopleId == person.Id || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID)
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Select(_converter.ToModel)
