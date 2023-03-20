@@ -2,9 +2,9 @@
 
 Felhasználó belépetetése (usernam, pass) [login]
 
-ADOTT EMBER munkáinak listázása [Jobs]
-Ember csatlakoztatása Munkához [Jobs]
-Új munka létrehozása [jobs]
+[DONE] ADOTT EMBER munkáinak listázása [Jobs]
+[DONE] Ember csatlakoztatása Munkához [Jobs]
+[DONE] Új munka létrehozása [jobs]
 
 [DONE] ADOTT EMBER üzeneteinek megtekintése [dsahboard]
 [DONE] Üzenet létrehozása [Dashboard]
