@@ -15,13 +15,17 @@ insert into dbo.People values
 	('Kovács János', 'janko', 'Jancsi', 'janchi@gmail.com', 'kasjdlaskd2', null),
 	('Takács Imre', 'imreee', 'Imi', 'imy56@gmail.com', 'iwerdx87', null)
 
+-- Pelda egy munkara
+insert into dbo.Jobs values
+	('ASD123', 'FOO 2023', 'Fishing On Orfű 2023', 1)
+
 -- Pelda oraberek
 insert into dbo.Wages values
-	('Mindenki', 0),
-	('Sima', 1300),
-	('Speciális', 2300.90),
-	('Kutyás', 1890.90),
-	('Kerítés', 1590.90)
+	('Mindenki', 0, 1),
+	('Sima', 1300, 1),
+	('Speciális', 2300.90, 1),
+	('Kutyás', 1890.90, 1),
+	('Kerítés', 1590.90, 1)
 
 -- Allapotok letrehozasa
 insert into States values
@@ -36,10 +40,6 @@ insert into Roles values
 	('Tulajdonos'),
 	('Admin'),
 	('Felhasználó')
-
--- Pelda egy munkara
-insert into dbo.Jobs values
-	('ASD123', 'FOO 2023', 'Fishing On Orfű 2023', 1)
 
 -- Emberek munkara rendelese
 insert into PeopleJobs values
@@ -190,3 +190,8 @@ insert into dbo.Positions values
 
 --select* from Shifts s
 --	inner join States st on s.StatusID = st.ID
+
+--					|Berek listazasa|
+--select w.Name, w.Price
+--from Wages w
+--where JobID = 1

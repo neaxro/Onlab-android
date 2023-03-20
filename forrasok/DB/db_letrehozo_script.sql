@@ -36,13 +36,6 @@ create table [People]
 	ProfilePicture image
 )
 
-create table [Wages]
-(
-	ID int identity primary key,
-	Name nvarchar(30) unique,
-	Price real
-)
-
 create table [Jobs]
 (
 	ID int identity primary key,
@@ -50,6 +43,14 @@ create table [Jobs]
 	Title nvarchar(20) unique,
 	Description nvarchar(100),
 	PeopleID int references People(ID) --creator
+)
+
+create table [Wages]
+(
+	ID int identity primary key,
+	Name nvarchar(30) unique,
+	Price real,
+	JobID int references Jobs(ID)
 )
 
 create table [States]
