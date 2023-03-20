@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Converters;
 using SecurityApi.Dtos;
 using System.Data;
 
@@ -8,10 +9,12 @@ namespace SecurityApi.Services
     public class WageService : IWageService
     {
         private readonly OnlabContext _context;
+        private readonly ModelToDtoConverter _converter;
         private IShiftService _shiftService;
         public WageService(OnlabContext context)
         {
             _context = context;
+            _converter = new ModelToDtoConverter();
             _shiftService = new ShiftService(context);
         }
 
@@ -42,7 +45,7 @@ namespace SecurityApi.Services
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
 
-            return wage == null ? null : ToModel(wage);
+            return wage == null ? null : _converter.ToModel(wage);
         }
 
         public async Task<Wage> Delete(int id)
@@ -55,18 +58,18 @@ namespace SecurityApi.Services
                 await _context.SaveChangesAsync();
             }
 
-            return wage == null ? null : ToModel(wage);
+            return wage == null ? null : _converter.ToModel(wage);
         }
 
         public async Task<Wage> GetById(int id)
         {
             var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == id);
-            return wage == null ? null : ToModel(wage);
+            return wage == null ? null : _converter.ToModel(wage);
         }
 
         public IEnumerable<Wage> GetAll()
         {
-            var wages = _context.Wages.Select(ToModel).ToList();
+            var wages = _context.Wages.Select(_converter.ToModel).ToList();
             return wages;
         }
 
@@ -100,21 +103,16 @@ namespace SecurityApi.Services
                 }
             }
 
-            return wage == null ? null : ToModel(wage);
+            return wage == null ? null : _converter.ToModel(wage);
         }
 
         public IEnumerable<Wage> GetWages()
         {
             var wages = _context.Wages
                 .Where(w => w.Id > 1)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
             return wages;
-        }
-
-        private Wage ToModel(Model.Wage wage)
-        {
-            return new Wage(wage.Id, wage.Name, wage.Price);
         }
     }
 }

@@ -8,18 +8,21 @@ using Job = SecurityApi.Dtos.Job;
 using State = SecurityApi.Dtos.State;
 using Wage = SecurityApi.Dtos.Wage;
 using System.Data;
+using SecurityApi.Converters;
 
 namespace SecurityApi.Services
 {
     public class ShiftService : IShiftService
     {
         private readonly OnlabContext _context;
+        private readonly ModelToDtoConverter _converter;
         private const int PENDING_STATUS_ID = 1;
         private const int PROCESSING_STATUS_ID = 2;
         private const int BROADCAST_WAGE_ID = 1;
         public ShiftService(OnlabContext context)
         {
             _context = context;
+            _converter = new ModelToDtoConverter();
         }
         public async Task<Shift> Create(int personId, CreateShift newShift)
         {
@@ -74,7 +77,7 @@ namespace SecurityApi.Services
 
             await tran.CommitAsync();
 
-            return ToModel(shift);
+            return _converter.ToModel(shift);
         }
 
         private float? CalculateEarnedMoney(Model.Shift shift)
@@ -126,7 +129,7 @@ namespace SecurityApi.Services
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
 
-            return ToModel(shift);
+            return _converter.ToModel(shift);
         }
 
         public async Task<Shift> Delete(int id)
@@ -145,7 +148,7 @@ namespace SecurityApi.Services
             _context.Shifts.Remove(shift);
             await _context.SaveChangesAsync();
 
-            return ToModel(shift);
+            return _converter.ToModel(shift);
         }
 
         public async Task<Shift> Get(int id)
@@ -157,7 +160,7 @@ namespace SecurityApi.Services
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
                 .FirstOrDefaultAsync(s => s.Id == id);
-            return result == null ? null : ToModel(result);
+            return result == null ? null : _converter.ToModel(result);
         }
 
         public IEnumerable<Shift> GetAll()
@@ -168,7 +171,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
             return shifts;
         }
@@ -190,7 +193,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
             return shifts;
         }
@@ -212,7 +215,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
             return shifts;
         }
@@ -235,7 +238,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
             return shifts;
         }
@@ -257,7 +260,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
             return shifts;
         }
@@ -309,7 +312,7 @@ namespace SecurityApi.Services
                 await tran.RollbackAsync();
             }
 
-            return shift == null ? null : ToModel(shift);
+            return shift == null ? null : _converter.ToModel(shift);
         }
 
         public async Task<Shift> AcceptShift(int id)
@@ -345,7 +348,7 @@ namespace SecurityApi.Services
                 throw new DataException("Shift's status is not Pending!");
             }
 
-            return shift == null ? null : ToModel(shift);
+            return shift == null ? null : _converter.ToModel(shift);
         }
 
         public async Task<Shift> DenyShift(int id)
@@ -381,7 +384,7 @@ namespace SecurityApi.Services
                 throw new DataException("Shift's status is not Pending!");
             }
 
-            return shift == null ? null : ToModel(shift);
+            return shift == null ? null : _converter.ToModel(shift);
         }
 
         public async Task WageChangedUpdate(int wageId)
@@ -400,48 +403,6 @@ namespace SecurityApi.Services
 
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
-        }
-
-        private Shift ToModel(Model.Shift shift)
-        {
-            Person p = new Person(
-                shift.People.Id,
-                shift.People.Name,
-                shift.People.Username,
-                shift.People.Nickname,
-                shift.People.Email,
-                shift.People.ProfilePicture
-                );
-
-            Person owner = new Person(
-                shift.Job.People.Id,
-                shift.Job.People.Name,
-                shift.Job.People.Username,
-                shift.Job.People.Nickname,
-                shift.Job.People.Email,
-                null
-                );
-
-            Job j = new Job(
-                shift.Job.Id,
-                shift.Job.Title,
-                shift.Job.Description,
-                owner
-                );
-
-            State s = new State(
-                shift.Status.Id,
-                shift.Status.Title,
-                shift.Status.Description
-                );
-
-            Wage w = new Wage(
-                shift.Wage.Id,
-                shift.Wage.Name,
-                shift.Wage.Price
-                );
-
-            return new Shift(shift.Id, shift.StartTime, shift.EndTime, shift.EarnedMoney, p, j, s, w);
         }
     }
 }

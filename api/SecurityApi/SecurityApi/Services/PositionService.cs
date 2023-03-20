@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Formatting;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Converters;
 using SecurityApi.Dtos;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -11,9 +12,11 @@ namespace SecurityApi.Services
     public class PositionService : IPositionService
     {
         private readonly OnlabContext _context;
+        private readonly ModelToDtoConverter _converter;
         public PositionService(OnlabContext context)
         {
             _context = context;
+            _converter = new ModelToDtoConverter();
         }
 
         public async Task<Position> Create(int jobId, int personId, CreatePosition newPosition)
@@ -48,7 +51,7 @@ namespace SecurityApi.Services
 
             await tran.CommitAsync();
 
-            return ToModel(position);
+            return _converter.ToModel(position);
         }
 
         public async Task<Position> Delete(int positionId)
@@ -65,7 +68,7 @@ namespace SecurityApi.Services
                 await _context.SaveChangesAsync();
             }
             
-            return position == null ? null : ToModel(position);
+            return position == null ? null : _converter.ToModel(position);
         }
 
         public async Task<Position> Get(int positionId)
@@ -75,7 +78,7 @@ namespace SecurityApi.Services
                     .ThenInclude(j => j.People)
                 .Include(p => p.People)
                 .FirstOrDefaultAsync(p => p.Id == positionId);
-            return position == null ? null : ToModel(position);
+            return position == null ? null : _converter.ToModel(position);
         }
 
         public IEnumerable<Position> GetAll()
@@ -84,7 +87,7 @@ namespace SecurityApi.Services
                 .Include(p => p.Job)
                     .ThenInclude(j => j.People)
                 .Include(p => p.People)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
             return positions;
         }
@@ -96,7 +99,7 @@ namespace SecurityApi.Services
                     .ThenInclude(j => j.People)
                 .Include(p => p.People)
                 .Where(p => p.PeopleId == personId && p.JobId == jobId)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
 
             return positions;
@@ -198,39 +201,7 @@ namespace SecurityApi.Services
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
 
-            return ToModel(position);
-        }
-
-        private Position ToModel(Model.Position position)
-        {
-            var p = new Person(
-                position.People.Id,
-                position.People.Name,
-                position.People.Username,
-                position.People.Nickname,
-                position.People.Email,
-                null
-                //position.People.ProfilePicture
-                );
-
-            var owner = new Person(
-                position.Job.People.Id,
-                position.Job.People.Name,
-                position.Job.People.Username,
-                position.Job.People.Nickname,
-                position.Job.People.Email,
-                null
-                //position.Job.People.ProfilePicture
-                );
-
-            var j = new Job(
-                position.Job.Id,
-                position.Job.Title,
-                position.Job.Description,
-                owner
-                );
-
-            return new Position(position.Id, (DateTime)position.Time, (float)position.Longitude, (float)position.Latitude, p, j);
+            return _converter.ToModel(position);
         }
     }
 }

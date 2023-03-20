@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Converters;
 using SecurityApi.Dtos;
 using SecurityApi.Model;
 using System.Data;
@@ -13,11 +14,13 @@ namespace SecurityApi.Services
     public class DashboardService : IDashboardService
     {
         private readonly OnlabContext _context;
+        private readonly ModelToDtoConverter _converter;
         const int BROADCAST_MESSAGE_ID = 1;
 
         public DashboardService(OnlabContext context)
         {
             _context = context;
+            _converter = new ModelToDtoConverter();
         }
 
         public async Task<Dashboard> Delete(int id)
@@ -34,7 +37,7 @@ namespace SecurityApi.Services
                 await _context.SaveChangesAsync();
             }
 
-            return dboard == null ? null : ToModel(dboard);
+            return dboard == null ? null : _converter.ToModel(dboard);
         }
 
         public async Task<Dashboard> GetById(int id)
@@ -45,7 +48,7 @@ namespace SecurityApi.Services
                 .Include(d => d.People)
                 .FirstOrDefaultAsync();
 
-            return dboard == null ? null : ToModel(dboard);
+            return dboard == null ? null : _converter.ToModel(dboard);
         }
 
         public async Task<Dashboard> Insert(CreateDashboard dashboard)
@@ -74,7 +77,7 @@ namespace SecurityApi.Services
 
             await tran.CommitAsync();
 
-            return newMessage == null ? null : ToModel(newMessage);
+            return newMessage == null ? null : _converter.ToModel(newMessage);
         }
 
         public IEnumerable<Dashboard> ListAll()
@@ -82,7 +85,7 @@ namespace SecurityApi.Services
             var dboards = _context.Dashboards
                 .Include(d => d.Wage)
                 .Include(d => d.People)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
 
             return dboards;
@@ -94,7 +97,7 @@ namespace SecurityApi.Services
                 .Where(d => d.WageId == categoryId || d.WageId == BROADCAST_MESSAGE_ID)
                 .Include(d => d.Wage)
                 .Include(d => d.People)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
 
             return dboards;
@@ -111,7 +114,7 @@ namespace SecurityApi.Services
                 .Where(d => d.PeopleId == person.Id || d.WageId == BROADCAST_MESSAGE_ID)
                 .Include(d => d.Wage)
                 .Include(d => d.People)
-                .Select(ToModel)
+                .Select(_converter.ToModel)
                 .ToList();
 
             return dboards;
@@ -144,10 +147,10 @@ namespace SecurityApi.Services
             await _context.SaveChangesAsync();
             await tarn.CommitAsync();
 
-            return ToModel(dboard);
+            return _converter.ToModel(dboard);
         }
 
-        private Dashboard ToModel(Model.Dashboard dashboard)
+        /*private Dashboard ToModel(Model.Dashboard dashboard)
         {
             return new Dashboard(
                 dashboard.Id,
@@ -159,6 +162,6 @@ namespace SecurityApi.Services
                 dashboard.Wage.Id,
                 dashboard.Wage.Name
                 );
-        }
+        }*/
     }
 }

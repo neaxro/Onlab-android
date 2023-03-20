@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Converters;
 using SecurityApi.Dtos;
 using SecurityApi.Model;
 using System.Data;
@@ -10,10 +11,12 @@ namespace SecurityApi.Services
     public class PeopleService : IPeopleService
     {
         private readonly OnlabContext _context;
+        private readonly ModelToDtoConverter _converter;
 
         public PeopleService(OnlabContext context)
         {
             _context = context;
+            _converter = new ModelToDtoConverter();
         }
 
         public async Task<Person> DeleteById(int id)
@@ -26,18 +29,18 @@ namespace SecurityApi.Services
                 await _context.SaveChangesAsync();
             }
 
-            return result == null ? null : ToModel(result);
+            return result == null ? null : _converter.ToModel(result);
         }
 
         public async Task<Person> FindById(int id)
         {
             var result = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
-            return result == null ? null : ToModel(result);
+            return result == null ? null : _converter.ToModel(result);
         }
 
         public IEnumerable<Person> GetAll()
         {
-            return _context.People.Select(ToModel).ToList();
+            return _context.People.Select(_converter.ToModel).ToList();
             
         }
 
@@ -64,7 +67,7 @@ namespace SecurityApi.Services
 
             await tran.CommitAsync();
 
-            return ToModel(person);
+            return _converter.ToModel(person);
         }
 
         public async Task<Person> Update(int id, CreatePerson newData)
@@ -82,7 +85,7 @@ namespace SecurityApi.Services
                 await _context.SaveChangesAsync();
             }
 
-            return person == null ? null : ToModel(person);
+            return person == null ? null : _converter.ToModel(person);
         }
 
         public async Task<Person> UploadImage(int id, IFormFile image)
@@ -99,19 +102,7 @@ namespace SecurityApi.Services
                 await _context.SaveChangesAsync();
             }
 
-            return person == null ? null : ToModel(person);
-        }
-
-        private Person ToModel(Model.Person person)
-        {
-            return new Person(
-                person.Id,
-                person.Name,
-                person.Username,
-                person.Nickname,
-                person.Email,
-                person.ProfilePicture
-                );
+            return person == null ? null : _converter.ToModel(person);
         }
     }
 }
