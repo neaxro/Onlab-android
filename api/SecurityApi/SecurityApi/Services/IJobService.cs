@@ -9,7 +9,7 @@ namespace SecurityApi.Services
         IEnumerable<Job> GetAll();
         IEnumerable<Job> GetAllAwailableForPerson(int personId);
         IEnumerable<Person> AllPersonInJob(int jobId);
-        Job Get(int jobId);
+        Task<Job> Get(int jobId);
         Task<Job> Create(CreateJob job);
         Task<Job> Delete(int jobId);
         Task ConnectToJob(int jobId, int personId);

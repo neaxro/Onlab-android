@@ -165,7 +165,7 @@ namespace SecurityApi.Services
                     entity.Job.People.ProfilePicture);
 
 
-                var job = new Job(entity.Job.Id, entity.Job.Title, entity.Job.Description, owner);
+                var job = new Job(entity.Job.Id, entity.Job.Title, entity.Job.Pin, entity.Job.Description, owner);
 
                 positionsForReturn.Add(new Position(
                     entity.Id,

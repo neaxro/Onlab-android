@@ -31,7 +31,7 @@
         public Dtos.Job ToModel(Model.Job job)
         {
             Dtos.Person owner = ToModel(job.People);
-            return new Dtos.Job(job.Id, job.Title, job.Description, owner);
+            return new Dtos.Job(job.Id, job.Title, job.Pin, job.Description, owner);
         }
 
         public Dtos.Dashboard ToModel(Model.Dashboard dashboard)
