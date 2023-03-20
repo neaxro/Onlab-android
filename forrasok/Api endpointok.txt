@@ -20,8 +20,8 @@ Adott ember szummázott szolgálat (Total Ft, Ora) [Stat]
 [DONE] Ember adatainak módosítása [Profile]
 [DONE] Profilkép feltöltése [Profile]
 
-Munkán dolgozó emberek listázása [People/ADmin]
-Munkán dolgozó emberek Jogainak változtatása [People/ADmin]
+[DONE] Munkán dolgozó emberek listázása [People/ADmin]
+[DONE] Munkán dolgozó emberek Jogainak változtatása [People/ADmin]
 ??? Munkán dolgozó emberek Órabérének változtatása [People/Admin]
 	--> Lehet h ezt érdemesebb lenne kivenni mert majd a Shift start-nál lehetne kiválasztania. Kevesebb adminisztráció lenne vele. Max felülírja egy admin.
 

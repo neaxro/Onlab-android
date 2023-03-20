@@ -6,14 +6,12 @@ namespace SecurityApi.Services
 {
     public interface IPeopleService
     {
-        // Debug
         IEnumerable<Person> GetAll();
-        //IEnumerable<Person> GetAllOnJob(int jobId);
-        // People/Admin
-        //Task<IEnumerable<PersonDetailed>> GetAllOnJobDetailed();
+        IEnumerable<Person> GetAllOnJob(int jobId);
         Task<Person> Insert(CreatePerson newPerson);
         Task<Person> FindById(int id);
         Task<Person> Update(int id, CreatePerson newData);
+        Task ChangePersonRole(int jobId, int personId, int roleId);
         Task<Person> DeleteById(int id);
         Task<Person> UploadImage(int id, IFormFile image);
     }

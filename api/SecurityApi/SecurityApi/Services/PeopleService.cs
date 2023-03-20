@@ -4,6 +4,7 @@ using SecurityApi.Converters;
 using SecurityApi.Dtos;
 using SecurityApi.Model;
 using System.Data;
+using System.Linq;
 using Person = SecurityApi.Dtos.Person;
 
 namespace SecurityApi.Services
@@ -17,6 +18,31 @@ namespace SecurityApi.Services
         {
             _context = context;
             _converter = new ModelToDtoConverter();
+        }
+
+#warning Nem ellenoriz semmit, megteszi a valtoztatast (ezzel lehet 2 tulaj 1 munkaba)
+        public async Task ChangePersonRole(int jobId, int personId, int roleId)
+        {
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            var newRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+            if (newRole == null)
+            {
+                await tran.RollbackAsync();
+                throw new DataException(String.Format("Role with ID({0}) does not exist!", roleId));
+            }
+
+            var personConnection = await _context.PeopleJobs.FirstOrDefaultAsync(pj => pj.PeopleId == personId && pj.JobId == jobId);
+            if(personConnection == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("Person with ID({0}) on Job ID({1}) does not exist!", personId, jobId));
+            }
+
+            personConnection.Role = newRole;
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
         }
 
         public async Task<Person> DeleteById(int id)
@@ -42,6 +68,18 @@ namespace SecurityApi.Services
         {
             return _context.People.Select(_converter.ToModel).ToList();
             
+        }
+
+        public IEnumerable<Person> GetAllOnJob(int jobId)
+        {
+            var people = _context.PeopleJobs
+                .Where(pj => pj.JobId == jobId)
+                .Include(pj => pj.People)
+                .Select(pj => pj.People)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return people;
         }
 
         public async Task<Person> Insert(CreatePerson newPerson)

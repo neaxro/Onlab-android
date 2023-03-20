@@ -48,6 +48,13 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [HttpGet("allonjob/{jobId}")]
+        public ActionResult<IEnumerable<Person>> GetAllOnJob(int jobId)
+        {
+            var result = _service.GetAllOnJob(jobId);
+            return Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,6 +92,21 @@ namespace SecurityApi.Controllers
             var person = await _service.Update(id, newData);
 
             return person == null ? NotFound() : Ok(person);
+        }
+
+        [HttpPatch("changerole/{jobId}/{personId}/{roleId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> ChangeRole(int jobId, int personId, int roleId)
+        {
+            try
+            {
+                await _service.ChangePersonRole(jobId, personId, roleId);
+                return Ok();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
