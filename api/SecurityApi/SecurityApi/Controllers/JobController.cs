@@ -48,6 +48,13 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("connection/{connectionId}")]
+        public async Task<ActionResult<PersonJob>> GetConnection(int connectionId)
+        {
+            var result = await _service.GetConnection(connectionId);
+            return result == null ? NotFound() : Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,6 +69,27 @@ namespace SecurityApi.Controllers
             catch (DataException de)
             {
                 return NotFound(de.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("connect")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Job>> ConncetPersonToJob([FromBody] CreateConnection connection)
+        {
+            try
+            {
+                var created = await _service.ConnectToJob(connection);
+                return CreatedAtAction(nameof(GetConnection), new { connectionId = created.Id }, created);
+            }
+            catch (DataException de)
+            {
+                return BadRequest(de.Message);
             }
             catch (Exception ex)
             {

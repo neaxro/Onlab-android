@@ -66,5 +66,10 @@
 
             return new Dtos.Shift(shift.Id, shift.StartTime, shift.EndTime, shift.EarnedMoney, person, job, status, wage);
         }
+
+        public Dtos.PersonJob ToModel(Model.PeopleJob peopleJob)
+        {
+            return new Dtos.PersonJob(peopleJob.Id, peopleJob.Job.Title, peopleJob.People.Name);
+        }
     }
 }
