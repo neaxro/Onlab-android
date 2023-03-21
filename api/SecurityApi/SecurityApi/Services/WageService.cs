@@ -29,14 +29,23 @@ namespace SecurityApi.Services
             Model.Wage wage = null;
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
-            var result = await _context.Wages.FirstOrDefaultAsync(w => w.Name== newWage.Name);
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == newWage.JobId);
+            if (job == null)
+            {
+                throw new DataException(String.Format("Job with ID({0}) does not exist!", newWage.JobId));
+            }
+
+            var result = await _context.Wages
+                .Include(w => w.Job)
+                .FirstOrDefaultAsync(w => w.Name== newWage.Name);
 
             if(result == null)
             {
                 wage = new Model.Wage()
                 {
                     Name = newWage.Name,
-                    Price = newWage.Price
+                    Price = newWage.Price,
+                    Job = job
                 };
 
                 await _context.Wages.AddAsync(wage);
@@ -50,7 +59,9 @@ namespace SecurityApi.Services
 
         public async Task<Wage> Delete(int id)
         {
-            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == id);
+            var wage = await _context.Wages
+                .Include(w => w.Job)
+                .FirstOrDefaultAsync(w => w.Id == id);
             
             if(wage != null)
             {
@@ -63,13 +74,17 @@ namespace SecurityApi.Services
 
         public async Task<Wage> GetById(int id)
         {
-            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == id);
+            var wage = await _context.Wages
+                .Include(w => w.Job)
+                .FirstOrDefaultAsync(w => w.Id == id);
             return wage == null ? null : _converter.ToModel(wage);
         }
 
         public IEnumerable<Wage> GetAll()
         {
-            var wages = _context.Wages.Select(_converter.ToModel).ToList();
+            var wages = _context.Wages
+                .Include(w => w.Job)
+                .Select(_converter.ToModel).ToList();
             return wages;
         }
 
@@ -81,7 +96,16 @@ namespace SecurityApi.Services
                 throw new ArgumentOutOfRangeException(nameof(newWage.Price));
             }
 
-            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == id);
+            var job = await _context.Jobs.FirstOrDefaultAsync(job => job.Id == newWage.JobId);
+
+            if (job == null)
+            {
+                throw new DataException(String.Format("Job with ID({0}) does not exist!", newWage.JobId));
+            }
+
+            var wage = await _context.Wages
+                .Include(w => w.Job)
+                .FirstOrDefaultAsync(w => w.Id == id);
             
             if(wage != null)
             {
@@ -93,6 +117,7 @@ namespace SecurityApi.Services
 
                 wage.Name = newWage.Name;
                 wage.Price = newWage.Price;
+                wage.Job = job;
 
                 await _context.SaveChangesAsync();
 
@@ -110,9 +135,45 @@ namespace SecurityApi.Services
         {
             var wages = _context.Wages
                 .Where(w => w.Id > 1)
+                .Include(w => w.Job)
                 .Select(_converter.ToModel)
                 .ToList();
             return wages;
+        }
+
+        public async Task<IEnumerable<Wage>> GetWagesInJob(int jobId)
+        {
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == jobId);
+
+            if(job == null)
+            {
+                throw new DataException(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            var wages = _context.Wages
+                .Where(w => w.Id > 1 && w.JobId == jobId)
+                .Include(w => w.Job)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return wages;
+        }
+
+        public async Task<IEnumerable<MessageCategory>> GetMessageCategories(int jobId)
+        {
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == jobId);
+
+            if (job == null)
+            {
+                throw new DataException(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            var categories = _context.Wages
+                .Where(w => w.JobId == jobId)
+                .Select(_converter.WageToMessageCategory)
+                .ToList();
+
+            return categories;
         }
     }
 }
