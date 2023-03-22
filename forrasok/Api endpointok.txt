@@ -48,4 +48,4 @@ Megjegyzések:
 	Endpointokban az "ID'-t valami menaingfullabbra átnevezni pl: personId ...
 	Delete-eknél a FK konfliktusokat jelezni
 	Position/Create: Csekkolni h az ember rajta van-e a Job-on mihez illeszti a Positiont. Vagy felesleges ennyire biztosra?
-	Job/Create: Default Role-okat létrehozni benük majd ezután hozzáadni az Ownert
+	[DONE] Job/Create: Default Role-okat létrehozni benük majd ezután hozzáadni az Ownert

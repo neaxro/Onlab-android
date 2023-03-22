@@ -14,5 +14,6 @@ namespace SecurityApi.Services
         Task ChangePersonRole(int jobId, int personId, int roleId);
         Task<Person> DeleteById(int id);
         Task<Person> UploadImage(int id, IFormFile image);
+        Task<Person> RemoveImage(int id);
     }
 }

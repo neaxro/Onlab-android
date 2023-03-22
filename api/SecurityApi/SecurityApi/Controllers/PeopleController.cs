@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -124,6 +125,22 @@ namespace SecurityApi.Controllers
             {
                 return BadRequest();
             }
-        }        
+        }
+
+        [HttpDelete("profilepicture/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteProfilePicture(int id)
+        {
+            try
+            {
+                var result = await _service.RemoveImage(id);
+                return result == null ? NotFound() : NoContent();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

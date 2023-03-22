@@ -108,6 +108,21 @@ namespace SecurityApi.Services
             return _converter.ToModel(person);
         }
 
+        public async Task<Person> RemoveImage(int id)
+        {
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+
+            if(person == null)
+            {
+                return null;
+            }
+
+            person.ProfilePicture = null;
+            await _context.SaveChangesAsync();
+
+            return person == null ? null : _converter.ToModel(person);
+        }
+
         public async Task<Person> Update(int id, CreatePerson newData)
         {
             var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
