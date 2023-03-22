@@ -143,6 +143,25 @@ namespace SecurityApi.Services
             await _context.Jobs.AddAsync(newJob);
             await _context.SaveChangesAsync();
 
+            // Insert default Wages
+            Model.Wage broadcastWage = new Model.Wage()
+            {
+                Name = "Everybody",
+                Price = 0,
+                Job = newJob
+            };
+            Model.Wage defaultWage = new Model.Wage()
+            {
+                Name = "Default",
+                Price = 1300,
+                Job = newJob
+            };
+
+            await _context.Wages.AddAsync(broadcastWage);
+            await _context.Wages.AddAsync(defaultWage);
+
+            await _context.SaveChangesAsync();
+
             await tran.CommitAsync();
 
             // Connect the user in PeopleJobs table

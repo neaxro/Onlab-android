@@ -31,6 +31,8 @@ Adott ember szummázott szolgálat (Total Ft, Ora) [Stat]
 [DONE] Pending szolgálatok listázása [Pending Shifts/Admin]
 [DONE] Pending szolgálatok elfogadása/elutasítása [Pending shifts/Admin]
 
+ROLE CONTROLLER
+
 Megjegyzések:
 	Change Role-t Job-ba (legalábbis ne Person-ba)
 	Delete profile picture
