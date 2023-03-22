@@ -42,22 +42,29 @@ namespace SecurityApi.Controllers
             return dboard == null ? NotFound() : Ok(dboard);
         }
 
-        [HttpGet("forperson/bycategoryid/{categoryId}")]
+        [HttpGet("forperson/bycategoryid/{jobId}/{categoryId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByCategoryId(int categoryId)
+        public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByCategoryId(int jobId, int categoryId)
         {
-            IEnumerable<Dashboard> dboards = _service.ListForPersonByCategoryID(categoryId);
-            return (dboards == null || dboards.Count() == 0) ? NotFound() : Ok(dboards);
+            IEnumerable<Dashboard> dboards = _service.ListForPersonByCategoryID(jobId, categoryId);
+            return Ok(dboards);
         }
 
-        [HttpGet("forperson/bypersonid/{personId}")]
+        [HttpGet("forperson/bypersonid/{jobId}/{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByPersonId(int personId)
+        public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByPersonId(int jobId, int personId)
         {
-            var dboards = await _service.ListForPersonByPersonID(personId);
-            return (dboards == null || dboards.Count() == 0) ? NotFound() : Ok(dboards);
+            var dboards = await _service.ListForPersonByPersonID(jobId, personId);
+            return Ok(dboards);
+        }
+
+        [HttpGet("allforjob/{jobId}")]
+        public ActionResult<IEnumerable<Dashboard>> GetAllForJob(int jobId)
+        {
+            var result = _service.ListAllInJob(jobId);
+            return Ok(result);
         }
 
         [HttpPost]

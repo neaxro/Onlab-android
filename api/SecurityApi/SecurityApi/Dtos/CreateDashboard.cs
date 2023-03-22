@@ -2,7 +2,7 @@
 public record CreateDashboard(
     string Title,
     string Message,
-    string JobName,
+    int JobId,
     int CreatorId,
     int GroupId
     );

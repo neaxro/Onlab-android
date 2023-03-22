@@ -58,7 +58,7 @@ namespace SecurityApi.Services
 
             var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == dashboard.GroupId);
             var creator = await _context.People.FirstOrDefaultAsync(p => p.Id == dashboard.CreatorId);
-            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Title == dashboard.JobName);
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == dashboard.JobId);
 
             if(wage != null && creator != null && job != null)
             {
@@ -91,10 +91,22 @@ namespace SecurityApi.Services
             return dboards;
         }
 
-        public IEnumerable<Dashboard> ListForPersonByCategoryID(int categoryId)
+        public IEnumerable<Dashboard> ListAllInJob(int jobId)
+        {
+            var dashboardes = _context.Dashboards
+                .Include(d => d.Wage)
+                .Include(d => d.People)
+                .Where(d => d.JobId == jobId)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return dashboardes;
+        }
+
+        public IEnumerable<Dashboard> ListForPersonByCategoryID(int jobId, int categoryId)
         {
             var dboards = _context.Dashboards
-                .Where(d => d.WageId == categoryId || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID)
+                .Where(d => d.JobId == jobId && (d.WageId == categoryId || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID))
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Select(_converter.ToModel)
@@ -103,7 +115,7 @@ namespace SecurityApi.Services
             return dboards;
         }
 
-        public async Task<IEnumerable<Dashboard>> ListForPersonByPersonID(int personId)
+        public async Task<IEnumerable<Dashboard>> ListForPersonByPersonID(int jobId, int personId)
         {
             var person = await _context.People.SingleOrDefaultAsync(p => p.Id == personId);
             
@@ -111,7 +123,7 @@ namespace SecurityApi.Services
                 return null;
 
             var dboards = _context.Dashboards
-                .Where(d => d.PeopleId == person.Id || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID)
+                .Where(d => d.JobId == jobId && (d.PeopleId == person.Id || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID))
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Select(_converter.ToModel)
@@ -149,19 +161,5 @@ namespace SecurityApi.Services
 
             return _converter.ToModel(dboard);
         }
-
-        /*private Dashboard ToModel(Model.Dashboard dashboard)
-        {
-            return new Dashboard(
-                dashboard.Id,
-                dashboard.Title,
-                dashboard.Message,
-                dashboard.CreationTime,
-                dashboard.People.Name,
-                dashboard.People.ProfilePicture,
-                dashboard.Wage.Id,
-                dashboard.Wage.Name
-                );
-        }*/
     }
 }
