@@ -49,7 +49,7 @@
 
         public Dtos.Wage ToModel(Model.Wage wage)
         {
-            return new Dtos.Wage(wage.Id, wage.Name, wage.Price);
+            return new Dtos.Wage(wage.Id, wage.Name, wage.Price, wage.Job.Title);
         }
 
         public Dtos.State ToModel(Model.State state)
@@ -70,6 +70,11 @@
         public Dtos.PersonJob ToModel(Model.PeopleJob peopleJob)
         {
             return new Dtos.PersonJob(peopleJob.Id, peopleJob.Job.Title, peopleJob.People.Name);
+        }
+
+        public Dtos.MessageCategory WageToMessageCategory(Model.Wage wage)
+        {
+            return new Dtos.MessageCategory(wage.Id, wage.Name);
         }
     }
 }

@@ -10,14 +10,14 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].Shifts
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].Positions') AND type in (N'U'))
 		drop table Positions
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].Wages') AND type in (N'U'))
+		drop table Wages
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].Jobs') AND type in (N'U'))
 		drop table Jobs
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].People') AND type in (N'U'))
 		drop table People
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].Wages') AND type in (N'U'))
-		drop table Wages
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].States') AND type in (N'U'))
 		drop table States
@@ -36,13 +36,6 @@ create table [People]
 	ProfilePicture image
 )
 
-create table [Wages]
-(
-	ID int identity primary key,
-	Name nvarchar(30) unique,
-	Price real
-)
-
 create table [Jobs]
 (
 	ID int identity primary key,
@@ -50,6 +43,14 @@ create table [Jobs]
 	Title nvarchar(20) unique,
 	Description nvarchar(100),
 	PeopleID int references People(ID) --creator
+)
+
+create table [Wages]
+(
+	ID int identity primary key,
+	Name nvarchar(30),
+	Price real,
+	JobID int references Jobs(ID)
 )
 
 create table [States]
