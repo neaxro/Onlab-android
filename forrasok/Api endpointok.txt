@@ -34,14 +34,14 @@ Adott ember szummázott szolgálat (Total Ft, Ora) [Stat]
 ROLE CONTROLLER
 
 Megjegyzések:
-	Change Role-t Job-ba (legalábbis ne Person-ba)
+	MOVE Role-t Job-ba (legalábbis ne Person-ba)
 	[DONE] Delete profile picture
 	[DONE] ConnectToJob nem használja a PIN-t!
 	[DONE] Job/Create Job: Ha hiba van pl nincs Wage wtih ID... akkor a Job létrejön de az owner-t nem rendeli hozzá a PeopleJobs-hoz!
 	People/Get All on job lehetne a Job-ban. + kiírhatná a Role, Wage nevét
 	[DONE] Dashboard/New message: Miért jobName alapján kell hozzárendelni üzenetet?
 	[DONE] Dashboard/Get For...: Nem Job-on belül kérdezik le hanem globálisan...
-	Wage/Insert: Ha letezik mar wage akkor jelezzük ne 404...
+	[DONE] Wage/Insert: Ha letezik mar wage akkor jelezzük ne 404...
 	Job/Delete: kimaradt...
 	Wage/Insert: Ellenőrizni, hogy kér egyforma nevű Wage ne legyen 1 munkában
 	Wage/Delete: Default wage ne lehessen törölhető

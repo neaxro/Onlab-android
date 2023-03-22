@@ -39,17 +39,19 @@ namespace SecurityApi.Services
                 .Include(w => w.Job)
                 .FirstOrDefaultAsync(w => w.Name== newWage.Name && w.JobId == newWage.JobId);
 
-            if(result == null)
+            if(result != null)
             {
-                wage = new Model.Wage()
-                {
-                    Name = newWage.Name,
-                    Price = newWage.Price,
-                    Job = job
-                };
-
-                await _context.Wages.AddAsync(wage);
+                throw new DataException(String.Format("Wage with name \"{0}\" already exists!", newWage.Name));
             }
+
+            wage = new Model.Wage()
+            {
+                Name = newWage.Name,
+                Price = newWage.Price,
+                Job = job
+            };
+
+            await _context.Wages.AddAsync(wage);
 
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
