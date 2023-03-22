@@ -11,7 +11,11 @@ public partial class Wage
 
     public float? Price { get; set; }
 
+    public int? JobId { get; set; }
+
     public virtual ICollection<Dashboard> Dashboards { get; } = new List<Dashboard>();
+
+    public virtual Job? Job { get; set; }
 
     public virtual ICollection<PeopleJob> PeopleJobs { get; } = new List<PeopleJob>();
 

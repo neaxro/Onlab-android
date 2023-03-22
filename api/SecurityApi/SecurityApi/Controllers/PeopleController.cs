@@ -70,7 +70,7 @@ namespace SecurityApi.Controllers
                 //ModelState.AddModelError(nameof(CreatePerson.FullName), ex.Message);
                 //return ValidationProblem(ModelState);
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
