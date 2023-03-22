@@ -42,7 +42,8 @@ namespace SecurityApi.Services
             if(connection.RoleId == DatabaseConstants.ROLE_OWNER_ID)
             {
                 var alreadyExists = await _context.PeopleJobs
-                    .FirstOrDefaultAsync(pj => pj.JobId == connection.JobId && pj.RoleId == DatabaseConstants.ROLE_OWNER_ID);
+                    .Include(pj => pj.Job)
+                    .FirstOrDefaultAsync(pj => pj.Job.Pin == connection.Pin && pj.RoleId == DatabaseConstants.ROLE_OWNER_ID);
 
                 if (alreadyExists != null)
                 {
@@ -53,7 +54,8 @@ namespace SecurityApi.Services
 
             // She/He already connected?
             var duplicateConnection = await _context.PeopleJobs
-                .FirstOrDefaultAsync(pj => pj.JobId == connection.JobId && pj.PeopleId == connection.PersonId);
+                .Include(pj => pj.Job)
+                .FirstOrDefaultAsync(pj => pj.Job.Pin == connection.Pin && pj.PeopleId == connection.PersonId);
             if (duplicateConnection != null)
             {
                 await tran.RollbackAsync();
@@ -67,7 +69,7 @@ namespace SecurityApi.Services
                 throw new DataException("Role does not exist!");
             }
 
-            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == connection.JobId);
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Pin == connection.Pin);
             if(job == null)
             {
                 await tran.RollbackAsync();
@@ -165,7 +167,7 @@ namespace SecurityApi.Services
             await tran.CommitAsync();
 
             // Connect the user in PeopleJobs table
-            CreateConnection cc = new CreateConnection(newJob.Id, owner.Id, DatabaseConstants.ROLE_OWNER_ID, DatabaseConstants.DEFAULT_WAGE_ID);
+            CreateConnection cc = new CreateConnection(newJob.Pin, owner.Id, DatabaseConstants.ROLE_OWNER_ID, DatabaseConstants.DEFAULT_WAGE_ID);
             await ConnectToJob(cc);
 
             return _converter.ToModel(newJob);

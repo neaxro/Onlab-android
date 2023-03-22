@@ -35,7 +35,7 @@ ROLE CONTROLLER
 
 Megjegyzések:
 	Change Role-t Job-ba (legalábbis ne Person-ba)
-	Delete profile picture
+	[DONE] Delete profile picture
 	ConnectToJob nem használja a PIN-t!
 	Job/Create Job: Ha hiba van pl nincs Wage wtih ID... akkor a Job létrejön de az owner-t nem rendeli hozzá a PeopleJobs-hoz!
 	People/Get All on job lehetne a Job-ban. + kiírhatná a Role, Wage nevét

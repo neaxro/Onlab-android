@@ -1,2 +1,2 @@
 ﻿namespace SecurityApi.Dtos;
-public record CreateConnection(int JobId, int PersonId, int RoleId, int WageId);
+public record CreateConnection(string Pin, int PersonId, int RoleId, int WageId);
