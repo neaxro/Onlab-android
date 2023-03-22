@@ -37,7 +37,7 @@ namespace SecurityApi.Services
 
             var result = await _context.Wages
                 .Include(w => w.Job)
-                .FirstOrDefaultAsync(w => w.Name== newWage.Name);
+                .FirstOrDefaultAsync(w => w.Name== newWage.Name && w.JobId == newWage.JobId);
 
             if(result == null)
             {
