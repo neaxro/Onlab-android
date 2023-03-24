@@ -2,6 +2,7 @@
 using SecurityApi.Context;
 using SecurityApi.Converters;
 using SecurityApi.Dtos;
+using SecurityApi.Enums;
 using System.Data;
 
 namespace SecurityApi.Services
@@ -61,6 +62,11 @@ namespace SecurityApi.Services
 
         public async Task<Wage> Delete(int id)
         {
+            if(id == DatabaseConstants.BROADCAST_MESSAGE_ID || id == DatabaseConstants.DEFAULT_WAGE_ID)
+            {
+                throw new Exception("You do not have permission for delete this Wage!");
+            }
+
             var wage = await _context.Wages
                 .Include(w => w.Job)
                 .FirstOrDefaultAsync(w => w.Id == id);

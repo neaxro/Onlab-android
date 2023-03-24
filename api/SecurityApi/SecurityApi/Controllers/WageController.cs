@@ -142,8 +142,14 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Wage>> Delete(int id)
         {
-            var result = await _service.Delete(id);
-            return result == null ? NotFound() : NoContent();
+            try
+            {
+                var result = await _service.Delete(id);
+                return result == null ? NotFound() : NoContent();
+            } catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

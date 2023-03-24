@@ -167,7 +167,7 @@ namespace SecurityApi.Services
             await tran.CommitAsync();
 
             // Connect the user in PeopleJobs table
-            CreateConnection cc = new CreateConnection(newJob.Pin, owner.Id, DatabaseConstants.ROLE_OWNER_ID, DatabaseConstants.DEFAULT_WAGE_ID);
+            CreateConnection cc = new CreateConnection(newJob.Pin, owner.Id, broadcastWage.Id, defaultWage.Id);
             await ConnectToJob(cc);
 
             return _converter.ToModel(newJob);
