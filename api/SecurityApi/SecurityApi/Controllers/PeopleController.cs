@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using SecurityApi.Context;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
-using Person = SecurityApi.Dtos.Person;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
 
 namespace SecurityApi.Controllers
 {

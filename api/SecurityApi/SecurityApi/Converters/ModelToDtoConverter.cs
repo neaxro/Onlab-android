@@ -1,4 +1,13 @@
-﻿namespace SecurityApi.Converters
+﻿using SecurityApi.Dtos.DashboardDtos;
+using SecurityApi.Dtos.JobDtos;
+using SecurityApi.Dtos.PeopleJobDtos;
+using SecurityApi.Dtos.PersonDtos;
+using SecurityApi.Dtos.PositionDtos;
+using SecurityApi.Dtos.ShiftDtos;
+using SecurityApi.Dtos.StateDtos;
+using SecurityApi.Dtos.WageDtos;
+
+namespace SecurityApi.Converters
 {
     public class ModelToDtoConverter
     {
@@ -23,58 +32,58 @@
             }
         }
 
-        public Dtos.Person ToModel(Model.Person person)
+        public Person ToModel(Model.Person person)
         {
-            return new Dtos.Person(person.Id, person.Name, person.Username, person.Nickname, person.Email, person.ProfilePicture);
+            return new Dtos.PersonDtos.Person(person.Id, person.Name, person.Username, person.Nickname, person.Email, person.ProfilePicture);
         }
 
-        public Dtos.Job ToModel(Model.Job job)
+        public Job ToModel(Model.Job job)
         {
-            Dtos.Person owner = ToModel(job.People);
-            return new Dtos.Job(job.Id, job.Title, job.Pin, job.Description, owner);
+            Person owner = ToModel(job.People);
+            return new Dtos.JobDtos.Job(job.Id, job.Title, job.Pin, job.Description, owner);
         }
 
-        public Dtos.Dashboard ToModel(Model.Dashboard dashboard)
+        public Dashboard ToModel(Model.Dashboard dashboard)
         {
-            return new Dtos.Dashboard(dashboard.Id, dashboard.Title, dashboard.Message, dashboard.CreationTime, dashboard.People.Name, dashboard.People.ProfilePicture, dashboard.Wage.Id, dashboard.Wage.Name);
+            return new Dtos.DashboardDtos.Dashboard(dashboard.Id, dashboard.Title, dashboard.Message, dashboard.CreationTime, dashboard.People.Name, dashboard.People.ProfilePicture, dashboard.Wage.Id, dashboard.Wage.Name);
         }
 
-        public Dtos.Position ToModel(Model.Position position)
+        public Position ToModel(Model.Position position)
         {
-            Dtos.Person positionedPerson = ToModel(position.People);
-            Dtos.Job job = ToModel(position.Job);
+            Person positionedPerson = ToModel(position.People);
+            Job job = ToModel(position.Job);
 
-            return new Dtos.Position(position.Id, position.Time, position.Longitude, position.Latitude, positionedPerson, job);
+            return new Dtos.PositionDtos.Position(position.Id, position.Time, position.Longitude, position.Latitude, positionedPerson, job);
         }
 
-        public Dtos.Wage ToModel(Model.Wage wage)
+        public Wage ToModel(Model.Wage wage)
         {
-            return new Dtos.Wage(wage.Id, wage.Name, wage.Price, wage.Job.Title);
+            return new Dtos.WageDtos.Wage(wage.Id, wage.Name, wage.Price, wage.Job.Title);
         }
 
-        public Dtos.State ToModel(Model.State state)
+        public State ToModel(Model.State state)
         {
-            return new Dtos.State(state.Id, state.Title, state.Description);
+            return new Dtos.StateDtos.State(state.Id, state.Title, state.Description);
         }
 
-        public Dtos.Shift ToModel(Model.Shift shift)
+        public Shift ToModel(Model.Shift shift)
         {
-            Dtos.Person person = ToModel(shift.People);
-            Dtos.Job job = ToModel(shift.Job);
-            Dtos.State status = ToModel(shift.Status);
-            Dtos.Wage wage = ToModel(shift.Wage);
+            Person person = ToModel(shift.People);
+            Job job = ToModel(shift.Job);
+            State status = ToModel(shift.Status);
+            Wage wage = ToModel(shift.Wage);
 
-            return new Dtos.Shift(shift.Id, shift.StartTime, shift.EndTime, shift.EarnedMoney, person, job, status, wage);
+            return new Dtos.ShiftDtos.Shift(shift.Id, shift.StartTime, shift.EndTime, shift.EarnedMoney, person, job, status, wage);
         }
 
-        public Dtos.PersonJob ToModel(Model.PeopleJob peopleJob)
+        public PersonJob ToModel(Model.PeopleJob peopleJob)
         {
-            return new Dtos.PersonJob(peopleJob.Id, peopleJob.Job.Title, peopleJob.People.Name);
+            return new Dtos.PeopleJobDtos.PersonJob(peopleJob.Id, peopleJob.Job.Title, peopleJob.People.Name);
         }
 
-        public Dtos.MessageCategory WageToMessageCategory(Model.Wage wage)
+        public MessageCategory WageToMessageCategory(Model.Wage wage)
         {
-            return new Dtos.MessageCategory(wage.Id, wage.Name);
+            return new Dtos.WageDtos.MessageCategory(wage.Id, wage.Name);
         }
     }
 }

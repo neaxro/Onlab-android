@@ -1,4 +1,4 @@
-﻿namespace SecurityApi.Dtos;
+﻿namespace SecurityApi.Dtos.DashboardDtos;
 public record CreateDashboard(
     string Title,
     string Message,

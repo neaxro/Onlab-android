@@ -1,6 +1,9 @@
-﻿using SecurityApi.Dtos;
-using Job = SecurityApi.Dtos.Job;
-using Person = SecurityApi.Dtos.Person;
+﻿using SecurityApi.Dtos.JobDtos;
+using SecurityApi.Dtos.PeopleJobDtos;
+using SecurityApi.Dtos.RoleDtos;
+using SecurityApi.Dtos.WageDtos;
+using Job = SecurityApi.Dtos.JobDtos.Job;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
 
 namespace SecurityApi.Services
 {

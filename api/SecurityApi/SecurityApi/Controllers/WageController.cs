@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
-using Wage = SecurityApi.Dtos.Wage;
+using Wage = SecurityApi.Dtos.WageDtos.Wage;
 
 namespace SecurityApi.Controllers
 {

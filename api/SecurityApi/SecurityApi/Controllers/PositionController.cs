@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.PositionDtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
-using Position = SecurityApi.Dtos.Position;
+using Position = SecurityApi.Dtos.PositionDtos.Position;
 
 namespace SecurityApi.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Converters;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Enums;
 using System.Data;
 

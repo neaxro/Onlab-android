@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Converters;
-using SecurityApi.Dtos;
 using System.Data;
 using System.Runtime.CompilerServices;
-using Position = SecurityApi.Dtos.Position;
+using Position = SecurityApi.Dtos.PositionDtos.Position;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
+using Job = SecurityApi.Dtos.JobDtos.Job;
+using SecurityApi.Dtos.PositionDtos;
 
 namespace SecurityApi.Services
 {

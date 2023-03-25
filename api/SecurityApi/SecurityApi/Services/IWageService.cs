@@ -1,4 +1,4 @@
-﻿using SecurityApi.Dtos;
+﻿using SecurityApi.Dtos.WageDtos;
 
 namespace SecurityApi.Services
 {

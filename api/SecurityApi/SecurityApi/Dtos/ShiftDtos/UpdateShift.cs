@@ -1,4 +1,4 @@
-﻿namespace SecurityApi.Dtos;
+﻿namespace SecurityApi.Dtos.ShiftDtos;
 public record UpdateShift(
     DateTime StartTime,
     DateTime EndTime,

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Converters;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Model;
 using System.Data;
 using System.Linq;
-using Person = SecurityApi.Dtos.Person;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
 
 namespace SecurityApi.Services
 {

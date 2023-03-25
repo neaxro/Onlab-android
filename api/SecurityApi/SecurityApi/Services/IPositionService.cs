@@ -1,6 +1,6 @@
-﻿using SecurityApi.Dtos;
+﻿using SecurityApi.Dtos.PositionDtos;
 using SecurityApi.Model;
-using Position = SecurityApi.Dtos.Position;
+using Position = SecurityApi.Dtos.PositionDtos.Position;
 
 namespace SecurityApi.Services
 {

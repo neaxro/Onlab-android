@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
-using SecurityApi.Dtos;
 using SecurityApi.Model;
-using Shift = SecurityApi.Dtos.Shift;
-using Person = SecurityApi.Dtos.Person;
-using Job = SecurityApi.Dtos.Job;
-using State = SecurityApi.Dtos.State;
-using Wage = SecurityApi.Dtos.Wage;
+using Shift = SecurityApi.Dtos.ShiftDtos.Shift;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
+using Job = SecurityApi.Dtos.JobDtos.Job;
+using State = SecurityApi.Dtos.StateDtos.State;
+using Wage = SecurityApi.Dtos.WageDtos.Wage;
 using System.Data;
 using SecurityApi.Converters;
 using SecurityApi.Enums;
+using SecurityApi.Dtos.ShiftDtos;
 
 namespace SecurityApi.Services
 {

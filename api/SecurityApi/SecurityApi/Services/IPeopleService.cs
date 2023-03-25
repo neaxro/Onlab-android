@@ -1,6 +1,6 @@
-﻿using SecurityApi.Dtos;
+﻿using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Model;
-using Person = SecurityApi.Dtos.Person;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
 
 namespace SecurityApi.Services
 {

@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.ShiftDtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
-using Shift = SecurityApi.Dtos.Shift;
+using Shift = SecurityApi.Dtos.ShiftDtos.Shift;
 
 namespace SecurityApi.Controllers
 {

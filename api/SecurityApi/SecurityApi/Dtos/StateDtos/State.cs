@@ -1,4 +1,4 @@
-﻿namespace SecurityApi.Dtos;
+﻿namespace SecurityApi.Dtos.StateDtos;
 public record State(
     int Id,
     string Title,

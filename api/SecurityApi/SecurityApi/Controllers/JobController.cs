@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.JobDtos;
+using SecurityApi.Dtos.PeopleJobDtos;
+using SecurityApi.Dtos.RoleDtos;
+using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Enums;
 using SecurityApi.Model;
 using SecurityApi.Services;
-using Job = SecurityApi.Dtos.Job;
-using Person = SecurityApi.Dtos.Person;
+using Job = SecurityApi.Dtos.JobDtos.Job;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
 
 namespace SecurityApi.Controllers
 {

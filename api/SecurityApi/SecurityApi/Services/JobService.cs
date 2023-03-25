@@ -2,7 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Converters;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.JobDtos;
+using SecurityApi.Dtos.PeopleJobDtos;
+using SecurityApi.Dtos.PersonDtos;
+using SecurityApi.Dtos.RoleDtos;
+using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Enums;
 using System.Data;
 

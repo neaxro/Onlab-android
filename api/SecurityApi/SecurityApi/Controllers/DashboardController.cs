@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.DashboardDtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
-using Dashboard = SecurityApi.Dtos.Dashboard;
+using Dashboard = SecurityApi.Dtos.DashboardDtos.Dashboard;
 
 namespace SecurityApi.Controllers
 {

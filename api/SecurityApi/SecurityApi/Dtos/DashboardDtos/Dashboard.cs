@@ -1,6 +1,6 @@
 ﻿using SecurityApi.Model;
 
-namespace SecurityApi.Dtos;
+namespace SecurityApi.Dtos.DashboardDtos;
 public record Dashboard(
     int id,
     string Title,

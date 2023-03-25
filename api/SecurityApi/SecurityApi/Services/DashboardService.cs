@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Converters;
-using SecurityApi.Dtos;
+using SecurityApi.Dtos.DashboardDtos;
 using SecurityApi.Enums;
 using SecurityApi.Model;
 using System.Data;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using Dashboard = SecurityApi.Dtos.Dashboard;
+using Dashboard = SecurityApi.Dtos.DashboardDtos.Dashboard;
 
 
 namespace SecurityApi.Services

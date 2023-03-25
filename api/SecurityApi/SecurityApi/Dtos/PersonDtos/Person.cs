@@ -1,4 +1,4 @@
-﻿namespace SecurityApi.Dtos;
+﻿namespace SecurityApi.Dtos.PersonDtos;
 
 public record Person(
     int Id,
