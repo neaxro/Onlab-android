@@ -74,14 +74,14 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{personId}")]
+        [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Shift>> CreateShift(int personId, [FromBody] CreateShift shift)
+        public async Task<ActionResult<Shift>> CreateShift([FromBody] CreateShift shift)
         {
             try
             {
-                var created = await _service.Create(personId, shift);
+                var created = await _service.Create(shift);
                 return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
             }
             catch (Exception ex)

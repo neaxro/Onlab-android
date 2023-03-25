@@ -11,7 +11,7 @@ namespace SecurityApi.Services
         IEnumerable<Shift> GetAllForPersonInJob(int personId, int jobId);
         IEnumerable<Shift> GetAllInProgress(int jobId);
         Task<IEnumerable<Shift>> GetAllPendingInJob(int jobId);
-        Task<Shift> Create(int id, CreateShift newShift);
+        Task<Shift> Create(CreateShift newShift);
         Task<Shift> Finish(int id);
         Task<Shift> Delete(int id);
         Task<Shift> Update(int id, UpdateShift newShift);
