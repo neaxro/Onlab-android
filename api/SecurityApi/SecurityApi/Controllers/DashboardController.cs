@@ -98,11 +98,17 @@ namespace SecurityApi.Controllers
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Dashboard>> Update(int id, [FromBody] CreateDashboard newContent)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Dashboard>> Update(int id, [FromBody] UpdateDashboard newContent)
         {
-            var result = await _service.Update(id, newContent);
-
-            return result == null ? NotFound() : Ok(result);
+            try
+            {
+                var result = await _service.Update(id, newContent);
+                return result == null ? NotFound() : Ok(result);
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]

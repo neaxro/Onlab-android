@@ -156,9 +156,9 @@ namespace SecurityApi.Services
             return dboards;
         }
 
-        public async Task<Dashboard> Update(int id, CreateDashboard newContent)
+        public async Task<Dashboard> Update(int id, UpdateDashboard newContent)
         {
-            using var tarn = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
+            using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
             var dboard = await _context.Dashboards
                 .Include(d => d.Wage)
@@ -168,20 +168,24 @@ namespace SecurityApi.Services
 
             // Not found
             if (dboard == null)
+            {
+                await tran.RollbackAsync();
                 return null;
+            }
 
-            var group = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newContent.GroupId);
+            var group = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newContent.GroupId && w.JobId == dboard.JobId);
+            if (group == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Group does not exist in Job!");
+            }
 
             dboard.Title = newContent.Title;
             dboard.Message = newContent.Message;
-
-            if(group != null)
-            {
-                dboard.Wage = group;
-            }
+            dboard.Wage = group;
 
             await _context.SaveChangesAsync();
-            await tarn.CommitAsync();
+            await tran.CommitAsync();
 
             return _converter.ToModel(dboard);
         }

@@ -10,7 +10,7 @@ namespace SecurityApi.Services
         Task<IEnumerable<Dashboard>> ListForPersonByPersonID(int jobId, int personId);
         IEnumerable<Dashboard> ListAllInJob(int jobId);
         Task<Dashboard> Insert(CreateDashboard dashboard);
-        Task<Dashboard> Update(int id, CreateDashboard newContent);
+        Task<Dashboard> Update(int id, UpdateDashboard newContent);
         Task<Dashboard> Delete(int id);
     }
 }
