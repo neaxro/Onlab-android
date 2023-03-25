@@ -23,13 +23,13 @@ namespace SecurityApi.Services
             _converter = new ModelToDtoConverter();
         }
 
-        public async Task<Dashboard> Delete(int id)
+        public async Task<Dashboard> Delete(int dashboardId)
         {
             var dboard = await _context.Dashboards
                 .Include(d => d.Wage)
                 .Include(d => d.Job)
                 .Include(d => d.People)
-                .FirstOrDefaultAsync(d => d.Id == id);
+                .FirstOrDefaultAsync(d => d.Id == dashboardId);
             
             if(dboard != null)
             {
@@ -40,17 +40,17 @@ namespace SecurityApi.Services
             return dboard == null ? null : _converter.ToModel(dboard);
         }
 
-        public async Task<Dashboard> GetById(int id)
+        public async Task<Dashboard> GetById(int dashboardId)
         {
             var dboard = await _context.Dashboards
-                .Where(d => d.Id == id)
+                .Where(d => d.Id == dashboardId)
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .FirstOrDefaultAsync();
 
             if(dboard == null)
             {
-                throw new Exception("Dashboard does not exist!");
+                throw new Exception(String.Format("Dashboard with ID({0}) does not exist!", dashboardId));
             }
 
             return _converter.ToModel(dboard);
@@ -163,7 +163,7 @@ namespace SecurityApi.Services
             return dboards;
         }
 
-        public async Task<Dashboard> Update(int id, UpdateDashboard newContent)
+        public async Task<Dashboard> Update(int dashboardId, UpdateDashboard newContent)
         {
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
@@ -171,12 +171,12 @@ namespace SecurityApi.Services
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Include(d => d.Job)
-                .FirstOrDefaultAsync(d => d.Id == id);
+                .FirstOrDefaultAsync(d => d.Id == dashboardId);
 
             if (dboard == null)
             {
                 await tran.RollbackAsync();
-                throw new DataException(String.Format("Dashboard with ID({0}) does not exist!", id));
+                throw new DataException(String.Format("Dashboard with ID({0}) does not exist!", dashboardId));
             }
 
             var group = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newContent.GroupId && w.JobId == dboard.JobId);

@@ -29,7 +29,7 @@ namespace SecurityApi.Services
             if (person == null)
             {
                 await tran.RollbackAsync();
-                throw new ArgumentException(String.Format("Person with ID({0}) not found!", personId));
+                throw new Exception(String.Format("Person with ID({0}) not found!", personId));
             }
 
             var job = await _context.Jobs
@@ -38,7 +38,7 @@ namespace SecurityApi.Services
             if(job == null)
             {
                 await tran.RollbackAsync();
-                throw new ArgumentException(String.Format("Job with ID({0}) not found!", jobId));
+                throw new Exception(String.Format("Job with ID({0}) not found!", jobId));
             }
 
             var personInJob = await _context.PeopleJobs.FirstOrDefaultAsync(pj => pj.JobId == jobId && pj.PeopleId == personId);
@@ -73,13 +73,15 @@ namespace SecurityApi.Services
                 .Include(p => p.People)
                 .FirstOrDefaultAsync(p => p.Id == positionId);
             
-            if(position != null)
+            if(position == null)
             {
-                _context.Positions.Remove(position);
-                await _context.SaveChangesAsync();
+                throw new Exception(String.Format("Position with ID({0}) does not exist!", positionId));
             }
             
-            return position == null ? null : _converter.ToModel(position);
+            _context.Positions.Remove(position);
+            await _context.SaveChangesAsync();
+            
+            return _converter.ToModel(position);
         }
 
         public async Task<Position> Get(int positionId)
@@ -89,7 +91,13 @@ namespace SecurityApi.Services
                     .ThenInclude(j => j.People)
                 .Include(p => p.People)
                 .FirstOrDefaultAsync(p => p.Id == positionId);
-            return position == null ? null : _converter.ToModel(position);
+
+            if (position == null)
+            {
+                throw new Exception(String.Format("Position with ID({0}) does not exist!", positionId));
+            }
+
+            return _converter.ToModel(position);
         }
 
         public IEnumerable<Position> GetAll()
@@ -100,6 +108,7 @@ namespace SecurityApi.Services
                 .Include(p => p.People)
                 .Select(_converter.ToModel)
                 .ToList();
+
             return positions;
         }
 
@@ -203,7 +212,7 @@ namespace SecurityApi.Services
             if(position == null)
             {
                 await tran.RollbackAsync();
-                return null;
+                throw new Exception(String.Format("Position with ID({0}) does not exist!", positionId));
             }
 
             position.Longitude = newPosition.Longitude;

@@ -36,8 +36,14 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Position>>> GetById(int positionId)
         {
-            var position = await _service.Get(positionId);
-            return position == null ? NotFound() : Ok(position);
+            try
+            {
+                var position = await _service.Get(positionId);
+                return Ok(position);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("forperson/{jobId}/{personId}")]
@@ -65,10 +71,6 @@ namespace SecurityApi.Controllers
                 var created = await _service.Create(jobId, personId, newPosition);
                 return CreatedAtAction(nameof(GetById), new { positionId = created.Id }, created);
             }
-            catch (ArgumentException ae)
-            {
-                return NotFound(ae.Message);
-            }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -80,17 +82,29 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Position>> Update(int positionId, [FromBody] CreatePosition position)
         {
-            var positon = await _service.Update(positionId, position);
-            return position == null ? NotFound() : Ok(positon);
+            try
+            {
+                var positon = await _service.Update(positionId, position);
+                return Ok(positon);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{positionId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Position>> Delete(int id)
+        public async Task<ActionResult<Position>> Delete(int positionId)
         {
-            var result = await _service.Delete(id);
-            return result == null ? NotFound() : Ok(result);
+            try
+            {
+                var result = await _service.Delete(positionId);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }
