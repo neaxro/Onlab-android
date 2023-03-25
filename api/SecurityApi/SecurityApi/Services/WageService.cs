@@ -100,19 +100,12 @@ namespace SecurityApi.Services
             return wages;
         }
 
-        public async Task<Wage> Update(int id, CreateWage newWage)
+        public async Task<Wage> Update(int id, UpdateWage newWage)
         {
             // It doesnt make sense...
             if (newWage.Price <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(newWage.Price));
-            }
-
-            var job = await _context.Jobs.FirstOrDefaultAsync(job => job.Id == newWage.JobId);
-
-            if (job == null)
-            {
-                throw new DataException(String.Format("Job with ID({0}) does not exist!", newWage.JobId));
             }
 
             var wage = await _context.Wages
@@ -129,7 +122,6 @@ namespace SecurityApi.Services
 
                 wage.Name = newWage.Name;
                 wage.Price = newWage.Price;
-                wage.Job = job;
 
                 await _context.SaveChangesAsync();
 
