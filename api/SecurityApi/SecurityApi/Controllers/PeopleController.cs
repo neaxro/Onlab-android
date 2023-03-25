@@ -88,21 +88,6 @@ namespace SecurityApi.Controllers
             return person == null ? NotFound() : Ok(person);
         }
 
-        [HttpPatch("changerole/{jobId}/{personId}/{roleId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> ChangeRole(int jobId, int personId, int roleId)
-        {
-            try
-            {
-                await _service.ChangePersonRole(jobId, personId, roleId);
-                return Ok();
-            } catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

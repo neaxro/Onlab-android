@@ -20,31 +20,6 @@ namespace SecurityApi.Services
             _converter = new ModelToDtoConverter();
         }
 
-#warning Nem ellenoriz semmit, megteszi a valtoztatast (ezzel lehet 2 tulaj 1 munkaba)
-        public async Task ChangePersonRole(int jobId, int personId, int roleId)
-        {
-            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
-
-            var newRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
-            if (newRole == null)
-            {
-                await tran.RollbackAsync();
-                throw new DataException(String.Format("Role with ID({0}) does not exist!", roleId));
-            }
-
-            var personConnection = await _context.PeopleJobs.FirstOrDefaultAsync(pj => pj.PeopleId == personId && pj.JobId == jobId);
-            if(personConnection == null)
-            {
-                await tran.RollbackAsync();
-                throw new Exception(String.Format("Person with ID({0}) on Job ID({1}) does not exist!", personId, jobId));
-            }
-
-            personConnection.Role = newRole;
-
-            await _context.SaveChangesAsync();
-            await tran.CommitAsync();
-        }
-
         public async Task<Person> DeleteById(int id)
         {
             var result = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
