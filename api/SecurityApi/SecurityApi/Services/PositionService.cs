@@ -26,6 +26,7 @@ namespace SecurityApi.Services
             var person = await _context.People.FirstOrDefaultAsync(p => p.Id == personId);
             if (person == null)
             {
+                await tran.RollbackAsync();
                 throw new ArgumentException(String.Format("Person with ID({0}) not found!", personId));
             }
 
@@ -34,7 +35,15 @@ namespace SecurityApi.Services
                 .FirstOrDefaultAsync(j => j.Id == jobId);
             if(job == null)
             {
+                await tran.RollbackAsync();
                 throw new ArgumentException(String.Format("Job with ID({0}) not found!", jobId));
+            }
+
+            var personInJob = await _context.PeopleJobs.FirstOrDefaultAsync(pj => pj.JobId == jobId && pj.PeopleId == personId);
+            if(personInJob == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("People does not exist in Job!");
             }
 
             var position = new Model.Position()
