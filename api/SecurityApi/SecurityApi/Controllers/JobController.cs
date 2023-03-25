@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Dtos;
+using SecurityApi.Enums;
 using SecurityApi.Model;
 using SecurityApi.Services;
 using Job = SecurityApi.Dtos.Job;
@@ -76,15 +77,15 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [HttpPost("connect")]
+        [HttpPost("connect/{pin}/{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Job>> ConncetPersonToJob([FromBody] CreateConnection connection)
+        public async Task<ActionResult<Job>> ConncetPersonToJob(string pin, int personId)
         {
             try
             {
-                var created = await _service.ConnectToJob(connection);
+                var created = await _service.ConnectToJob(pin.Trim(), personId, DatabaseConstants.ROLE_USER_ID);
                 return CreatedAtAction(nameof(GetConnection), new { connectionId = created.Id }, created);
             }
             catch (DataException de)

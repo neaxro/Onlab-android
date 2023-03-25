@@ -29,21 +29,35 @@ namespace SecurityApi.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PersonJob> ConnectToJob(CreateConnection connection)
+        public async Task<PersonJob> ConnectToJob(string pin, int personId, int roleId)
         {
-            if(connection.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID)
-            {
-                throw new DataException(String.Format("Invalid Wage Id({0})", connection.WageId));
-            }
-
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
+            // Job exists?
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Pin == pin);
+            if (job == null)
+            {
+                await tran.RollbackAsync();
+                throw new DataException("Job does not exist!");
+            }
+
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(job.Id, _context);
+            int defaultWageId = DatabaseConstants.GetDefaultWageID(job.Id, _context);
+
+            // Is wage exists in the Job?
+            // And is it its broadcast wage id?
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == defaultWageId && w.JobId == job.Id);
+            if (wage == null)
+            {
+                await tran.RollbackAsync();
+                throw new DataException("Wage does not exist!");
+            }        
+
             // Job already has owner?
-            if(connection.RoleId == DatabaseConstants.ROLE_OWNER_ID)
+            if(roleId == DatabaseConstants.ROLE_OWNER_ID)
             {
                 var alreadyExists = await _context.PeopleJobs
-                    .Include(pj => pj.Job)
-                    .FirstOrDefaultAsync(pj => pj.Job.Pin == connection.Pin && pj.RoleId == DatabaseConstants.ROLE_OWNER_ID);
+                    .FirstOrDefaultAsync(pj => pj.JobId == job.Id && pj.RoleId == DatabaseConstants.ROLE_OWNER_ID);
 
                 if (alreadyExists != null)
                 {
@@ -54,40 +68,26 @@ namespace SecurityApi.Services
 
             // She/He already connected?
             var duplicateConnection = await _context.PeopleJobs
-                .Include(pj => pj.Job)
-                .FirstOrDefaultAsync(pj => pj.Job.Pin == connection.Pin && pj.PeopleId == connection.PersonId);
+                .FirstOrDefaultAsync(pj => pj.JobId == job.Id && pj.PeopleId == personId);
             if (duplicateConnection != null)
             {
                 await tran.RollbackAsync();
                 throw new DataException("You are already connected to this job!");
             }
 
-            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == connection.RoleId);
+            // Role exists?
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
             if (role == null)
             {
                 await tran.RollbackAsync();
                 throw new DataException("Role does not exist!");
             }
 
-            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Pin == connection.Pin);
-            if(job == null)
-            {
-                await tran.RollbackAsync();
-                throw new DataException("Job does not exist!");
-            }
-
-            var person = await _context.People.FirstOrDefaultAsync(pj => pj.Id == connection.PersonId);
+            var person = await _context.People.FirstOrDefaultAsync(pj => pj.Id == personId);
             if (person == null)
             {
                 await tran.RollbackAsync();
                 throw new DataException("Person does not exist!");
-            }
-
-            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == connection.WageId);
-            if (wage == null)
-            {
-                await tran.RollbackAsync();
-                throw new DataException("Wage does not exist!");
             }
 
             var newPeopleJob = new Model.PeopleJob()
@@ -111,7 +111,6 @@ namespace SecurityApi.Services
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
             var sameTitle = await _context.Jobs.FirstOrDefaultAsync(j => j.Title == job.Title);
-            
             if(sameTitle != null)
             {
                 await tran.RollbackAsync();
@@ -119,7 +118,6 @@ namespace SecurityApi.Services
             }
 
             var owner = await _context.People.FirstOrDefaultAsync(p => p.Id == job.OwnerId);
-
             if(owner == null)
             {
                 await tran.RollbackAsync();
@@ -143,7 +141,6 @@ namespace SecurityApi.Services
             };
 
             await _context.Jobs.AddAsync(newJob);
-            await _context.SaveChangesAsync();
 
             // Insert default Wages
             Model.Wage broadcastWage = new Model.Wage()
@@ -167,8 +164,7 @@ namespace SecurityApi.Services
             await tran.CommitAsync();
 
             // Connect the user in PeopleJobs table
-            CreateConnection cc = new CreateConnection(newJob.Pin, owner.Id, broadcastWage.Id, defaultWage.Id);
-            await ConnectToJob(cc);
+            await ConnectToJob(newJob.Pin.Trim(), owner.Id, DatabaseConstants.ROLE_OWNER_ID);
 
             return _converter.ToModel(newJob);
         }
