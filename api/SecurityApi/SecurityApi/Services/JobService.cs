@@ -77,6 +77,39 @@ namespace SecurityApi.Services
             return _converter.ToModel(peopleJobConnection);
         }
 
+        public async Task<PersonJob> ChangePersonWage(int jobId, ChangeWage change)
+        {
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            var peopleJobConnection = await _context.PeopleJobs
+                .Include(pj => pj.Job)
+                    .ThenInclude(j => j.People)
+                .Include(pj => pj.People)
+                .Include(pj => pj.Role)
+                .Include(pj => pj.Wage)
+                .FirstOrDefaultAsync(pj => pj.JobId == jobId && pj.PeopleId == change.PersonId);
+
+            if (peopleJobConnection == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Person does not exist in this Job!");
+            }
+
+            var newWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == change.WageId && w.JobId == jobId);
+            if (newWage == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Wage does not exist in Job!");
+            }
+
+            peopleJobConnection.Wage = newWage;
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return _converter.ToModel(peopleJobConnection);
+        }
+
         public async Task<PersonJob> ConnectToJob(string pin, int personId, int roleId)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);

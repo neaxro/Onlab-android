@@ -14,6 +14,7 @@ namespace SecurityApi.Services
         Task<Job> Delete(int jobId);
         Task<PersonJob> ConnectToJob(string pin, int personId, int roleId);
         Task<PersonJob> ChangePersonRole(int jobId, ChangeRole change);
+        Task<PersonJob> ChangePersonWage(int jobId, ChangeWage change);
         Task<PersonJob> GetConnection(int connectionId);
     }
 }

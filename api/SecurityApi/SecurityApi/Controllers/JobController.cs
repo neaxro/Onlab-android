@@ -120,5 +120,21 @@ namespace SecurityApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPatch("changewage/{jobId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ChangeWage(int jobId, ChangeWage change)
+        {
+            try
+            {
+                var result = await _service.ChangePersonWage(jobId, change);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
