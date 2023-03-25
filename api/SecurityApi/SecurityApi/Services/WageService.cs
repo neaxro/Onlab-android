@@ -21,19 +21,18 @@ namespace SecurityApi.Services
 
         public async Task<Wage> Create(CreateWage newWage)
         {
-            // It doesnt make sense...
             if(newWage.Price <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(newWage.Price));
+                throw new Exception("Invalid price value for Wage!");
             }
 
-            Model.Wage wage = null;
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
             var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == newWage.JobId);
             if (job == null)
             {
-                throw new DataException(String.Format("Job with ID({0}) does not exist!", newWage.JobId));
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", newWage.JobId));
             }
 
             var result = await _context.Wages
@@ -42,10 +41,11 @@ namespace SecurityApi.Services
 
             if(result != null)
             {
-                throw new DataException(String.Format("Wage with name \"{0}\" already exists!", newWage.Name));
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("Wage with name \"{0}\" already exists!", newWage.Name));
             }
 
-            wage = new Model.Wage()
+            Model.Wage wage = new Model.Wage()
             {
                 Name = newWage.Name,
                 Price = newWage.Price,
@@ -57,14 +57,15 @@ namespace SecurityApi.Services
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
 
-            return wage == null ? null : _converter.ToModel(wage);
+            return _converter.ToModel(wage);
         }
 
-        public async Task<Wage> Delete(int id)
+        public async Task<Wage> Delete(int wageId)
         {
             var wage = await _context.Wages
                 .Include(w => w.Job)
-                .FirstOrDefaultAsync(w => w.Id == id);
+                .FirstOrDefaultAsync(w => w.Id == wageId);
+
             if (wage == null)
             {
                 throw new Exception("Wage does not exist!");
@@ -73,7 +74,7 @@ namespace SecurityApi.Services
             int broadcastWageId = DatabaseConstants.GetBroadcastWageID((int)wage.JobId, _context);
             int defaultWageId = DatabaseConstants.GetDefaultWageID((int)wage.JobId, _context);
 
-            if(id == broadcastWageId || id == defaultWageId)
+            if(wageId == broadcastWageId || wageId == defaultWageId)
             {
                 throw new Exception("You do not have permission for delete this Wage!");
             }
@@ -81,15 +82,21 @@ namespace SecurityApi.Services
             _context.Wages.Remove(wage);
             await _context.SaveChangesAsync();
 
-            return wage == null ? null : _converter.ToModel(wage);
+            return _converter.ToModel(wage);
         }
 
-        public async Task<Wage> GetById(int id)
+        public async Task<Wage> GetById(int wageId)
         {
             var wage = await _context.Wages
                 .Include(w => w.Job)
-                .FirstOrDefaultAsync(w => w.Id == id);
-            return wage == null ? null : _converter.ToModel(wage);
+                .FirstOrDefaultAsync(w => w.Id == wageId);
+
+            if (wage == null)
+            {
+                throw new Exception(String.Format("Wage with ID(0}) does not exist!", wageId));
+            }
+
+            return _converter.ToModel(wage);
         }
 
         public IEnumerable<Wage> GetAll()
@@ -100,49 +107,40 @@ namespace SecurityApi.Services
             return wages;
         }
 
-        public async Task<Wage> Update(int id, UpdateWage newWage)
+        public async Task<Wage> Update(int wageId, UpdateWage newWage)
         {
-            // It doesnt make sense...
             if (newWage.Price <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(newWage.Price));
+                throw new Exception("Invalid price value for Wage!");
             }
 
             var wage = await _context.Wages
                 .Include(w => w.Job)
-                .FirstOrDefaultAsync(w => w.Id == id);
-            
-            if(wage != null)
+                .FirstOrDefaultAsync(w => w.Id == wageId);
+
+            if (wage == null)
             {
-                bool priceChange = false;
-                if(wage.Price != newWage.Price)
-                {
-                    priceChange = true;
-                }
-
-                wage.Name = newWage.Name;
-                wage.Price = newWage.Price;
-
-                await _context.SaveChangesAsync();
-
-                // Update all shifts prices where needed
-                if (priceChange)
-                {
-                    await _shiftService.WageChangedUpdate(wage.Id);
-                }
+                throw new Exception(String.Format("Wage with ID({0}) does not exist!", wageId));
+            }
+            
+            bool priceChange = false;
+            if(wage.Price != newWage.Price)
+            {
+                priceChange = true;
             }
 
-            return wage == null ? null : _converter.ToModel(wage);
-        }
+            wage.Name = newWage.Name;
+            wage.Price = newWage.Price;
 
-        public IEnumerable<Wage> GetWages()
-        {
-            var wages = _context.Wages
-                .Where(w => w.Id > 1)
-                .Include(w => w.Job)
-                .Select(_converter.ToModel)
-                .ToList();
-            return wages;
+            await _context.SaveChangesAsync();
+
+            // Update all shifts prices where needed
+            if (priceChange)
+            {
+                await _shiftService.WageChangedUpdate(wage.Id);
+            }
+
+            return _converter.ToModel(wage);
         }
 
         public async Task<IEnumerable<Wage>> GetWagesInJob(int jobId)
@@ -151,11 +149,13 @@ namespace SecurityApi.Services
 
             if(job == null)
             {
-                throw new DataException(String.Format("Job with ID({0}) does not exist!", jobId));
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
             }
 
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(jobId, _context);
+
             var wages = _context.Wages
-                .Where(w => w.Id > 1 && w.JobId == jobId)
+                .Where(w => w.Id > broadcastWageId && w.JobId == jobId)
                 .Include(w => w.Job)
                 .Select(_converter.ToModel)
                 .ToList();
@@ -169,7 +169,7 @@ namespace SecurityApi.Services
 
             if (job == null)
             {
-                throw new DataException(String.Format("Job with ID({0}) does not exist!", jobId));
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
             }
 
             var categories = _context.Wages

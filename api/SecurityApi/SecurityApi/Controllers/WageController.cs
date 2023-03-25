@@ -28,13 +28,6 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Wage>> GetWages()
-        {
-            var wages = _service.GetWages();
-            return Ok(wages);
-        }
-
         [HttpGet("all")]
         public ActionResult<IEnumerable<Wage>> GetAll()
         {
@@ -42,13 +35,19 @@ namespace SecurityApi.Controllers
             return Ok(wages);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{wageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Wage>> GetWageById(int id)
+        public async Task<ActionResult<Wage>> GetWageById(int wageId)
         {
-            var result = await _service.GetById(id);
-            return result == null ? NotFound() : Ok(result);
+            try
+            {
+                var result = await _service.GetById(wageId);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("forjob/{jobId}")]
@@ -60,9 +59,9 @@ namespace SecurityApi.Controllers
             {
                 var result = await _service.GetWagesInJob(jobId);
                 return Ok(result);
-            } catch (DataException de)
+            } catch (Exception ex)
             {
-                return NotFound(de.Message);
+                return NotFound(ex.Message);
             }
         }
 
@@ -74,9 +73,9 @@ namespace SecurityApi.Controllers
                 var result = await _service.GetMessageCategories(jobId);
                 return Ok(result);
             }
-            catch (DataException de)
+            catch (Exception ex)
             {
-                return NotFound(de.Message);
+                return NotFound(ex.Message);
             }
         }
 
@@ -87,68 +86,44 @@ namespace SecurityApi.Controllers
             try
             {
                 var created = await _service.Create(newWage);
-
-                if (created == null)
-                {
-                    // This means that the server couldnt make a new message
-                    return NotFound();
-                }
-
-                return CreatedAtAction(nameof(GetWageById), new { id = created.Id }, created);
+                return CreatedAtAction(nameof(GetWageById), new { wageId = created.Id }, created);
             }
-            catch(ArgumentOutOfRangeException ec)
+            catch(Exception ex)
             {
-                return BadRequest(ec.Message);
-            }
-            catch (DataException de)
-            {
-                return BadRequest(de.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                ModelState.AddModelError(nameof(CreateWage.Name), ex.Message);
-                return ValidationProblem(ModelState);
-            }
-            catch(Exception e)
-            {
-                return BadRequest($"Could not create {e.Message}");
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("{wageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Update(int id, [FromBody] UpdateWage newContent)
+        public async Task<ActionResult> Update(int wageId, [FromBody] UpdateWage newContent)
         {
             try
             {
-                var result = await _service.Update(id, newContent);
-                return result == null ? NotFound() : Ok();
+                var result = await _service.Update(wageId, newContent);
+                return Ok(result);
             }
-            catch(DataException de)
+            catch (Exception ex)
             {
-                return BadRequest(de.Message);
-            }
-            catch (ArgumentOutOfRangeException ec)
-            {
-                return BadRequest(ec.Message);
+                return BadRequest(ex.Message);
             }
 
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{wageId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Wage>> Delete(int id)
+        public async Task<ActionResult<Wage>> Delete(int wageId)
         {
             try
             {
-                var result = await _service.Delete(id);
-                return result == null ? NotFound() : NoContent();
-            } catch(Exception e)
+                var result = await _service.Delete(wageId);
+                return NoContent();
+            } catch(Exception ex)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
         }
     }
