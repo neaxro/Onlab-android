@@ -75,3 +75,7 @@ Másik hasznos funkciója az alkalmazásnak az a lokáció megosztás. Amennyibe
 2. Sprint
    - Authorizáció (API-val) [link](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-7.0), [másik, talán hasznos link](https://learn.microsoft.com/en-us/aspnet/web-api/overview/security/authentication-and-authorization-in-aspnet-web-api)
    - DB-hez csatlakozzon, alaplekérdezések menjenek
+3. Sprint
+   - Authorizáció API
+   - Tesztelni, hibákat javítani
+   - Véglegesítani az API-t
