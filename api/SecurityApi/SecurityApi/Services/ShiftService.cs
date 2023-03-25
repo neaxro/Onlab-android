@@ -52,8 +52,9 @@ namespace SecurityApi.Services
             }
 
             var itsWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(newShift.JobId, _context);
 
-            if(itsWage == null || itsWage.Id == DatabaseConstants.BROADCAST_MESSAGE_ID)
+            if(itsWage == null || itsWage.Id == broadcastWageId)
             {
                 throw new Exception("Wage doesnt exist!");
             }
@@ -270,7 +271,9 @@ namespace SecurityApi.Services
             var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
             var state = await _context.States.FirstOrDefaultAsync(s => s.Id == newShift.StatusId);
 
-            if(wage == null || wage.Id == DatabaseConstants.BROADCAST_MESSAGE_ID)
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID((int)wage.JobId, _context);
+
+            if(wage == null || wage.Id == broadcastWageId)
             {
                 throw new ArgumentException("New Wage doesnt exist!");
             }

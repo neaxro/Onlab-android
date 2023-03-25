@@ -62,20 +62,24 @@ namespace SecurityApi.Services
 
         public async Task<Wage> Delete(int id)
         {
-            if(id == DatabaseConstants.BROADCAST_MESSAGE_ID || id == DatabaseConstants.DEFAULT_WAGE_ID)
-            {
-                throw new Exception("You do not have permission for delete this Wage!");
-            }
-
             var wage = await _context.Wages
                 .Include(w => w.Job)
                 .FirstOrDefaultAsync(w => w.Id == id);
-            
-            if(wage != null)
+            if (wage == null)
             {
-                _context.Wages.Remove(wage);
-                await _context.SaveChangesAsync();
+                throw new Exception("Wage does not exist!");
             }
+
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID((int)wage.JobId, _context);
+            int defaultWageId = DatabaseConstants.GetDefaultWageID((int)wage.JobId, _context);
+
+            if(id == broadcastWageId || id == defaultWageId)
+            {
+                throw new Exception("You do not have permission for delete this Wage!");
+            }
+            
+            _context.Wages.Remove(wage);
+            await _context.SaveChangesAsync();
 
             return wage == null ? null : _converter.ToModel(wage);
         }

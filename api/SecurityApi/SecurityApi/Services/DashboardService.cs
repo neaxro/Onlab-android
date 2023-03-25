@@ -105,8 +105,10 @@ namespace SecurityApi.Services
 
         public IEnumerable<Dashboard> ListForPersonByCategoryID(int jobId, int categoryId)
         {
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(jobId, _context);
+
             var dboards = _context.Dashboards
-                .Where(d => d.JobId == jobId && (d.WageId == categoryId || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID))
+                .Where(d => d.JobId == jobId && (d.WageId == categoryId || d.WageId == broadcastWageId))
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Select(_converter.ToModel)
@@ -122,8 +124,10 @@ namespace SecurityApi.Services
             if (person == null)
                 return null;
 
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(jobId, _context);
+
             var dboards = _context.Dashboards
-                .Where(d => d.JobId == jobId && (d.PeopleId == person.Id || d.WageId == DatabaseConstants.BROADCAST_MESSAGE_ID))
+                .Where(d => d.JobId == jobId && (d.PeopleId == person.Id || d.WageId == broadcastWageId))
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Select(_converter.ToModel)
