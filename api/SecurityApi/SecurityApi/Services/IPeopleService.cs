@@ -7,7 +7,6 @@ namespace SecurityApi.Services
     public interface IPeopleService
     {
         IEnumerable<Person> GetAll();
-        IEnumerable<Person> GetAllOnJob(int jobId);
         Task<Person> Insert(CreatePerson newPerson);
         Task<Person> FindById(int id);
         Task<Person> Update(int id, CreatePerson newData);

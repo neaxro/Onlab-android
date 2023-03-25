@@ -70,18 +70,6 @@ namespace SecurityApi.Services
             
         }
 
-        public IEnumerable<Person> GetAllOnJob(int jobId)
-        {
-            var people = _context.PeopleJobs
-                .Where(pj => pj.JobId == jobId)
-                .Include(pj => pj.People)
-                .Select(pj => pj.People)
-                .Select(_converter.ToModel)
-                .ToList();
-
-            return people;
-        }
-
         public async Task<Person> Insert(CreatePerson newPerson)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);

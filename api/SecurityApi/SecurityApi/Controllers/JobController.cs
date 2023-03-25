@@ -12,6 +12,7 @@ using SecurityApi.Enums;
 using SecurityApi.Model;
 using SecurityApi.Services;
 using Job = SecurityApi.Dtos.Job;
+using Person = SecurityApi.Dtos.Person;
 
 namespace SecurityApi.Controllers
 {
@@ -31,6 +32,13 @@ namespace SecurityApi.Controllers
         {
             var jobs = _service.GetAll();
             return Ok(jobs);
+        }
+
+        [HttpGet("allonjob/{jobId}")]
+        public ActionResult<IEnumerable<Person>> GetAllOnJob(int jobId)
+        {
+            var result = _service.AllPersonInJob(jobId);
+            return Ok(result);
         }
 
         [HttpGet("{jobId}")]
@@ -93,6 +101,21 @@ namespace SecurityApi.Controllers
                 return BadRequest(de.Message);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("changerole/{jobId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ChangeRole(int jobId, ChangeRole change)
+        {
+            try
+            {
+                var result = await _service.ChangePersonRole(jobId, change);
+                return Ok();
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

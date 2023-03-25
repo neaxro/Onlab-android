@@ -49,13 +49,6 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [HttpGet("allonjob/{jobId}")]
-        public ActionResult<IEnumerable<Person>> GetAllOnJob(int jobId)
-        {
-            var result = _service.GetAllOnJob(jobId);
-            return Ok(result);
-        }
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

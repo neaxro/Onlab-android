@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
 using SecurityApi.Converters;
 using SecurityApi.Dtos;
@@ -21,12 +22,59 @@ namespace SecurityApi.Services
 
         public IEnumerable<Person> AllPersonInJob(int jobId)
         {
-            throw new NotImplementedException();
+            var people = _context.PeopleJobs
+                .Where(pj => pj.JobId == jobId)
+                .Include(pj => pj.People)
+                .Select(pj => pj.People)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return people;
         }
 
-        public Task ChangePersonRole(int personId, int roleId)
+        public async Task<PersonJob> ChangePersonRole(int jobId, ChangeRole change)
         {
-            throw new NotImplementedException();
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            var peopleJobConnection = await _context.PeopleJobs
+                .Include(pj => pj.Job)
+                    .ThenInclude(j => j.People)
+                .Include(pj => pj.People)
+                .Include(pj => pj.Role)
+                .Include(pj => pj.Wage)
+                .FirstOrDefaultAsync(pj => pj.JobId == jobId && pj.PeopleId == change.PersonId);
+            if(peopleJobConnection == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Person does not exist in this Job!");
+            }
+
+            if (peopleJobConnection.RoleId == DatabaseConstants.ROLE_OWNER_ID)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Owner role cannot be changed!");
+            }
+
+            if (change.RoleId == DatabaseConstants.ROLE_OWNER_ID)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Job must have only one Owner!");
+            }
+           
+
+            var newRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == change.RoleId);
+            if(newRole == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Role does not exist!");
+            }
+
+            peopleJobConnection.Role = newRole;
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return _converter.ToModel(peopleJobConnection);
         }
 
         public async Task<PersonJob> ConnectToJob(string pin, int personId, int roleId)
