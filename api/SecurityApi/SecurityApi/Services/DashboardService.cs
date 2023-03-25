@@ -53,27 +53,47 @@ namespace SecurityApi.Services
 
         public async Task<Dashboard> Insert(CreateDashboard dashboard)
         {
-            Model.Dashboard newMessage = null;
             using var tran = _context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
-            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == dashboard.GroupId);
-            var creator = await _context.People.FirstOrDefaultAsync(p => p.Id == dashboard.CreatorId);
             var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == dashboard.JobId);
-
-            if(wage != null && creator != null && job != null)
+            if (job == null)
             {
-                newMessage = new Model.Dashboard()
-                {
-                    Title = dashboard.Title,
-                    Message = dashboard.Message,
-                    Job = job,
-                    People = creator,
-                    Wage = wage
-                };
-
-                await _context.Dashboards.AddAsync(newMessage);
-                await _context.SaveChangesAsync();
+                await tran.RollbackAsync();
+                throw new Exception("Job does not exist!");
             }
+
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == dashboard.GroupId && w.JobId == dashboard.JobId);
+            if(wage == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Wage does not exist in Job!");
+            }
+
+            var creator = await _context.People.FirstOrDefaultAsync(p => p.Id == dashboard.CreatorId);
+            if (creator == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Person does not exist!");
+            }
+
+            var creatorInJob = await _context.PeopleJobs.FirstOrDefaultAsync(pj => pj.JobId == job.Id && pj.PeopleId == creator.Id);
+            if (creatorInJob == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Person does not exist in Job!");
+            }
+
+            Model.Dashboard newMessage = new Model.Dashboard()
+            {
+                Title = dashboard.Title,
+                Message = dashboard.Message,
+                Job = job,
+                People = creator,
+                Wage = wage
+            };
+
+            await _context.Dashboards.AddAsync(newMessage);
+            await _context.SaveChangesAsync();
 
             await tran.CommitAsync();
 

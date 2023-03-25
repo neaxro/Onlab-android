@@ -68,6 +68,8 @@ namespace SecurityApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> InsertNewMessage([FromBody] CreateDashboard createDashboard)
         {
             try
@@ -86,6 +88,10 @@ namespace SecurityApi.Controllers
             {
                 ModelState.AddModelError(nameof(CreateDashboard.Title), ex.Message);
                 return ValidationProblem(ModelState);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
