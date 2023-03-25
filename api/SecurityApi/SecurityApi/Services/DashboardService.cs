@@ -48,7 +48,12 @@ namespace SecurityApi.Services
                 .Include(d => d.People)
                 .FirstOrDefaultAsync();
 
-            return dboard == null ? null : _converter.ToModel(dboard);
+            if(dboard == null)
+            {
+                throw new Exception("Dashboard does not exist!");
+            }
+
+            return _converter.ToModel(dboard);
         }
 
         public async Task<Dashboard> Insert(CreateDashboard dashboard)
@@ -97,7 +102,7 @@ namespace SecurityApi.Services
 
             await tran.CommitAsync();
 
-            return newMessage == null ? null : _converter.ToModel(newMessage);
+            return _converter.ToModel(newMessage);
         }
 
         public IEnumerable<Dashboard> ListAll()
@@ -142,7 +147,9 @@ namespace SecurityApi.Services
             var person = await _context.People.SingleOrDefaultAsync(p => p.Id == personId);
             
             if (person == null)
-                return null;
+            {
+                throw new Exception("Person does not exist!");
+            }
 
             int broadcastWageId = DatabaseConstants.GetBroadcastWageID(jobId, _context);
 
@@ -166,11 +173,10 @@ namespace SecurityApi.Services
                 .Include(d => d.Job)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
-            // Not found
             if (dboard == null)
             {
                 await tran.RollbackAsync();
-                return null;
+                throw new DataException(String.Format("Dashboard with ID({0}) does not exist!", id));
             }
 
             var group = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newContent.GroupId && w.JobId == dboard.JobId);

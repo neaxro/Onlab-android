@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -33,13 +34,19 @@ namespace SecurityApi.Controllers
             return Ok(dboards);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{dashboardId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Dashboard>> GetById(int id)
+        public async Task<ActionResult<Dashboard>> GetById(int dashboardId)
         {
-            var dboard = await _service.GetById(id);
-            return dboard == null ? NotFound() : Ok(dboard);
+            try
+            {
+                var dboard = await _service.GetById(dashboardId);
+                return Ok(dboard);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("forperson/bycategoryid/{jobId}/{categoryId}")]
@@ -76,13 +83,7 @@ namespace SecurityApi.Controllers
             {
                 var result = await _service.Insert(createDashboard);
 
-                if(result == null)
-                {
-                    // This means that the server couldnt make a new message
-                    return NotFound();
-                }
-
-                return CreatedAtAction(nameof(GetById), new { id = result.id }, result);
+                return CreatedAtAction(nameof(GetById), new { dashboardId = result.id }, result);
             }
             catch (ArgumentException ex)
             {
@@ -95,28 +96,33 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("{dashboardId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Dashboard>> Update(int id, [FromBody] UpdateDashboard newContent)
+        public async Task<ActionResult<Dashboard>> Update(int dashboardId, [FromBody] UpdateDashboard newContent)
         {
             try
             {
-                var result = await _service.Update(id, newContent);
-                return result == null ? NotFound() : Ok(result);
-            } catch (Exception ex)
+                var result = await _service.Update(dashboardId, newContent);
+                return Ok(result);
+            }
+            catch (DataException de)
+            {
+                return NotFound(de.Message);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{dashboardId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Dashboard>> Remove(int id)
+        public async Task<ActionResult<Dashboard>> Remove(int dashboardId)
         {
-            var result = await _service.Delete(id);
+            var result = await _service.Delete(dashboardId);
 
             return result == null ? NotFound() : NoContent();
         }
