@@ -8,10 +8,10 @@ namespace SecurityApi.Services
     {
         IEnumerable<Person> GetAll();
         Task<Person> Insert(CreatePerson newPerson);
-        Task<Person> FindById(int id);
-        Task<Person> Update(int id, CreatePerson newData);
-        Task<Person> DeleteById(int id);
-        Task<Person> UploadImage(int id, IFormFile image);
-        Task<Person> RemoveImage(int id);
+        Task<Person> Get(int personId);
+        Task<Person> Update(int personId, CreatePerson newData);
+        Task<Person> Delete(int personId);
+        Task<Person> UploadImage(int personId, IFormFile image);
+        Task<Person> RemoveImage(int personId);
     }
 }

@@ -5,6 +5,7 @@ using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Model;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Person = SecurityApi.Dtos.PersonDtos.Person;
 
 namespace SecurityApi.Services
@@ -20,39 +21,74 @@ namespace SecurityApi.Services
             _converter = new ModelToDtoConverter();
         }
 
-        public async Task<Person> DeleteById(int id)
+        public async Task<Person> Delete(int personId)
         {
-            var result = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+            var result = await _context.People.FirstOrDefaultAsync(p => p.Id == personId);
 
-            if (result != null)
+            if(result == null)
             {
-                _context.People.Remove(result);
-                await _context.SaveChangesAsync();
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
             }
 
-            return result == null ? null : _converter.ToModel(result);
+            _context.People.Remove(result);
+            await _context.SaveChangesAsync();
+
+            return _converter.ToModel(result);
         }
 
-        public async Task<Person> FindById(int id)
+        public async Task<Person> Get(int personId)
         {
-            var result = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
-            return result == null ? null : _converter.ToModel(result);
+            var result = await _context.People.FirstOrDefaultAsync(p => p.Id == personId);
+
+            if (result == null)
+            {
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
+            }
+
+            return _converter.ToModel(result);
         }
 
         public IEnumerable<Person> GetAll()
         {
-            return _context.People.Select(_converter.ToModel).ToList();
+            var people = _context.People
+                .Select(_converter.ToModel)
+                .ToList();
             
+            return people;
         }
 
         public async Task<Person> Insert(CreatePerson newPerson)
         {
-            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
-            var result = await _context.People.AnyAsync(p => EF.Functions.Like(p.Username, newPerson.Username));
-            
-            if (result)
+            if (newPerson.Username.Any(Char.IsWhiteSpace)){
+                throw new Exception("Username must not contain whitespaces!");
+            }
+
+            if (newPerson.Nickname.Any(Char.IsWhiteSpace)){
+                throw new Exception("Nickname must not contain whitespaces!");
+            }
+
+            string justAlphabetPattern = @"^[a-zA-Z]+$";
+            Match isValidNicname = Regex.Match(newPerson.Nickname, justAlphabetPattern, RegexOptions.IgnoreCase);
+            if (!isValidNicname.Success)
             {
-                throw new Exception("User already exists!");
+                throw new Exception("Nickname must contains only letters!");
+            }
+
+            string emailRegexPattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+            Match isEmailValid = Regex.Match(newPerson.Email, emailRegexPattern, RegexOptions.IgnoreCase);
+            if (!isEmailValid.Success)
+            {
+                throw new Exception("Email address invalid format!");
+            }
+
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            var result = await _context.People.FirstOrDefaultAsync(p => p.Username.ToUpper() == newPerson.Username.ToUpper());
+            
+            if (result != null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("Username \"{0}\" has already taken!", newPerson.Username));
             }
 
             var person = new Model.Person()
@@ -71,54 +107,70 @@ namespace SecurityApi.Services
             return _converter.ToModel(person);
         }
 
-        public async Task<Person> RemoveImage(int id)
+        public async Task<Person> RemoveImage(int personId)
         {
-            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == personId);
 
             if(person == null)
             {
-                return null;
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
             }
 
             person.ProfilePicture = null;
             await _context.SaveChangesAsync();
 
-            return person == null ? null : _converter.ToModel(person);
+            return _converter.ToModel(person);
         }
 
-        public async Task<Person> Update(int id, CreatePerson newData)
+        public async Task<Person> Update(int personId, CreatePerson newData)
         {
-            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == personId);
 
-            if(person != null)
+            if(person == null)
             {
-                person.Name = newData.FullName;
-                person.Username = newData.Username;
-                person.Nickname = newData.Nickname;
-                person.Email = newData.Email;
-                person.Password = newData.Password;
-
-                await _context.SaveChangesAsync();
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
             }
 
-            return person == null ? null : _converter.ToModel(person);
-        }
-
-        public async Task<Person> UploadImage(int id, IFormFile image)
-        {
-            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
-            if(person != null)
+            var personWithNewUsername = await _context.People.FirstOrDefaultAsync(p => p.Username == newData.Username);
+            if(personWithNewUsername != null)
             {
-                using(var ms = new MemoryStream())
+                // Not the same person who changes data but the username is same
+                if(personWithNewUsername.Id != personId)
                 {
-                    image.CopyTo(ms);
-                    person.ProfilePicture = ms.ToArray();
+                    throw new Exception("Username already taken!");
                 }
-
-                await _context.SaveChangesAsync();
+                // Else the username is not change for the same user who is updateing itself
             }
 
-            return person == null ? null : _converter.ToModel(person);
+            person.Name = newData.FullName;
+            person.Username = newData.Username;
+            person.Nickname = newData.Nickname;
+            person.Email = newData.Email;
+            person.Password = newData.Password;
+
+            await _context.SaveChangesAsync();
+
+            return _converter.ToModel(person);
+        }
+
+        public async Task<Person> UploadImage(int personId, IFormFile image)
+        {
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == personId);
+
+            if (person == null)
+            {
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
+            }
+
+            using(var ms = new MemoryStream())
+            {
+                image.CopyTo(ms);
+                person.ProfilePicture = ms.ToArray();
+            }
+
+            await _context.SaveChangesAsync();
+
+            return _converter.ToModel(person);
         }
     }
 }

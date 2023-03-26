@@ -33,91 +33,97 @@ namespace SecurityApi.Controllers
             return Ok(people);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Person>> Get(int id)
+        public async Task<ActionResult<Person>> Get(int personId)
         {
-            var talalat = await _service.FindById(id);
-            if (talalat == null)
+            try
             {
-                return NotFound();
-            }
-            else
-            {
+                var talalat = await _service.Get(personId);
                 return Ok(talalat);
+            } catch(Exception ex)
+            {
+                return NotFound(ex.Message);
             }
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Person>> Insert([FromBody] CreatePerson uj)
+        public async Task<ActionResult<Person>> Insert([FromBody] CreatePerson newPerson)
         {
             try
             {
-                var created = await _service.Insert(uj);
-                return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+                var created = await _service.Insert(newPerson);
+                return CreatedAtAction(nameof(Get), new { personId = created.Id }, created);
             }
             catch (Exception ex)
             {
-                //ModelState.AddModelError(nameof(CreatePerson.FullName), ex.Message);
-                //return ValidationProblem(ModelState);
-
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpPost("picture/{id}")]
+        [HttpPost("picture/{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [RequestSizeLimit(20000000)]  // ~20 MB
-        public async Task<ActionResult> UploadProfilePicture(int id, [FromForm] IFormFile image)
+        public async Task<ActionResult> UploadProfilePicture(int personId, [FromForm] IFormFile image)
         {
-            var result = await _service.UploadImage(id, image);
-            return result == null ? NotFound() : Ok();
-        }
-
-        [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Person>> Update(int id, [FromBody] CreatePerson newData)
-        {
-            var person = await _service.Update(id, newData);
-
-            return person == null ? NotFound() : Ok(person);
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Delete(int id)
-        {
-            try
-            {
-                var result = await _service.DeleteById(id);
-                return result == null ? NotFound() : NoContent();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpDelete("profilepicture/{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> DeleteProfilePicture(int id)
-        {
-            try
-            {
-                var result = await _service.RemoveImage(id);
-                return result == null ? NotFound() : NoContent();
+            try{
+                var result = await _service.UploadImage(personId, image);
+                return Ok();
             } catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPatch("{personId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Person>> Update(int personId, [FromBody] CreatePerson newData)
+        {
+            try
+            {
+                var person = await _service.Update(personId, newData);
+                return Ok(person);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("{personId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Delete(int personId)
+        {
+            try
+            {
+                var result = await _service.Delete(personId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("profilepicture/{personId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteProfilePicture(int personId)
+        {
+            try
+            {
+                var result = await _service.RemoveImage(personId);
+                return NoContent();
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }

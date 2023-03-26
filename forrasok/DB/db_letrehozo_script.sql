@@ -31,7 +31,7 @@ create table [People]
 	Name nvarchar(30),
 	Username nvarchar(20) unique,
 	Nickname nvarchar(30),
-	Email nvarchar(20),
+	Email nvarchar(50),
 	Password nvarchar(30),
 	ProfilePicture image
 )
