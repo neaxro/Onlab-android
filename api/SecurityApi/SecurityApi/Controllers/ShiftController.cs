@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Composition;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,36 +36,66 @@ namespace SecurityApi.Controllers
         [HttpGet("all/forjob/{jobId}")]
         public ActionResult<IEnumerable<Shift>> GetAllForJob(int jobId)
         {
-            var shifts = _service.GetAllForJob(jobId);
-            return shifts == null ? NotFound() : Ok(shifts);
+            try
+            {
+                var shifts = _service.GetAllForJob(jobId);
+                return Ok(shifts);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
         
         [HttpGet("all/forperson/{personId}")]
         public ActionResult<IEnumerable<Shift>> GetAllForPerson(int personId)
         {
-            var shifts = _service.GetAllForPerson(personId);
-            return shifts == null ? NotFound() : Ok(shifts);
+            try
+            {
+                var shifts = _service.GetAllForPerson(personId);
+                return Ok(shifts);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("all/{jobId}/{personId}")]
-        public ActionResult<IEnumerable<Shift>> GetAllFroPeronInJob(int personId, int jobId)
+        public ActionResult<IEnumerable<Shift>> GetAllForPeronInJob(int jobId, int personId)
         {
-            var shifts = _service.GetAllForPersonInJob(personId, jobId);
-            return shifts == null ? NotFound() : Ok(shifts);
+            try
+            {
+                var shifts = _service.GetAllForPersonInJob(personId, jobId);
+                return Ok(shifts);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("pending/{jobId}")]
         public async Task<ActionResult<IEnumerable<Shift>>> GetAllPendingInJob(int jobId)
         {
-            var pendingShifts = await _service.GetAllPendingInJob(jobId);
-            return pendingShifts == null ? NotFound() : Ok(pendingShifts);
+            try
+            {
+                var pendingShifts = await _service.GetAllPendingInJob(jobId);
+                return Ok(pendingShifts);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Shift>> Get(int id)
+        [HttpGet("{shiftId}")]
+        public async Task<ActionResult<Shift>> Get(int shiftId)
         {
-            var result = await _service.Get(id);
-            return result == null ? NotFound() : Ok(result);
+            try
+            {
+                var result = await _service.Get(shiftId);
+                return Ok(result);
+            } catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("inprogress/{jobId}")]
@@ -74,7 +105,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost()]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Shift>> CreateShift([FromBody] CreateShift shift)
@@ -82,7 +113,7 @@ namespace SecurityApi.Controllers
             try
             {
                 var created = await _service.Create(shift);
-                return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+                return CreatedAtAction(nameof(Get), new { shiftId = created.Id }, created);
             }
             catch (Exception ex)
             {
@@ -93,68 +124,79 @@ namespace SecurityApi.Controllers
         [HttpPatch("finish/{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Shift>> EndShift(int shiftId)
-        {
-            var result = await _service.Finish(shiftId);
-            return result == null ? NotFound() : Ok(result);
-        }
-
-        [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Update(int id, [FromBody] UpdateShift updateShift)
+        public async Task<ActionResult<Shift>> FinishShift(int shiftId)
         {
             try
             {
-                var res = await _service.Update(id, updateShift);
-                return res == null ? NotFound() : Ok();
-            }
-            catch (ArgumentException ae)
+                var result = await _service.Finish(shiftId);
+                return Ok(result);
+            } catch (Exception ex)
             {
-                return BadRequest(ae.Message);
+                return NotFound(ex.Message);
             }
         }
 
-        [HttpPatch("accept/{id}")]
+        [HttpPatch("{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> AcceptShift(int id)
+        public async Task<ActionResult> Update(int shiftId, [FromBody] UpdateShift updateShift)
         {
             try
             {
-                var res = await _service.AcceptShift(id);
-                return res == null ? NotFound() : Ok();
+                var res = await _service.Update(shiftId, updateShift);
+                return Ok(res);
             }
-            catch (DataException de)
+            catch (Exception ex)
             {
-                return BadRequest(de.Message);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPatch("deny/{id}")]
+        [HttpPatch("accept/{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DenyShift(int id)
+        public async Task<ActionResult> AcceptShift(int shiftId)
         {
             try
             {
-                var res = await _service.DenyShift(id);
-                return res == null ? NotFound() : Ok();
+                var res = await _service.AcceptShift(shiftId);
+                return Ok();
             }
-            catch (DataException de)
+            catch (Exception ex)
             {
-                return BadRequest(de.Message);
+                return NotFound(ex.Message);
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpPatch("deny/{shiftId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DenyShift(int shiftId)
+        {
+            try
+            {
+                var res = await _service.DenyShift(shiftId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("{shiftId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Shift>> Delete(int id)
+        public async Task<ActionResult<Shift>> Delete(int shiftId)
         {
-            var result = await _service.Delete(id);
-
-            return result == null ? NotFound() : Ok(result);
+            try
+            {
+                var result = await _service.Delete(shiftId);
+                return Ok(result);
+            } catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

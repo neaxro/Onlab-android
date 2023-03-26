@@ -33,6 +33,7 @@ namespace SecurityApi.Services
                 .Include(pj => pj.Wage)
                 .Include(pj => pj.Role)
                 .FirstOrDefaultAsync(pj => pj.JobId == newShift.JobId && pj.PeopleId == newShift.PersonId);
+
             if(peopleJob == null)
             {
                 await tran.RollbackAsync();
@@ -43,14 +44,17 @@ namespace SecurityApi.Services
                 .Include(p => p.Shifts)
                 .FirstOrDefaultAsync(p => p.Id == newShift.PersonId);              
 
-            var inProcessShift = person.Shifts.FirstOrDefault(s => s.JobId == newShift.JobId && s.EndTime == null);
+            var inProcessShift = person.Shifts
+                .FirstOrDefault(s => s.JobId == newShift.JobId && s.EndTime == null);
             if (inProcessShift != null)
             {
                 await tran.RollbackAsync();
                 throw new Exception("You must finish your current shift!");
             }
 
-            var itsWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId && w.JobId == newShift.JobId);
+            var itsWage = await _context.Wages
+                .FirstOrDefaultAsync(w => w.Id == newShift.WageId && w.JobId == newShift.JobId);
+            
             int broadcastWageId = DatabaseConstants.GetBroadcastWageID(newShift.JobId, _context);
 
             if(itsWage == null || itsWage.Id == broadcastWageId)
@@ -70,7 +74,7 @@ namespace SecurityApi.Services
                 Status = inProcessState
             };
 
-            _context.Shifts.Add(shift);
+            await _context.Shifts.AddAsync(shift);
 
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
@@ -85,14 +89,15 @@ namespace SecurityApi.Services
 
             if(end == null)
             {
+                // Earne money can be null, good return value in case of bad/early call
                 return null;
             }
 
-            double wagePrice = (double)shift.Wage.Price;
+            double pricePerHour = (double)shift.Wage.Price;
 
             double hours = (end - start).TotalHours;
 
-            return (float)(wagePrice * Math.Round(hours, 1));
+            return (float)(pricePerHour * Math.Round(hours, 1));
         }
 
         public async Task<Shift> Finish(int shiftId)
@@ -108,21 +113,17 @@ namespace SecurityApi.Services
                 .FirstOrDefaultAsync(s =>
                 s.Id == shiftId && s.EndTime == null);
 
-            var pendingStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.PENDING_STATUS_ID);
-
-            // TODO: Esetleg leellenorizni h van-e ilyen ember, van-e befejezetlen szolgalata?
             if (shift == null)
             {
-                return null;
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("Shift with ID({0}) does not exist!", shiftId));
             }
 
+            var pendingStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.PENDING_STATUS_ID);
+
             shift.EndTime = DateTime.Now;
-
             shift.Status = pendingStatus;
-
-            float? earnedMoney = CalculateEarnedMoney(shift);
-
-            shift.EarnedMoney = earnedMoney;
+            shift.EarnedMoney = CalculateEarnedMoney(shift);
 
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
@@ -130,7 +131,7 @@ namespace SecurityApi.Services
             return _converter.ToModel(shift);
         }
 
-        public async Task<Shift> Delete(int id)
+        public async Task<Shift> Delete(int shiftId)
         {
             var shift = await _context.Shifts
                 .Include(s => s.People)
@@ -138,10 +139,12 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == shiftId);
 
             if (shift == null)
-                return null;
+            {
+                throw new Exception(String.Format("Shift with ID({0}) does not exist!", shiftId));
+            }
 
             _context.Shifts.Remove(shift);
             await _context.SaveChangesAsync();
@@ -149,16 +152,22 @@ namespace SecurityApi.Services
             return _converter.ToModel(shift);
         }
 
-        public async Task<Shift> Get(int id)
+        public async Task<Shift> Get(int shiftId)
         {
-            var result = await _context.Shifts
+            var shift = await _context.Shifts
                 .Include(s => s.People)
                 .Include(s => s.Wage)
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .FirstOrDefaultAsync(s => s.Id == id);
-            return result == null ? null : _converter.ToModel(result);
+                .FirstOrDefaultAsync(s => s.Id == shiftId);
+
+            if(shift == null)
+            {
+                throw new Exception(String.Format("Shift with ID({0}) does not exist!", shiftId));
+            }
+
+            return _converter.ToModel(shift);
         }
 
         public IEnumerable<Shift> GetAll()
@@ -171,17 +180,16 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .Select(_converter.ToModel)
                 .ToList();
+
             return shifts;
         }
 
         public IEnumerable<Shift> GetAllForJob(int jobId)
         {
-            var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);
-            
-            // Job doesnt exist
+            var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);            
             if(job == null)
             {
-                return null;
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
             }
 
             var shifts = _context.Shifts
@@ -193,6 +201,7 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .Select(_converter.ToModel)
                 .ToList();
+
             return shifts;
         }
 
@@ -200,10 +209,9 @@ namespace SecurityApi.Services
         {
             var person = _context.People.FirstOrDefault(p => p.Id == personId);
 
-            // Person doesnt exist
             if (person == null)
             {
-                return null;
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
             }
 
             var shifts = _context.Shifts
@@ -215,18 +223,22 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .Select(_converter.ToModel)
                 .ToList();
+
             return shifts;
         }
 
-        public IEnumerable<Shift> GetAllForPersonInJob(int personId, int jobId)
+        public IEnumerable<Shift> GetAllForPersonInJob(int jobId, int personId)
         {
             var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);
-            var person = _context.People.FirstOrDefault(p => p.Id == personId);
-
-            // Job or Person doesnt exist
-            if (job == null || person == null)
+            if(job == null)
             {
-                return null;
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+            
+            var person = _context.People.FirstOrDefault(p => p.Id == personId);
+            if (person == null)
+            {
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
             }
 
             var shifts = _context.Shifts
@@ -238,17 +250,16 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .Select(_converter.ToModel)
                 .ToList();
+
             return shifts;
         }
 
         public async Task<IEnumerable<Shift>> GetAllPendingInJob(int jobId)
         {
             var job = await _context.Jobs.FirstOrDefaultAsync(job => job.Id == jobId);
-
-            // Job doesnt exist
             if (job == null)
             {
-                return null;
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
             }
 
             var shifts = _context.Shifts
@@ -260,31 +271,35 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .Select(_converter.ToModel)
                 .ToList();
+
             return shifts;
         }
 
-        public async Task<Shift> Update(int id, UpdateShift newShift)
+        public async Task<Shift> Update(int shiftId, UpdateShift newShift)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
             var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
-            var state = await _context.States.FirstOrDefaultAsync(s => s.Id == newShift.StatusId);
-
             int broadcastWageId = DatabaseConstants.GetBroadcastWageID((int)wage.JobId, _context);
 
-            if(wage == null || wage.Id == broadcastWageId)
+            if (wage == null || wage.Id == broadcastWageId)
             {
-                throw new ArgumentException("New Wage doesnt exist!");
-            }
-            if(state == null)
-            {
-                throw new ArgumentException("New State doesnt exist!");
-            }
-            if(newShift.EndTime < newShift.StartTime)
-            {
-                throw new ArgumentException("Invalid Start or End Time!");
+                await tran.RollbackAsync();
+                throw new Exception("New Wage doesnt exist!");
             }
 
+            var state = await _context.States.FirstOrDefaultAsync(s => s.Id == newShift.StatusId);
+            if(state == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("New State doesnt exist!");
+            }
+
+            if(newShift.EndTime < newShift.StartTime)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Invalid Start or End Time!");
+            }
 
             var shift = await _context.Shifts
                 .Include(s => s.People)
@@ -292,40 +307,39 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == shiftId);
 
-            if(shift != null)
-            {
-                shift.StartTime = newShift.StartTime;
-                shift.EndTime = newShift.EndTime;
-                shift.WageId = newShift.WageId;
-                shift.StatusId = newShift.StatusId;
-
-                await _context.SaveChangesAsync();
-
-                // Because of the changes
-                float? money = CalculateEarnedMoney(shift);
-                shift.EarnedMoney = money;
-
-                await _context.SaveChangesAsync();
-                await tran.CommitAsync();
-            }
-            else
+            if(shift == null)
             {
                 await tran.RollbackAsync();
+                throw new Exception("Shift does not exist!");
             }
 
-            return shift == null ? null : _converter.ToModel(shift);
+            shift.StartTime = newShift.StartTime;
+            shift.EndTime = newShift.EndTime;
+            shift.WageId = newShift.WageId;
+            shift.StatusId = newShift.StatusId;
+
+            await _context.SaveChangesAsync();
+
+            // Because of the changes
+            shift.EarnedMoney = CalculateEarnedMoney(shift);
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return _converter.ToModel(shift);
         }
 
-        public async Task<Shift> AcceptShift(int id)
+        public async Task<Shift> AcceptShift(int shiftId)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
-            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.ACCEPTED_STATUS_ID);
+            var acceptedStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.ACCEPTED_STATUS_ID);
 
-            if(status == null)
+            if(acceptedStatus == null)
             {
+                await tran.RollbackAsync();
                 throw new DataException(String.Format("Status with ID({0}) doesnt exist!", DatabaseConstants.ACCEPTED_STATUS_ID));
             }
 
@@ -335,31 +349,37 @@ namespace SecurityApi.Services
                 .Include(s => s.Job)
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == shiftId);
 
-            if(shift != null && shift.StatusId == DatabaseConstants.PENDING_STATUS_ID)
+            if(shift == null)
             {
-                shift.Status = status;
-
-                await _context.SaveChangesAsync();
-                await tran.CommitAsync();
-            }
-            else if(shift != null)
-            {
-                throw new DataException("Shift's status is not Pending!");
+                await tran.RollbackAsync();
+                throw new Exception("Shift does not exist!");
             }
 
-            return shift == null ? null : _converter.ToModel(shift);
+            if(shift.StatusId != DatabaseConstants.PENDING_STATUS_ID)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Shift's status is not Pending!");
+            }
+
+            shift.Status = acceptedStatus;
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return _converter.ToModel(shift);
         }
 
         public async Task<Shift> DenyShift(int id)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
-            var status = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.DENY_STATUS_ID);
+            var denyStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.DENY_STATUS_ID);
 
-            if (status == null)
+            if (denyStatus == null)
             {
+                await tran.RollbackAsync();
                 throw new DataException(String.Format("Status with ID({0}) doesnt exist!", DatabaseConstants.DENY_STATUS_ID));
             }
 
@@ -371,19 +391,24 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if (shift != null && shift.StatusId == DatabaseConstants.PENDING_STATUS_ID)
+            if (shift == null)
             {
-                shift.Status = status;
-
-                await _context.SaveChangesAsync();
-                await tran.CommitAsync();
-            }
-            else if (shift != null)
-            {
-                throw new DataException("Shift's status is not Pending!");
+                await tran.RollbackAsync();
+                throw new Exception("Shift does not exist!");
             }
 
-            return shift == null ? null : _converter.ToModel(shift);
+            if (shift.StatusId != DatabaseConstants.PENDING_STATUS_ID)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Shift's status is not Pending!");
+            }
+
+            shift.Status = denyStatus;
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return _converter.ToModel(shift);
         }
 
         public async Task WageChangedUpdate(int wageId)
@@ -395,7 +420,7 @@ namespace SecurityApi.Services
                 .Where(s => s.WageId == wageId)
                 .ToListAsync();
 
-            foreach ( var shift in shifts)
+            foreach (var shift in shifts)
             {
                 shift.EarnedMoney = CalculateEarnedMoney(shift);
             }
