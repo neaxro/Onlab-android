@@ -143,5 +143,18 @@ namespace SecurityApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{jobId}")]
+        public async Task<ActionResult<Job>> Delete(int jobId)
+        {
+            try
+            {
+                var result = await _service.Delete(jobId);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

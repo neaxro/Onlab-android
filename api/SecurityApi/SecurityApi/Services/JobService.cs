@@ -253,9 +253,45 @@ namespace SecurityApi.Services
             return _converter.ToModel(newJob);
         }
 
-        public Task<Job> Delete(int jobId)
+        public async Task<Job> Delete(int jobId)
         {
-            throw new NotImplementedException();
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+
+            var job = await _context.Jobs
+                .Include(j => j.People)
+                .SingleOrDefaultAsync(j => j.Id == jobId);
+
+            if(job == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("job with ID({0}) does not exist!", jobId));
+            }
+
+            var jobPositions = await _context.Positions.Where(p => p.JobId == jobId).ToListAsync();
+            var jobPeopleJobs = await _context.PeopleJobs.Where(pj => pj.JobId== jobId).ToListAsync();
+            var jobDashboards = await _context.Dashboards.Where(d => d.JobId == jobId).ToListAsync();
+            var jobShifts = await _context.Shifts.Where(s => s.JobId == jobId).ToListAsync();
+            var jobWages = await _context.Wages.Where(w => w.JobId == jobId).ToListAsync();
+
+            try
+            {
+                _context.Positions.RemoveRange(jobPositions);
+                _context.PeopleJobs.RemoveRange(jobPeopleJobs);
+                _context.Dashboards.RemoveRange(jobDashboards);
+                _context.Shifts.RemoveRange(jobShifts);
+                _context.Wages.RemoveRange(jobWages);
+                _context.Jobs.Remove(job);
+            }
+            catch (Exception ex)
+            {
+                await tran.RollbackAsync();
+                throw new Exception(ex.Message);
+            }
+
+            await _context.SaveChangesAsync();
+            await tran.CommitAsync();
+
+            return _converter.ToModel(job);
         }
 
         public async Task<Job> Get(int jobId)
