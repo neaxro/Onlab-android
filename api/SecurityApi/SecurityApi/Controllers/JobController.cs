@@ -49,22 +49,34 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Job>> Get(int jobId)
         {
-            var result = await _service.Get(jobId);
-            return result == null ? NotFound() : Ok(result);
+            try
+            {
+                var result = await _service.Get(jobId);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("availablefor/{personId}")]
         public ActionResult<IEnumerable<Job>> GetAllAvailableForPerson(int personId)
         {
-            var result = _service.GetAllAwailableForPerson(personId);
+            var result = _service.GetAllAvailableForPerson(personId);
             return Ok(result);
         }
 
         [HttpGet("connection/{connectionId}")]
         public async Task<ActionResult<PersonJob>> GetConnection(int connectionId)
         {
-            var result = await _service.GetConnection(connectionId);
-            return result == null ? NotFound() : Ok(result);
+            try
+            {
+                var result = await _service.GetConnection(connectionId);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -78,13 +90,9 @@ namespace SecurityApi.Controllers
                 var created = await _service.Create(job);
                 return CreatedAtAction(nameof(Get), new { jobId = created.Id }, created);
             }
-            catch (DataException de)
-            {
-                return NotFound(de.Message);
-            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
@@ -98,10 +106,6 @@ namespace SecurityApi.Controllers
             {
                 var created = await _service.ConnectToJob(pin.Trim(), personId, DatabaseConstants.ROLE_USER_ID);
                 return CreatedAtAction(nameof(GetConnection), new { connectionId = created.Id }, created);
-            }
-            catch (DataException de)
-            {
-                return BadRequest(de.Message);
             }
             catch (Exception ex)
             {

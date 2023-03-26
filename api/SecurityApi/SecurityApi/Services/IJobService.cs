@@ -10,7 +10,7 @@ namespace SecurityApi.Services
     public interface IJobService
     {
         IEnumerable<Job> GetAll();
-        IEnumerable<Job> GetAllAwailableForPerson(int personId);
+        IEnumerable<Job> GetAllAvailableForPerson(int personId);
         IEnumerable<Person> AllPersonInJob(int jobId);
         Task<Job> Get(int jobId);
         Task<Job> Create(CreateJob job);

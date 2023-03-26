@@ -15,6 +15,7 @@ namespace SecurityApi.Enums
         static public readonly int ACCEPTED_STATUS_ID = 3;
         static public readonly int DENY_STATUS_ID = 4;
 
+        // If the Wage does not exist in the Job it will throw an Exception!
         static public int GetBroadcastWageID(int jobId, OnlabContext context)
         {
             var id = context.Wages
@@ -24,6 +25,7 @@ namespace SecurityApi.Enums
             return id;
         }
 
+        // If the Wage does not exist in the Job it will throw an Exception!
         static public int GetDefaultWageID(int jobId, OnlabContext context)
         {
             return GetBroadcastWageID(jobId, context) + 1;

@@ -47,6 +47,7 @@ namespace SecurityApi.Services
                 .Include(pj => pj.Role)
                 .Include(pj => pj.Wage)
                 .FirstOrDefaultAsync(pj => pj.JobId == jobId && pj.PeopleId == change.PersonId);
+
             if(peopleJobConnection == null)
             {
                 await tran.RollbackAsync();
@@ -99,7 +100,8 @@ namespace SecurityApi.Services
                 throw new Exception("Person does not exist in this Job!");
             }
 
-            var newWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == change.WageId && w.JobId == jobId);
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(change.WageId, _context);
+            var newWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == change.WageId && w.JobId == jobId && w.Id != broadcastWageId);
             if (newWage == null)
             {
                 await tran.RollbackAsync();
@@ -118,61 +120,55 @@ namespace SecurityApi.Services
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
-            // Job exists?
             var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Pin == pin);
             if (job == null)
             {
                 await tran.RollbackAsync();
-                throw new DataException("Job does not exist!");
+                throw new Exception("Job does not exist!");
             }
 
             int broadcastWageId = DatabaseConstants.GetBroadcastWageID(job.Id, _context);
             int defaultWageId = DatabaseConstants.GetDefaultWageID(job.Id, _context);
 
-            // Is wage exists in the Job?
-            // And is it its broadcast wage id?
             var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == defaultWageId && w.JobId == job.Id);
             if (wage == null)
             {
                 await tran.RollbackAsync();
-                throw new DataException("Wage does not exist!");
+                throw new Exception("Wage does not exist!");
             }        
 
-            // Job already has owner?
             if(roleId == DatabaseConstants.ROLE_OWNER_ID)
             {
-                var alreadyExists = await _context.PeopleJobs
+                var jobAlreadyHasOwner = await _context.PeopleJobs
                     .FirstOrDefaultAsync(pj => pj.JobId == job.Id && pj.RoleId == DatabaseConstants.ROLE_OWNER_ID);
 
-                if (alreadyExists != null)
+                if (jobAlreadyHasOwner != null)
                 {
                     await tran.RollbackAsync();
-                    throw new DataException("Job already has owner!");
+                    throw new Exception("Job already has owner!");
                 }
             }
 
-            // She/He already connected?
-            var duplicateConnection = await _context.PeopleJobs
+            var alreadyConnectedToJob = await _context.PeopleJobs
                 .FirstOrDefaultAsync(pj => pj.JobId == job.Id && pj.PeopleId == personId);
-            if (duplicateConnection != null)
+            if (alreadyConnectedToJob != null)
             {
                 await tran.RollbackAsync();
-                throw new DataException("You are already connected to this job!");
+                throw new Exception("You are already connected to this job!");
             }
 
-            // Role exists?
             var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
             if (role == null)
             {
                 await tran.RollbackAsync();
-                throw new DataException("Role does not exist!");
+                throw new Exception("Role does not exist!");
             }
 
             var person = await _context.People.FirstOrDefaultAsync(pj => pj.Id == personId);
             if (person == null)
             {
                 await tran.RollbackAsync();
-                throw new DataException("Person does not exist!");
+                throw new Exception("Person does not exist!");
             }
 
             var newPeopleJob = new Model.PeopleJob()
@@ -188,28 +184,31 @@ namespace SecurityApi.Services
 
             await tran.CommitAsync();
 
-            return newPeopleJob == null ? null : _converter.ToModel(newPeopleJob);
+            return _converter.ToModel(newPeopleJob);
         }
 
         public async Task<Job> Create(CreateJob job)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
-            var sameTitle = await _context.Jobs.FirstOrDefaultAsync(j => j.Title == job.Title);
-            if(sameTitle != null)
+            var jobWithSameTitle = await _context.Jobs.FirstOrDefaultAsync(j => j.Title == job.Title);
+            if(jobWithSameTitle != null)
             {
                 await tran.RollbackAsync();
-                throw new DataException(String.Format("Job with title \"{0}\" already exists! Job's title must be unique!", job.Title));
+                throw new Exception(String.Format("Job with title \"{0}\" already exists! Job's title must be unique!", job.Title));
             }
 
             var owner = await _context.People.FirstOrDefaultAsync(p => p.Id == job.OwnerId);
             if(owner == null)
             {
                 await tran.RollbackAsync();
-                throw new DataException(String.Format("Person with ID({0}) not found! Owner is null", job.OwnerId));
+                throw new Exception(String.Format("Person with ID({0}) not found! Owner does not exist!", job.OwnerId));
             }
 
-            var usedPins = await _context.Jobs.Select(j => j.Pin).ToListAsync();
+            var usedPins = await _context.Jobs
+                .Select(j => j.Pin)
+                .ToListAsync();
+
             string pin = "RANDOMPIN";
 
             do
@@ -265,7 +264,12 @@ namespace SecurityApi.Services
                 .Include(j => j.People)
                 .FirstOrDefaultAsync(j => j.Id == jobId);
 
-            return job == null ? null : _converter.ToModel(job);
+            if(job == null)
+            {
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            return _converter.ToModel(job);
         }
 
         public IEnumerable<Job> GetAll()
@@ -278,7 +282,7 @@ namespace SecurityApi.Services
             return jobs;
         }
 
-        public IEnumerable<Job> GetAllAwailableForPerson(int personId)
+        public IEnumerable<Job> GetAllAvailableForPerson(int personId)
         {
             var jobs = _context.PeopleJobs
                 .Include(pj => pj.Job)
@@ -301,12 +305,18 @@ namespace SecurityApi.Services
                 .Include(pj => pj.Wage)
                 .FirstOrDefaultAsync(pj => pj.Id == connectionId);
 
-            return connection == null ? null : _converter.ToModel(connection);
+            if(connection == null)
+            {
+                throw new Exception(String.Format("Connection between Job and Person does not exist! Connection ID({0})", connectionId));
+            }
+
+            return _converter.ToModel(connection);
         }
 
         private string GeneratePin(int length = 6)
         {
             // Numer of pins at default length: 36^6 = 2'176'782'336
+            // Chance for same pins generated: 1/36^6 ~= 4.6 * 10^(-10)
             string simbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             string pin = "";
 
