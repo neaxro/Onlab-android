@@ -22,6 +22,7 @@ builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<IPositionService, PositionService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve

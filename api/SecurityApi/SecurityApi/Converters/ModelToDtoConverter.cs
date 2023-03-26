@@ -5,7 +5,7 @@ using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Dtos.PositionDtos;
 using SecurityApi.Dtos.RoleDtos;
 using SecurityApi.Dtos.ShiftDtos;
-using SecurityApi.Dtos.StateDtos;
+using SecurityApi.Dtos.StatusDtos;
 using SecurityApi.Dtos.WageDtos;
 
 namespace SecurityApi.Converters
@@ -62,16 +62,16 @@ namespace SecurityApi.Converters
             return new Dtos.WageDtos.Wage(wage.Id, wage.Name, wage.Price, wage.Job.Title);
         }
 
-        public State ToModel(Model.State state)
+        public Status ToModel(Model.State state)
         {
-            return new Dtos.StateDtos.State(state.Id, state.Title, state.Description);
+            return new Dtos.StatusDtos.Status(state.Id, state.Title, state.Description);
         }
 
         public Shift ToModel(Model.Shift shift)
         {
             Person person = ToModel(shift.People);
             Job job = ToModel(shift.Job);
-            State status = ToModel(shift.Status);
+            Status status = ToModel(shift.Status);
             Wage wage = ToModel(shift.Wage);
 
             return new Dtos.ShiftDtos.Shift(shift.Id, shift.StartTime, shift.EndTime, shift.EarnedMoney, person, job, status, wage);

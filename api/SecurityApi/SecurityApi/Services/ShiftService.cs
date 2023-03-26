@@ -4,7 +4,7 @@ using SecurityApi.Model;
 using Shift = SecurityApi.Dtos.ShiftDtos.Shift;
 using Person = SecurityApi.Dtos.PersonDtos.Person;
 using Job = SecurityApi.Dtos.JobDtos.Job;
-using State = SecurityApi.Dtos.StateDtos.State;
+using State = SecurityApi.Dtos.StatusDtos.Status;
 using Wage = SecurityApi.Dtos.WageDtos.Wage;
 using System.Data;
 using SecurityApi.Converters;

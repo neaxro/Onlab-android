@@ -11,7 +11,6 @@ namespace SecurityApi.Services
 
         private readonly OnlabContext _context;
         private readonly ModelToDtoConverter _converter;
-
         public RoleService(OnlabContext context)
         {
             _context = context;
