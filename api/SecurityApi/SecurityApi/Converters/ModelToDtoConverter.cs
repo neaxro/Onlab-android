@@ -3,6 +3,7 @@ using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
 using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Dtos.PositionDtos;
+using SecurityApi.Dtos.RoleDtos;
 using SecurityApi.Dtos.ShiftDtos;
 using SecurityApi.Dtos.StateDtos;
 using SecurityApi.Dtos.WageDtos;
@@ -79,6 +80,11 @@ namespace SecurityApi.Converters
         public PersonJob ToModel(Model.PeopleJob peopleJob)
         {
             return new Dtos.PeopleJobDtos.PersonJob(peopleJob.Id, peopleJob.Job.Title, peopleJob.People.Name);
+        }
+
+        public Role ToModel(Model.Role role)
+        {
+            return new Dtos.RoleDtos.Role(role.Id, role.Title);
         }
 
         public MessageCategory WageToMessageCategory(Model.Wage wage)
