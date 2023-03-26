@@ -100,7 +100,7 @@ namespace SecurityApi.Services
                 throw new Exception("Person does not exist in this Job!");
             }
 
-            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(change.WageId, _context);
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID(jobId, _context);
             var newWage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == change.WageId && w.JobId == jobId && w.Id != broadcastWageId);
             if (newWage == null)
             {

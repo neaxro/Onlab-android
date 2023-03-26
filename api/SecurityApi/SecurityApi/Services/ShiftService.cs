@@ -97,7 +97,7 @@ namespace SecurityApi.Services
 
             double hours = (end - start).TotalHours;
 
-            return (float)(pricePerHour * Math.Round(hours, 1));
+            return (float)Math.Round((pricePerHour * hours), 2);
         }
 
         public async Task<Shift> Finish(int shiftId)

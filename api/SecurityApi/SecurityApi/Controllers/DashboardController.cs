@@ -63,8 +63,14 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByPersonId(int jobId, int personId)
         {
-            var dboards = await _service.ListForPersonByPersonID(jobId, personId);
-            return Ok(dboards);
+            try
+            {
+                var dboards = await _service.ListForPersonByPersonID(jobId, personId);
+                return Ok(dboards);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("allforjob/{jobId}")]

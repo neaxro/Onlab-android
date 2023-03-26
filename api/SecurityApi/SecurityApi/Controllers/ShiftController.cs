@@ -64,7 +64,7 @@ namespace SecurityApi.Controllers
         {
             try
             {
-                var shifts = _service.GetAllForPersonInJob(personId, jobId);
+                var shifts = _service.GetAllForPersonInJob(jobId, personId);
                 return Ok(shifts);
             } catch (Exception ex)
             {

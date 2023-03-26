@@ -144,17 +144,19 @@ namespace SecurityApi.Services
 
         public async Task<IEnumerable<Dashboard>> ListForPersonByPersonID(int jobId, int personId)
         {
-            var person = await _context.People.SingleOrDefaultAsync(p => p.Id == personId);
+            //var person = await _context.People.SingleOrDefaultAsync(p => p.Id == personId);
+
+            var person = await _context.PeopleJobs.SingleOrDefaultAsync(pj => pj.JobId == jobId && pj.PeopleId == personId);
             
             if (person == null)
             {
-                throw new Exception("Person does not exist!");
+                throw new Exception("Person does not exist in Job!");
             }
 
             int broadcastWageId = DatabaseConstants.GetBroadcastWageID(jobId, _context);
 
             var dboards = _context.Dashboards
-                .Where(d => d.JobId == jobId && (d.PeopleId == person.Id || d.WageId == broadcastWageId))
+                .Where(d => d.JobId == jobId && (d.WageId == person.WageId || d.WageId == broadcastWageId))
                 .Include(d => d.Wage)
                 .Include(d => d.People)
                 .Select(_converter.ToModel)

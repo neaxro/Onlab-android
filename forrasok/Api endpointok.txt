@@ -51,3 +51,7 @@ Megjegyzések:
 	[DONE] Position/Create: Csekkolni h az ember rajta van-e a Job-on mihez illeszti a Positiont. Vagy felesleges ennyire biztosra?
 	[DONE] Job/Create: Default Role-okat létrehozni benük majd ezután hozzáadni az Ownert
 	[DONE] DATBASECONSTANS-al bajok vannak: Minden job-z új Broadcast és Default wage jön létre. Ezek a Wage táblában eléggé redundánsak...
+
+Test megjegyzések:
+	[DONE] Dashboard Title varchar hosszát nagyobbra!
+	

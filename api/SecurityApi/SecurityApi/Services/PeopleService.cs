@@ -96,7 +96,8 @@ namespace SecurityApi.Services
                 Name = newPerson.FullName,
                 Username = newPerson.Username,
                 Nickname = newPerson.Nickname,
-                Email = newPerson.Email
+                Email = newPerson.Email,
+                Password = newPerson.Password
             };
 
             await _context.People.AddAsync(person);
