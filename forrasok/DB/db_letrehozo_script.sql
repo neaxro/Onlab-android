@@ -108,6 +108,19 @@ create table [PeopleJobs]
 	WageID int references Wages(ID)
 )
 
+CREATE INDEX IX_Jobs_Pin ON dbo.Jobs (Pin)
+
+CREATE INDEX IX_People_Name ON dbo.People (Name)
+CREATE INDEX IX_People_Nickname ON dbo.People (Nickname)
+
+CREATE INDEX IX_PeopleJobs_PersonID ON dbo.PeopleJobs (PeopleID)
+CREATE INDEX IX_PeopleJobs_JobID ON dbo.PeopleJobs (JobID)
+
+CREATE INDEX IX_Shifts_JobID ON dbo.Shifts (JobID)
+CREATE INDEX IX_Shifts_PeopleID ON dbo.Shifts (PeopleID)
+
+CREATE INDEX IX_Wages_JobID ON dbo.Wages (JobID)
+
 -- Role-ok letrehozasa
 insert into Roles values
 	('Owner'),
