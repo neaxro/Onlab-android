@@ -33,6 +33,7 @@ namespace SecurityApi.Controllers
             return Ok(roles);
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("{roleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

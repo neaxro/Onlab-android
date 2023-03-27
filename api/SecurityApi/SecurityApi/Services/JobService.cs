@@ -373,9 +373,12 @@ namespace SecurityApi.Services
 
         private string CreateToken(Model.PeopleJob connection)
         {
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, connection?.People?.Username));
-            //claims.Add(new Claim(ClaimTypes.Role, connection?.Role.Title));
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, connection?.People?.Username),
+                new Claim(ClaimTypes.Role, connection?.Role?.Title)
+            };
+            
 
             var symmetricKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(
