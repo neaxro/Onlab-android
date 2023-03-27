@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SecurityApi.Context;
 using SecurityApi.Converters;
 using SecurityApi.Dtos.JobDtos;
@@ -9,6 +10,9 @@ using SecurityApi.Dtos.RoleDtos;
 using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Enums;
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace SecurityApi.Services
 {
@@ -17,11 +21,13 @@ namespace SecurityApi.Services
         private readonly OnlabContext _context;
         private readonly ModelToDtoConverter _converter;
         private readonly Random _random;
-        public JobService(OnlabContext context)
+        private readonly IConfiguration _configuration;
+        public JobService(OnlabContext context, IConfiguration configuration)
         {
             _context = context;
             _converter = new ModelToDtoConverter();
             _random = new Random();
+            _configuration = configuration;
         }
 
         public IEnumerable<Person> AllPersonInJob(int jobId)
@@ -347,6 +353,45 @@ namespace SecurityApi.Services
             }
 
             return _converter.ToModel(connection);
+        }
+
+        public async Task<String> SelectJob(SelectJob selectJob)
+        {
+            var connection = await _context.PeopleJobs
+                .Include(pj => pj.People)
+                .Include(pj => pj.Role)
+                .FirstOrDefaultAsync(pj => pj.JobId == selectJob.JobId && pj.PeopleId == selectJob.PersonId);
+            if(connection == null)
+            {
+                throw new Exception("Connection not found between Person and Job!");
+            }
+
+            string token = CreateToken(connection);
+
+            return token;
+        }
+
+        private string CreateToken(Model.PeopleJob connection)
+        {
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, connection?.People?.Username));
+            //claims.Add(new Claim(ClaimTypes.Role, connection?.Role.Title));
+
+            var symmetricKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    _configuration.GetSection("SymmetricKeys:MySecretToken").Value!));
+
+            var credentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: credentials
+                );
+
+            var JsonWebToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return JsonWebToken;
         }
 
         private string GeneratePin(int length = 6)

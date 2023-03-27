@@ -96,6 +96,19 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [HttpPost("select")]
+        public async Task<ActionResult<String>> SelectJob([FromBody] SelectJob selectJob)
+        {
+            try
+            {
+                var result = await _service.SelectJob(selectJob);
+                return Ok(result);
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("connect/{pin}/{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
