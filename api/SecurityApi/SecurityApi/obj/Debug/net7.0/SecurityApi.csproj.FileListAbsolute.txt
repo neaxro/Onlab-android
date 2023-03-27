@@ -274,3 +274,7 @@ C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\runtimes
 C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\Scrutor.dll
+C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.dll
+C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll

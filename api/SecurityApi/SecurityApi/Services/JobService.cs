@@ -22,7 +22,7 @@ namespace SecurityApi.Services
         private readonly ModelToDtoConverter _converter;
         private readonly Random _random;
         private readonly IConfiguration _configuration;
-        public JobService(OnlabContext context, IConfiguration configuration)
+        public JobService(IConfiguration configuration, OnlabContext context)
         {
             _context = context;
             _converter = new ModelToDtoConverter();
