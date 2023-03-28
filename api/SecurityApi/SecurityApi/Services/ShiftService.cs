@@ -279,28 +279,6 @@ namespace SecurityApi.Services
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
-            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId);
-            int broadcastWageId = DatabaseConstants.GetBroadcastWageID((int)wage.JobId, _context);
-
-            if (wage == null || wage.Id == broadcastWageId)
-            {
-                await tran.RollbackAsync();
-                throw new Exception("New Wage doesnt exist!");
-            }
-
-            var state = await _context.States.FirstOrDefaultAsync(s => s.Id == newShift.StatusId);
-            if(state == null)
-            {
-                await tran.RollbackAsync();
-                throw new Exception("New State doesnt exist!");
-            }
-
-            if(newShift.EndTime < newShift.StartTime)
-            {
-                await tran.RollbackAsync();
-                throw new Exception("Invalid Start or End Time!");
-            }
-
             var shift = await _context.Shifts
                 .Include(s => s.People)
                 .Include(s => s.Wage)
@@ -309,10 +287,37 @@ namespace SecurityApi.Services
                 .Include(s => s.Status)
                 .FirstOrDefaultAsync(s => s.Id == shiftId);
 
-            if(shift == null)
+            if (shift == null)
             {
                 await tran.RollbackAsync();
                 throw new Exception("Shift does not exist!");
+            }
+
+            var wage = await _context.Wages.FirstOrDefaultAsync(w => w.Id == newShift.WageId && w.JobId == shift.JobId);
+            if (wage == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("Wage with ID({0}) does not exist in Job!", newShift.WageId));
+            }
+
+            int broadcastWageId = DatabaseConstants.GetBroadcastWageID((int)wage.JobId, _context);
+            if (wage.Id == broadcastWageId)
+            {
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("Wage with ID({0}) does not exist in Job!", newShift.WageId));
+            }
+
+            var state = await _context.States.FirstOrDefaultAsync(s => s.Id == newShift.StatusId);
+            if(state == null)
+            {
+                await tran.RollbackAsync();
+                throw new Exception(String.Format("State with ID({0}) does not exist!", newShift.StatusId));
+            }
+
+            if(newShift.EndTime < newShift.StartTime)
+            {
+                await tran.RollbackAsync();
+                throw new Exception("Invalid Start or End Time!");
             }
 
             shift.StartTime = newShift.StartTime;

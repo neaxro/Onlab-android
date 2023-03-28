@@ -25,6 +25,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Role>> GetAll()
         {
@@ -33,7 +34,7 @@ namespace SecurityApi.Controllers
             return Ok(roles);
         }
 
-        [Authorize(Roles = "Admin,Owner")]
+        [Authorize]
         [HttpGet("{roleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

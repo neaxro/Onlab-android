@@ -4,6 +4,7 @@ using System.Composition;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using Shift = SecurityApi.Dtos.ShiftDtos.Shift;
 
 namespace SecurityApi.Controllers
 {
+    [Authorize]
     [Route("api/shift")]
     [ApiController]
     public class ShiftController : ControllerBase
@@ -26,6 +28,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet("all")]
         public ActionResult<IEnumerable<Shift>> GetAll()
         {
@@ -33,6 +36,7 @@ namespace SecurityApi.Controllers
             return Ok(shifts);
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("all/forjob/{jobId}")]
         public ActionResult<IEnumerable<Shift>> GetAllForJob(int jobId)
         {
@@ -45,7 +49,8 @@ namespace SecurityApi.Controllers
                 return NotFound(ex.Message);
             }
         }
-        
+
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("all/forperson/{personId}")]
         public ActionResult<IEnumerable<Shift>> GetAllForPerson(int personId)
         {
@@ -59,6 +64,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("all/{jobId}/{personId}")]
         public ActionResult<IEnumerable<Shift>> GetAllForPeronInJob(int jobId, int personId)
         {
@@ -72,6 +78,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("pending/{jobId}")]
         public async Task<ActionResult<IEnumerable<Shift>>> GetAllPendingInJob(int jobId)
         {
@@ -85,6 +92,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{shiftId}")]
         public async Task<ActionResult<Shift>> Get(int shiftId)
         {
@@ -98,6 +106,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("inprogress/{jobId}")]
         public ActionResult<IEnumerable<Shift>> GetAllInProgressShifts(int jobId)
         {
@@ -105,6 +114,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -121,6 +131,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPatch("finish/{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -136,6 +147,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpPatch("{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -152,6 +164,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpPatch("accept/{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -168,6 +181,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpPatch("deny/{shiftId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -184,6 +198,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpDelete("{shiftId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

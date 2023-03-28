@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ using Person = SecurityApi.Dtos.PersonDtos.Person;
 
 namespace SecurityApi.Controllers
 {
+    [Authorize]
     [Route("api/job")]
     [ApiController]
     public class JobController : ControllerBase
@@ -30,6 +32,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet("all")]
         public ActionResult<IEnumerable<Job>> GetAllJobs()
         {
@@ -37,6 +40,7 @@ namespace SecurityApi.Controllers
             return Ok(jobs);
         }
 
+        [Authorize(Roles = "Admin, Owner")]
         [HttpGet("allonjob/{jobId}")]
         public ActionResult<IEnumerable<Person>> GetAllOnJob(int jobId)
         {
@@ -44,6 +48,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{jobId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -59,6 +64,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("availablefor/{personId}")]
         public ActionResult<IEnumerable<Job>> GetAllAvailableForPerson(int personId)
         {
@@ -66,6 +72,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("connection/{connectionId}")]
         public async Task<ActionResult<PersonJob>> GetConnection(int connectionId)
         {
@@ -79,6 +86,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -96,6 +104,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("select")]
         public async Task<ActionResult<String>> SelectJob([FromBody] SelectJob selectJob)
         {
@@ -109,6 +118,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("connect/{pin}/{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -126,6 +136,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Owner")]
         [HttpPatch("changerole/{jobId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -141,6 +152,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Owner")]
         [HttpPatch("changewage/{jobId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -157,6 +169,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Owner")]
         [HttpDelete("{jobId}")]
         public async Task<ActionResult<Job>> Delete(int jobId)
         {
