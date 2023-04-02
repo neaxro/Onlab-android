@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<Person>> ListAll()
         {
@@ -33,6 +35,7 @@ namespace SecurityApi.Controllers
             return Ok(people);
         }
 
+        [AllowAnonymous]
         [HttpGet("{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -48,14 +51,15 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [HttpPost]
+        [AllowAnonymous]
+        [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Person>> Insert([FromBody] CreatePerson newPerson)
+        public async Task<ActionResult<Person>> Register([FromBody] CreatePerson newPerson)
         {
             try
             {
-                var created = await _service.Insert(newPerson);
+                var created = await _service.Register(newPerson);
                 return CreatedAtAction(nameof(Get), new { personId = created.Id }, created);
             }
             catch (Exception ex)
@@ -64,6 +68,21 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<Person>> Login([FromBody] LoginPerson loginData)
+        {
+            try
+            {
+                var result = await _service.Login(loginData);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpPost("picture/{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -79,6 +98,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPatch("{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -94,6 +114,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{personId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -111,6 +132,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("profilepicture/{personId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

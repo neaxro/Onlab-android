@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -16,6 +17,7 @@ using Dashboard = SecurityApi.Dtos.DashboardDtos.Dashboard;
 
 namespace SecurityApi.Controllers
 {
+    [Authorize]
     [Route("api/dashboard")]
     [ApiController]
     public class DashboardController : ControllerBase
@@ -27,6 +29,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<Dashboard>> GetAll()
         {
@@ -34,6 +37,7 @@ namespace SecurityApi.Controllers
             return Ok(dboards);
         }
 
+        [AllowAnonymous]
         [HttpGet("{dashboardId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -49,15 +53,17 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("forperson/bycategoryid/{jobId}/{categoryId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Dashboard>>> GetForPersonByCategoryId(int jobId, int categoryId)
+        public ActionResult<IEnumerable<Dashboard>> GetForPersonByCategoryId(int jobId, int categoryId)
         {
             IEnumerable<Dashboard> dboards = _service.ListForPersonByCategoryID(jobId, categoryId);
             return Ok(dboards);
         }
 
+        [Authorize]
         [HttpGet("forperson/bypersonid/{jobId}/{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -73,6 +79,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("allforjob/{jobId}")]
         public ActionResult<IEnumerable<Dashboard>> GetAllForJob(int jobId)
         {
@@ -80,6 +87,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -101,7 +109,8 @@ namespace SecurityApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
+        [Authorize(Roles = "Admin,Owner")]
         [HttpPatch("{dashboardId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -123,6 +132,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpDelete("{dashboardId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

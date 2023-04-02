@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using Position = SecurityApi.Dtos.PositionDtos.Position;
 
 namespace SecurityApi.Controllers
 {
+    [Authorize]
     [Route("api/position")]
     [ApiController]
     public class PositionController : ControllerBase
@@ -24,6 +26,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("all")]
         public ActionResult<IEnumerable<Position>> GetAll()
         {
@@ -31,6 +34,7 @@ namespace SecurityApi.Controllers
             return Ok(positions);
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("{positionId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,6 +50,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("forperson/{jobId}/{personId}")]
         public ActionResult<IEnumerable<Position>> GetAllForPerson(int jobId, int personId)
         {
@@ -53,6 +58,7 @@ namespace SecurityApi.Controllers
             return Ok(positions);
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpGet("latest/{jobId}")]
         public ActionResult<IEnumerable<Position>> GetLatestPositionsForJob(int jobId)
         {
@@ -60,6 +66,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost("{jobId}/{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,6 +84,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpPatch("{positionId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -92,6 +100,7 @@ namespace SecurityApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Owner")]
         [HttpDelete("{positionId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

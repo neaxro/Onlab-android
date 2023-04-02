@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using Status = SecurityApi.Dtos.StatusDtos.Status;
 
 namespace SecurityApi.Controllers
 {
+    [Authorize]
     [Route("api/status")]
     [ApiController]
     public class StateController : ControllerBase
@@ -23,6 +25,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Status>> GetAll()
         {
@@ -30,6 +33,7 @@ namespace SecurityApi.Controllers
             return Ok(states);
         }
 
+        [Authorize]
         [HttpGet("{statusId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

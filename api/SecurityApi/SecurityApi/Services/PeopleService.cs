@@ -57,7 +57,23 @@ namespace SecurityApi.Services
             return people;
         }
 
-        public async Task<Person> Insert(CreatePerson newPerson)
+        public async Task<Person> Login(LoginPerson loginInformation)
+        {
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Username == loginInformation.Username);
+            if(person == null)
+            {
+                throw new Exception("Person does not exist!");
+            }
+
+            if(person.Password != loginInformation.Password)
+            {
+                throw new Exception("Incorrect Password!");
+            }
+
+            return _converter.ToModel(person);
+        }
+
+        public async Task<Person> Register(CreatePerson newPerson)
         {
             if (newPerson.Username.Any(Char.IsWhiteSpace)){
                 throw new Exception("Username must not contain whitespaces!");

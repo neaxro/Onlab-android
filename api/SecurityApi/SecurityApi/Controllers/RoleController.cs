@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using Role = SecurityApi.Dtos.RoleDtos.Role;
 
 namespace SecurityApi.Controllers
 {
+    [Authorize]
     [Route("api/role")]
     [ApiController]
     public class RoleController : ControllerBase
@@ -23,6 +25,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Role>> GetAll()
         {
@@ -31,6 +34,7 @@ namespace SecurityApi.Controllers
             return Ok(roles);
         }
 
+        [Authorize]
         [HttpGet("{roleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
