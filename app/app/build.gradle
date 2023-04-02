@@ -1,6 +1,9 @@
 plugins {
+    id "org.jetbrains.kotlin.kapt"
+
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -52,6 +55,8 @@ android {
 
 dependencies {
     def core_version = "1.9.0"
+    def nav_version = "2.5.3"
+    def retrofit_version = "2.9.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
@@ -66,8 +71,25 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
-    // Navigation Cotroller
-    def nav_version = "2.5.3"
+    // Navigation controller
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Dagger hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+}
+
+// Allow references to generated code | Dagger hilt
+kapt {
+    correctErrorTypes = true
 }
