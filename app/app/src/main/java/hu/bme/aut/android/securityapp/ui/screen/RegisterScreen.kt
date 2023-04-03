@@ -17,16 +17,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import hu.bme.aut.android.securityapp.data.model.LoginData
+import hu.bme.aut.android.securityapp.data.model.RegisterData
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @Composable
 fun RegisterScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: LoginViewModel
 ){
-    RegisterScr(navController = navController)
+    RegisterScr(navController = navController, viewModel = viewModel)
     
     /*Box(
         modifier = Modifier.fillMaxSize()
@@ -48,9 +53,11 @@ fun matchPasswords(pass1: String, pass2: String): Boolean{
 
 @Composable
 fun RegisterScr(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: LoginViewModel
 ){
     var username by remember { mutableStateOf("") }
+    var nickname by remember { mutableStateOf("") }
     var fullName by remember { mutableStateOf("") }
     var emailAddress by remember { mutableStateOf("") }
     var password1 by remember { mutableStateOf("") }
@@ -92,6 +99,18 @@ fun RegisterScr(
             },
             label = {
                 Text(text = "Username")
+            },
+            singleLine = true,
+            modifier = Modifier.padding(5.dp)
+        )
+
+        TextField(
+            value = nickname,
+            onValueChange = {
+                nickname = it
+            },
+            label = {
+                Text(text = "Nickname")
             },
             singleLine = true,
             modifier = Modifier.padding(5.dp)
@@ -176,7 +195,8 @@ fun RegisterScr(
         ) {
             Button(onClick = {
                 if(!isError){
-                    // TODO REGISTER
+                    val registerData = RegisterData(emailAddress, fullName, nickname, password1, username)
+                    val result = viewModel.RegisterUser(registerData)
                 }
             }) {
                 Text(text = "Register")
@@ -194,5 +214,5 @@ fun RegisterScr(
 @Composable
 @Preview(showBackground = true)
 fun prew(){
-    RegisterScr(navController = rememberNavController())
+    RegisterScr(navController = rememberNavController(), viewModel = viewModel())
 }

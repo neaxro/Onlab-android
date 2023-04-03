@@ -32,6 +32,10 @@ fun MyAppNavHost(
         }
 
         composable(route = Screen.Register.route){
-            RegisterScreen(navController)
+            val viewModel = hiltViewModel<LoginViewModel>()
+            RegisterScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
         }
     }

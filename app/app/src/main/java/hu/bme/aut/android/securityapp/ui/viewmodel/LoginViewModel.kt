@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import hu.bme.aut.android.securityapp.data.model.LoginData
+import hu.bme.aut.android.securityapp.data.model.RegisterData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +36,12 @@ class LoginViewModel @Inject constructor(
     fun LoginUser(loginData: LoginData): Person?{
         return runBlocking {
             repository.LoginPerson(loginData)
+        }
+    }
+
+    fun RegisterUser(registerData: RegisterData): Person?{
+        return runBlocking{
+            repository.RegisterPerson(registerData)
         }
     }
 }
