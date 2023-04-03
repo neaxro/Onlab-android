@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.di
 
+import android.app.Application
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -29,8 +30,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideLoginRepository(
-        api: LoginApi
+        api: LoginApi,
+        app: Application
     ): LoginRepository {
-        return LoginRepositoryImpl(api)
+        return LoginRepositoryImpl(api, app)
     }
 }
