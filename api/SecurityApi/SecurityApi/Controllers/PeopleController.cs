@@ -71,7 +71,7 @@ namespace SecurityApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginPerson loginData)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginPerson loginData)
         {
             try
             {

@@ -12,43 +12,12 @@ class LoginRepositoryImpl(
     private val api: LoginApi,
     private val appContext: Application
 ): LoginRepository {
-
-    override suspend fun GetAllPerson(): List<Person> {
-        val response = api.getAllPeople()
-
-        return listOf(Person(1,"Nemes Axel", "axel", "axel", "asd@gmail.com", ""))
-    }
-
-    override suspend fun LoginPerson(loginData: LoginData): Person? {
+    override suspend fun loginPerson(loginData: LoginData): String {
         val response = api.login(loginData)
 
         if(response.isSuccessful){
-            with(response.body()){
-                val loggedIn = this?.let { Person(it.id, it.fullName, it.username, it.nickname, it.email, it.profilePicture) }
-                if(loggedIn != null)
-                    Toast.makeText(appContext, "Logged in ${loggedIn.fullName}", Toast.LENGTH_LONG).show()
-                return loggedIn
-            }
+            return response.body()!!.token
         }
-        else{
-            return null
-        }
-    }
-
-    override suspend fun RegisterPerson(registerData: RegisterData): Person? {
-        val response = api.register((registerData))
-
-        if(response.isSuccessful){
-            with(response.body()){
-                val registered = this?.let { Person(it.id, it.fullName, it.username, it.nickname, it.email, it.profilePicture) }
-                if(registered != null)
-                    Toast.makeText(appContext, "Succesfull registration!", Toast.LENGTH_LONG).show()
-                return registered
-            }
-
-        }
-        else{
-            return null
-        }
+        return ""
     }
 }

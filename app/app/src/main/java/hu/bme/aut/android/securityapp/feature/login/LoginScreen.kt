@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,9 +36,8 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: LoginViewModel
 ){
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var success by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -53,9 +53,9 @@ fun LoginScreen(
         Spacer(modifier = Modifier.padding(30.dp))
 
         TextField(
-            value = username,
+            value = viewModel._username.value,
             onValueChange = {
-                username = it
+                viewModel.usernameChanged(it)
             },
             label = {Text(text = "Username")},
             singleLine = true
@@ -64,9 +64,9 @@ fun LoginScreen(
         Spacer(modifier = Modifier.padding(20.dp))
         
         TextField(
-            value = password,
+            value = viewModel._password.value,
             onValueChange = {
-                password = it
+                viewModel.passwordChanged(it)
             },
             label = {Text(text = "Password")},
             singleLine = true,
@@ -102,13 +102,17 @@ fun LoginScreen(
             }
 
             Button(onClick = {
-                val loginData = LoginData(username, password)
-                val loginResult = viewModel.LoginUser(loginData)
-
-                username = loginResult?.email ?: "Sikertelen"
+                viewModel.LoginUser({success = true}, {success = false})
             }) {
                 Text(text = "Login")
             }
+        }
+
+        if(success){
+            Text(text = "Sikeres Login!")
+        }
+        else{
+            Text(text = "Sikertelen!")
         }
     }
 }
@@ -117,41 +121,5 @@ fun LoginScreen(
 @Composable
 @ExperimentalMaterial3Api
 fun previewLoginScreen(){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Login",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.padding(30.dp))
-        
-        TextField(value = "Username", onValueChange = {})
-        Spacer(modifier = Modifier.padding(20.dp))
-        TextField(value = "Password", onValueChange = {})
-        Spacer(modifier = Modifier.padding(20.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Button(onClick = {
-                // TODO
-            }) {
-               Text(text = "Register")
-            }
-
-            //Spacer(modifier = Modifier.padding(15.dp))
-
-            Button(onClick = {
-                // TODO
-            }) {
-                Text(text = "Login")
-            }
-        }
-    }
+    LoginScreen(navController = rememberNavController(), viewModel = viewModel())
 }

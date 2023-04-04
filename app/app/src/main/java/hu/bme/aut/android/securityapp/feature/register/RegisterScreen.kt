@@ -23,48 +23,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import hu.bme.aut.android.securityapp.data.model.LoginData
 import hu.bme.aut.android.securityapp.data.model.RegisterData
+import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
-    viewModel: LoginViewModel
+    viewModel: RegisterViewModel
 ){
     RegisterScr(navController = navController, viewModel = viewModel)
-    
-    /*Box(
-        modifier = Modifier.fillMaxSize()
-    ){
-        Column(modifier = Modifier.fillMaxSize()) {
-            Text(text = "REGISTER SCREEN")
-            Button(onClick = {
-                navController.navigate(Screen.Login.route)
-            }) {
-                Text(text = "Got to Login")
-            }
-        }
-    }*/
 }
-
-fun matchPasswords(pass1: String, pass2: String): Boolean{
-    return pass1 == pass2
-}
-
 @Composable
 fun RegisterScr(
     navController: NavHostController,
-    viewModel: LoginViewModel
+    viewModel: RegisterViewModel
 ){
-    var username by remember { mutableStateOf("") }
-    var nickname by remember { mutableStateOf("") }
-    var fullName by remember { mutableStateOf("") }
-    var emailAddress by remember { mutableStateOf("") }
-    var password1 by remember { mutableStateOf("") }
     var passwordVisible1 by remember { mutableStateOf(false) }
-    var password2 by remember { mutableStateOf("") }
     var passwordVisible2 by remember { mutableStateOf(false) }
-    var isError by remember { mutableStateOf(false) }
+
+    var success by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,9 +59,9 @@ fun RegisterScr(
         Spacer(modifier = Modifier.padding(20.dp))
 
         TextField(
-            value = fullName,
+            value = viewModel.fullName.value,
             onValueChange = {
-                fullName = it
+                viewModel.changeFullName(it)
             },
             label = {
                 Text(text = "Full name")
@@ -93,9 +71,9 @@ fun RegisterScr(
         )
 
         TextField(
-            value = username,
+            value = viewModel.username.value,
             onValueChange = {
-                username = it
+                viewModel.changeUsername(it)
             },
             label = {
                 Text(text = "Username")
@@ -105,9 +83,9 @@ fun RegisterScr(
         )
 
         TextField(
-            value = nickname,
+            value = viewModel.nickname.value,
             onValueChange = {
-                nickname = it
+                viewModel.changeNickname(it)
             },
             label = {
                 Text(text = "Nickname")
@@ -117,9 +95,9 @@ fun RegisterScr(
         )
 
         TextField(
-            value = emailAddress,
+            value = viewModel.email.value,
             onValueChange = {
-                emailAddress = it
+                viewModel.changeEmail(it)
             },
             label = {
                 Text(text = "Email address")
@@ -130,10 +108,9 @@ fun RegisterScr(
         )
 
         TextField(
-            value = password1,
+            value = viewModel.password.value,
             onValueChange = {
-                isError = matchPasswords(password1, password2)
-                password1 = it
+                viewModel.changePassword(it)
             },
             label = {Text(text = "Password")},
             singleLine = true,
@@ -155,14 +132,12 @@ fun RegisterScr(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = if (passwordVisible1) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier.padding(5.dp),
-            isError = isError,
         )
 
         TextField(
-            value = password2,
+            value = viewModel.passwordAgain.value,
             onValueChange = {
-                isError = matchPasswords(password1, password2)
-                password2 = it
+                viewModel.changePasswordAgain(it)
             },
             label = {Text(text = "Verify password")},
             singleLine = true,
@@ -184,7 +159,6 @@ fun RegisterScr(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = if (passwordVisible2) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier.padding(5.dp),
-            isError = isError
         )
 
         Spacer(modifier = Modifier.padding(20.dp))
@@ -194,10 +168,7 @@ fun RegisterScr(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Button(onClick = {
-                if(!isError){
-                    val registerData = RegisterData(emailAddress, fullName, nickname, password1, username)
-                    val result = viewModel.RegisterUser(registerData)
-                }
+                viewModel.register({success = true}, {success = false})
             }) {
                 Text(text = "Register")
             }
@@ -207,6 +178,10 @@ fun RegisterScr(
             }) {
                 Text(text = "Login")
             }
+        }
+
+        if(success){
+            Text(text = "Successfull Registration!")
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
@@ -32,7 +33,7 @@ fun MyAppNavHost(
         }
 
         composable(route = Screen.Register.route){
-            val viewModel = hiltViewModel<LoginViewModel>()
+            val viewModel = hiltViewModel<RegisterViewModel>()
             RegisterScreen(
                 navController = navController,
                 viewModel = viewModel

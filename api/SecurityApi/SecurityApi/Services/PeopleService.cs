@@ -63,7 +63,7 @@ namespace SecurityApi.Services
             return people;
         }
 
-        public async Task<string> Login(LoginPerson loginInformation)
+        public async Task<LoginResponse> Login(LoginPerson loginInformation)
         {
             var person = await _context.People.FirstOrDefaultAsync(p => p.Username == loginInformation.Username);
             if(person == null)
@@ -77,7 +77,7 @@ namespace SecurityApi.Services
             }
 
             string token = CreateToken(person);
-            return token;
+            return new LoginResponse(person.Id, token);
         }
 
         private string CreateToken(Model.Person person)
