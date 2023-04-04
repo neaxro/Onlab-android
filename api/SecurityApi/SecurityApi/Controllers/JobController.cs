@@ -32,6 +32,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        // DEBUG ONLY
         [AllowAnonymous]
         [HttpGet("all")]
         public ActionResult<IEnumerable<Job>> GetAllJobs()
@@ -48,7 +49,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{jobId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -86,7 +87,7 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -104,7 +105,7 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost("select")]
         public async Task<ActionResult<String>> SelectJob([FromBody] SelectJob selectJob)
         {
@@ -118,7 +119,7 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost("connect/{pin}/{personId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

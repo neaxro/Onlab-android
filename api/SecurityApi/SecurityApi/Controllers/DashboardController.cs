@@ -29,6 +29,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        // DEBUG ONLY
         [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<Dashboard>> GetAll()
@@ -37,7 +38,7 @@ namespace SecurityApi.Controllers
             return Ok(dboards);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{dashboardId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

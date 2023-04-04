@@ -30,6 +30,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        // DEBUG ONLY
         [AllowAnonymous]
         [HttpGet("all")]
         public ActionResult<IEnumerable<Wage>> GetAll()
@@ -38,7 +39,7 @@ namespace SecurityApi.Controllers
             return Ok(wages);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{wageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

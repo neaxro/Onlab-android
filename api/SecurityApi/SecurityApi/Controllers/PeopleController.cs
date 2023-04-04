@@ -27,6 +27,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        // DEBUG ONLY
         [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<Person>> ListAll()
@@ -35,7 +36,7 @@ namespace SecurityApi.Controllers
             return Ok(people);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{personId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,7 +71,7 @@ namespace SecurityApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<Person>> Login([FromBody] LoginPerson loginData)
+        public async Task<ActionResult<string>> Login([FromBody] LoginPerson loginData)
         {
             try
             {
