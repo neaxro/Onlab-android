@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
-import hu.bme.aut.android.securityapp.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.feature.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @Composable

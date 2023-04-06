@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hu.bme.aut.android.securityapp.constants.Constants
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
 import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
@@ -24,7 +25,7 @@ object AppModule {
     @Singleton
     fun provideLoginApi(): LoginApi {
         return Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5002/")
+            .baseUrl(Constants.SERVER_ADDRESS)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LoginApi::class.java)
@@ -43,7 +44,7 @@ object AppModule {
     @Singleton
     fun provideRegisterApi(): RegisterApi {
         return Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5002/")
+            .baseUrl(Constants.SERVER_ADDRESS)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RegisterApi::class.java)

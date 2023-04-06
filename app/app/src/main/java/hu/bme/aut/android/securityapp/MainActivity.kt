@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import hu.bme.aut.android.securityapp.ui.screen.MyAppNavHost
-import hu.bme.aut.android.securityapp.ui.theme.SecurityAppTheme
+import hu.bme.aut.android.securityapp.feature.ui.theme.SecurityAppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

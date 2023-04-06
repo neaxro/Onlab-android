@@ -9,59 +9,69 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import hu.bme.aut.android.securityapp.data.model.LoginData
 import hu.bme.aut.android.securityapp.data.model.RegisterData
+import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
-import hu.bme.aut.android.securityapp.ui.navigation.Screen
-import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
+import hu.bme.aut.android.securityapp.feature.ui.navigation.Screen
+
+private fun matchPasswords(pass1: String, pass2: String): Boolean = pass1 == pass2
+
+private fun anyFieldEmpty(vararg fields: String): Boolean{
+    return fields.any {
+        it.isEmpty()
+    }
+}
 
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
-    viewModel: RegisterViewModel
+    viewModel: RegisterViewModel = hiltViewModel()
 ){
-    RegisterScr(navController = navController, viewModel = viewModel)
-}
-@Composable
-fun RegisterScr(
-    navController: NavHostController,
-    viewModel: RegisterViewModel
-){
+    var fullName by remember {viewModel.fullName}
+    var username by remember {viewModel.username}
+    var nickname by remember {viewModel.nickname}
+    var email by remember {viewModel.email}
+    var password by remember {viewModel.password}
+    var passwordAgain by remember {viewModel.passwordAgain}
+
     var passwordVisible1 by remember { mutableStateOf(false) }
     var passwordVisible2 by remember { mutableStateOf(false) }
 
-    var success by remember { mutableStateOf(false) }
+    var passwordsMatch by remember { mutableStateOf(true)}
+
+    var registerState by remember {
+        viewModel.registrationState
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
+
         Text(
             text = "Register",
             modifier = Modifier.fillMaxWidth(),
             fontSize = 30.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
         )
-        
-        Spacer(modifier = Modifier.padding(20.dp))
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
-            value = viewModel.fullName.value,
+            value = fullName,
             onValueChange = {
-                viewModel.changeFullName(it)
+                fullName = it
             },
             label = {
                 Text(text = "Full name")
@@ -71,9 +81,9 @@ fun RegisterScr(
         )
 
         TextField(
-            value = viewModel.username.value,
+            value = username,
             onValueChange = {
-                viewModel.changeUsername(it)
+                username = it
             },
             label = {
                 Text(text = "Username")
@@ -83,9 +93,9 @@ fun RegisterScr(
         )
 
         TextField(
-            value = viewModel.nickname.value,
+            value = nickname,
             onValueChange = {
-                viewModel.changeNickname(it)
+                nickname = it
             },
             label = {
                 Text(text = "Nickname")
@@ -95,9 +105,9 @@ fun RegisterScr(
         )
 
         TextField(
-            value = viewModel.email.value,
+            value = email,
             onValueChange = {
-                viewModel.changeEmail(it)
+                email = it
             },
             label = {
                 Text(text = "Email address")
@@ -108,9 +118,11 @@ fun RegisterScr(
         )
 
         TextField(
-            value = viewModel.password.value,
+            value = password,
             onValueChange = {
-                viewModel.changePassword(it)
+                password = it
+                passwordsMatch = matchPasswords(password, passwordAgain)
+                registerState = if(!passwordsMatch) "Passwords do not match!" else ""
             },
             label = {Text(text = "Password")},
             singleLine = true,
@@ -135,9 +147,11 @@ fun RegisterScr(
         )
 
         TextField(
-            value = viewModel.passwordAgain.value,
+            value = passwordAgain,
             onValueChange = {
-                viewModel.changePasswordAgain(it)
+                passwordAgain = it
+                passwordsMatch = matchPasswords(password, passwordAgain)
+                registerState = if(!passwordsMatch) "Passwords do not match!" else ""
             },
             label = {Text(text = "Verify password")},
             singleLine = true,
@@ -163,31 +177,47 @@ fun RegisterScr(
 
         Spacer(modifier = Modifier.padding(20.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Button(onClick = {
-                viewModel.register({success = true}, {success = false})
-            }) {
-                Text(text = "Register")
-            }
+        RegisterOrLogin(navController = navController){
 
-            Button(onClick = {
-                navController.navigate(Screen.Login.route)
-            }) {
-                Text(text = "Login")
+            if(passwordsMatch && !anyFieldEmpty(fullName, username, nickname, email, password, passwordAgain)){
+                viewModel.register()
             }
         }
 
-        if(success){
-            Text(text = "Successfull Registration!")
-        }
+        // TODO: Kicsit szebben megoldani a visszajelzést, esetleg egy loading effektet használni stb..
+        Text(text = registerState)
     }
 }
 
 @Composable
-@Preview(showBackground = true)
-fun prew(){
-    RegisterScr(navController = rememberNavController(), viewModel = viewModel())
+fun RegisterOrLogin(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    registerAction: () -> Unit = {}
+){
+    Column(modifier = modifier
+        .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(0.8f),
+            onClick = { registerAction() },
+        ) {
+            Text(text = "Register Now")
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Text(text = "Already have account?")
+            
+            TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
+                Text(text = "Login now")
+            }
+        }
+    }
 }

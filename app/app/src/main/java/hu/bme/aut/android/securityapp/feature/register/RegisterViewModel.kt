@@ -6,9 +6,18 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.data.model.RegisterData
 import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
+import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+sealed class RegisterValidationMessage(val errorMessage: String){
+    class NoError(): RegisterValidationMessage("No error")
+    class PasswordValidationMessage(errorMessage: String): RegisterValidationMessage(errorMessage)
+    class FullnameValidationMessage(errorMessage: String): RegisterValidationMessage(errorMessage)
+    class UsernameValidationMessage(errorMessage: String): RegisterValidationMessage(errorMessage)
+    class EmailValidationMessage(errorMessage: String): RegisterValidationMessage(errorMessage)
+}
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
@@ -21,36 +30,48 @@ class RegisterViewModel @Inject constructor(
     var passwordAgain = mutableStateOf("")
     var username = mutableStateOf("")
 
-    fun changeEmail(value: String): Unit{
-        email.value = value
-    }
-    fun changeFullName(value: String): Unit{
-        fullName.value = value
-    }
-    fun changeNickname(value: String): Unit{
-        nickname.value = value
-    }
-    fun changePassword(value: String): Unit{
-        password.value = value
-    }
-    fun changePasswordAgain(value: String): Unit{
-        passwordAgain.value = value
-    }
-    fun changeUsername(value: String): Unit{
-        username.value = value
+    var registrationState = mutableStateOf("")
+    var passwordsCorrect = mutableStateOf(true)
+
+    fun checkPassword(): RegisterValidationMessage{
+        if(password.value == passwordAgain.value){
+            return RegisterValidationMessage.PasswordValidationMessage("Passwords do not match!")
+        }
+
+        if(password.value.length < 6){
+            return RegisterValidationMessage.PasswordValidationMessage("Password is too short!")
+        }
+
+        if(password.value.length < 8){
+            return RegisterValidationMessage.PasswordValidationMessage("Password min length is 8 characters!")
+        }
+
+        if(password.value.length > 30){
+            return RegisterValidationMessage.PasswordValidationMessage("Password max length is 32 characters!")
+        }
+
+        val regexPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,30}\$".toRegex()
+        if(!regexPattern.matches(password.value)){
+            return RegisterValidationMessage.PasswordValidationMessage("Must contain uppercase letter and number!")
+        }
+
+        return RegisterValidationMessage.NoError()
     }
 
-    fun register(onSuccess: ()->Unit, onError: ()->Unit): Unit{
+    fun register(){
         val registerData = RegisterData(email.value, fullName.value, nickname.value, password.value, username.value)
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.registerUser(registerData)
+            val result: Resource<RegisterData> = repository.registerUser(registerData)
 
-            if(result.isNotEmpty()){
-                onSuccess()
+            when(result){
+                is Resource.Success<RegisterData> -> {
+                    registrationState.value = "Success"
+                }
+                is Resource.Error<RegisterData> -> {
+                    registrationState.value = result.message!!
+                }
             }
         }
-
-        onError()
     }
 }

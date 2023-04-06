@@ -4,43 +4,43 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.bme.aut.android.securityapp.data.model.Person
+import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
 import javax.inject.Inject
 import hu.bme.aut.android.securityapp.data.model.LoginData
-import hu.bme.aut.android.securityapp.data.model.RegisterData
+import hu.bme.aut.android.securityapp.data.model.LoginResponse
+import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.lang.Thread.sleep
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: LoginRepository
 ): ViewModel() {
 
-    var _username = mutableStateOf("")
-    var _password = mutableStateOf("")
+    var username = mutableStateOf("")
+    var password = mutableStateOf("")
 
-    fun LoginUser(onSuccess: ()->Unit, onError: ()->Unit){
-        // TODO: Validate username
-        // TODO: Validta password
+    var login = mutableStateOf("")
 
-        val loginData = LoginData(_username.value, _password.value)
+    fun LoginUser(){
+        if(username.value.isEmpty() || password.value.isEmpty()) return
 
+        val loginData = LoginData(username.value.trim(), password.value.trim())
         viewModelScope.launch(Dispatchers.IO) {
-            val loginToken: String = repository.loginPerson(loginData)
-            if(loginToken.isNotEmpty()){
-                onSuccess()
+            val loginResult: Resource<LoginResponse> = repository.loginPerson(loginData)
+
+            when(loginResult){
+                is Resource.Success<LoginResponse> -> {
+                    LoggedPerson.ID = loginResult.data!!.id
+                    LoggedPerson.TOKEN = loginResult.data!!.token
+
+                    login.value = "Success! ID: ${LoggedPerson.ID}"
+                }
+                is Resource.Error<LoginResponse> -> {
+                    login.value = loginResult.message!!
+                }
             }
         }
-
-        onError()
-    }
-    fun usernameChanged(value: String): Unit{
-        _username.value = value
-    }
-    fun passwordChanged(value: String): Unit{
-        _password.value = value
     }
 }

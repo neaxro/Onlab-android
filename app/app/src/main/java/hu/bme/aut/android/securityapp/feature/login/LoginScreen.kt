@@ -1,8 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
-import android.graphics.Paint.Align
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -12,32 +9,27 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import hu.bme.aut.android.securityapp.data.model.LoginData
-import hu.bme.aut.android.securityapp.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.feature.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     navController: NavHostController,
     viewModel: LoginViewModel
 ){
+    var username by remember { viewModel.username }
+    var password by remember { viewModel.password }
+
     var passwordVisible by remember { mutableStateOf(false) }
-    var success by remember { mutableStateOf(false) }
+
+    var loginResult by remember { viewModel.login }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -53,9 +45,9 @@ fun LoginScreen(
         Spacer(modifier = Modifier.padding(30.dp))
 
         TextField(
-            value = viewModel._username.value,
+            value = username,
             onValueChange = {
-                viewModel.usernameChanged(it)
+                username = it
             },
             label = {Text(text = "Username")},
             singleLine = true
@@ -64,9 +56,9 @@ fun LoginScreen(
         Spacer(modifier = Modifier.padding(20.dp))
         
         TextField(
-            value = viewModel._password.value,
+            value = password,
             onValueChange = {
-                viewModel.passwordChanged(it)
+                password = it
             },
             label = {Text(text = "Password")},
             singleLine = true,
@@ -91,35 +83,44 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.padding(20.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Button(onClick = {
-                navController.navigate(Screen.Register.route)
-            }) {
-                Text(text = "Register")
-            }
-
-            Button(onClick = {
-                viewModel.LoginUser({success = true}, {success = false})
-            }) {
-                Text(text = "Login")
-            }
+        LoginOrRegister(navController = navController){
+            viewModel.LoginUser()
         }
 
-        if(success){
-            Text(text = "Sikeres Login!")
-        }
-        else{
-            Text(text = "Sikertelen!")
-        }
+        // TODO: Kicsit szebben megoldani a visszajelzést, esetleg egy loading effektet használni stb..
+        Text(text = loginResult)
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-@ExperimentalMaterial3Api
-fun previewLoginScreen(){
-    LoginScreen(navController = rememberNavController(), viewModel = viewModel())
+fun LoginOrRegister(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    loginAction: () -> Unit = {}
+){
+    Column(modifier = modifier
+        .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(0.8f),
+            onClick = { loginAction() },
+        ) {
+            Text(text = "Sign in")
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Text(text = "Not a member?")
+
+            TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
+                Text(text = "Join now")
+            }
+        }
+    }
 }

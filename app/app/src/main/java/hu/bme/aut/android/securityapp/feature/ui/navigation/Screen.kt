@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.navigation
+package hu.bme.aut.android.securityapp.feature.ui.navigation
 
 sealed class Screen(val route: String){
     object Login : Screen(route = "login")

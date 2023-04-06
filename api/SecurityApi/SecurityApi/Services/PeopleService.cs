@@ -132,6 +132,15 @@ namespace SecurityApi.Services
                 throw new Exception("Email address invalid format!");
             }
 
+            if(newPerson.Password.Length < 8)
+            {
+                throw new Exception("Password min size is 8 characters!");
+            }
+            else if (newPerson.Password.Length > 30)
+            {
+                throw new Exception("Password max size is 30 characters!");
+            }
+
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
             var result = await _context.People.FirstOrDefaultAsync(p => p.Username.ToUpper() == newPerson.Username.ToUpper());
