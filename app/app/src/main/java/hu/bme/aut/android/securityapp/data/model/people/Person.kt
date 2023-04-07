@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.data.model
+package hu.bme.aut.android.securityapp.data.model.people
 
 data class Person(
     val id: Int,

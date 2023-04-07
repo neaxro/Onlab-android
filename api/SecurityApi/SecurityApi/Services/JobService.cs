@@ -193,7 +193,7 @@ namespace SecurityApi.Services
             return _converter.ToModel(newPeopleJob);
         }
 
-        public async Task<Job> Create(CreateJob job)
+        public async Task<DetailJob> Create(CreateJob job)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
@@ -256,10 +256,10 @@ namespace SecurityApi.Services
             // Connect the user in PeopleJobs table
             await ConnectToJob(newJob.Pin.Trim(), owner.Id, DatabaseConstants.ROLE_OWNER_ID);
 
-            return _converter.ToModel(newJob);
+            return _converter.ToDetailedModel(newJob);
         }
 
-        public async Task<Job> Delete(int jobId)
+        public async Task<DetailJob> Delete(int jobId)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
 
@@ -297,10 +297,10 @@ namespace SecurityApi.Services
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
 
-            return _converter.ToModel(job);
+            return _converter.ToDetailedModel(job);
         }
 
-        public async Task<Job> Get(int jobId)
+        public async Task<DetailJob> Get(int jobId)
         {
             var job = await _context.Jobs
                 .Include(j => j.People)
@@ -311,14 +311,14 @@ namespace SecurityApi.Services
                 throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
             }
 
-            return _converter.ToModel(job);
+            return _converter.ToDetailedModel(job);
         }
 
-        public IEnumerable<Job> GetAll()
+        public IEnumerable<DetailJob> GetAll()
         {
             var jobs = _context.Jobs
                 .Include(j => j.People)
-                .Select(_converter.ToModel)
+                .Select(_converter.ToDetailedModel)
                 .ToList();
 
             return jobs;

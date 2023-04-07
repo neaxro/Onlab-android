@@ -1,12 +1,12 @@
 package hu.bme.aut.android.securityapp.data.remote
 
-import hu.bme.aut.android.securityapp.data.model.ChangeRoleData
-import hu.bme.aut.android.securityapp.data.model.ChangeWageData
-import hu.bme.aut.android.securityapp.data.model.CreateJobData
-import hu.bme.aut.android.securityapp.data.model.SelectJobData
+import hu.bme.aut.android.securityapp.constants.LoggedPerson
+import hu.bme.aut.android.securityapp.data.model.job.*
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -14,8 +14,12 @@ import retrofit2.http.Path
 // TODO: Visszatérési típusokkal folytatni
 
 interface JobApi {
-    @GET("/api/job/allonjob/{personId}")
-    suspend fun getAllJobForPerson(@Path("personId") personId: Int)
+
+    @GET("/api/job/availablefor/{personId}")
+    suspend fun getAllJobForPerson(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("personId") personId: Int,
+    ): Response<List<JobResponse>>
 
     @GET("/api/job/{jobId}")
     suspend fun getJobById(@Path("jobId") jobId: Int)

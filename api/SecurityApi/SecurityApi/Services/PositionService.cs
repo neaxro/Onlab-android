@@ -6,7 +6,7 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using Position = SecurityApi.Dtos.PositionDtos.Position;
 using Person = SecurityApi.Dtos.PersonDtos.Person;
-using Job = SecurityApi.Dtos.JobDtos.Job;
+using Job = SecurityApi.Dtos.JobDtos.DetailJob;
 using SecurityApi.Dtos.PositionDtos;
 
 namespace SecurityApi.Services

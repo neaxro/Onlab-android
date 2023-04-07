@@ -8,14 +8,20 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.bme.aut.android.securityapp.constants.Constants
+import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
+import hu.bme.aut.android.securityapp.data.repository.JobRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepositoryImpl
+import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
+import hu.bme.aut.android.securityapp.network.HeaderInterceptor
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -42,12 +48,15 @@ object AppModule {
     }
 
     private fun getUrl(): String{
+        return Constants.SERVER_ADDRESS
+
         return if(checkBuildConfig())
             Constants.SERVER_ADDRESS
         else
             Constants.SERVER_ADDRESS_NOT_EMULATOR
     }
 
+    // API-s
     @Provides
     @Singleton
     fun provideLoginApi(): LoginApi {
@@ -56,15 +65,6 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LoginApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideLoginRepository(
-        api: LoginApi,
-        app: Application
-    ): LoginRepository {
-        return LoginRepositoryImpl(api, app)
     }
 
     @Provides
@@ -79,10 +79,44 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideJobApi(): JobApi {
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HeaderInterceptor())
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(getUrl())
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(JobApi::class.java)
+    }
+
+    // REPOSITORY-s
+    @Provides
+    @Singleton
+    fun provideLoginRepository(
+        api: LoginApi,
+        app: Application
+    ): LoginRepository {
+        return LoginRepositoryImpl(api, app)
+    }
+
+    @Provides
+    @Singleton
     fun provideRegisterRepository(
         api: RegisterApi,
         app: Application
     ): RegisterRepository{
         return RegisterRepositoryImpl(api, app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideJobRepository(
+        api: JobApi,
+        app: Application
+    ): JobRepository {
+        return JobRepositoryImpl(api, app)
     }
 }

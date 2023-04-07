@@ -15,6 +15,7 @@ using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Enums;
 using SecurityApi.Model;
 using SecurityApi.Services;
+using DetailJob = SecurityApi.Dtos.JobDtos.DetailJob;
 using Job = SecurityApi.Dtos.JobDtos.Job;
 using Person = SecurityApi.Dtos.PersonDtos.Person;
 
@@ -35,7 +36,7 @@ namespace SecurityApi.Controllers
         // DEBUG ONLY
         [AllowAnonymous]
         [HttpGet("all")]
-        public ActionResult<IEnumerable<Job>> GetAllJobs()
+        public ActionResult<IEnumerable<DetailJob>> GetAllJobs()
         {
             var jobs = _service.GetAll();
             return Ok(jobs);
@@ -53,7 +54,7 @@ namespace SecurityApi.Controllers
         [HttpGet("{jobId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Job>> Get(int jobId)
+        public async Task<ActionResult<DetailJob>> Get(int jobId)
         {
             try
             {
@@ -92,7 +93,7 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Job>> Create([FromBody] CreateJob job)
+        public async Task<ActionResult<DetailJob>> Create([FromBody] CreateJob job)
         {
             try
             {
@@ -124,7 +125,7 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Job>> ConncetPersonToJob(string pin, int personId)
+        public async Task<ActionResult<DetailJob>> ConncetPersonToJob(string pin, int personId)
         {
             try
             {
@@ -172,7 +173,7 @@ namespace SecurityApi.Controllers
 
         [Authorize(Roles = "Owner")]
         [HttpDelete("{jobId}")]
-        public async Task<ActionResult<Job>> Delete(int jobId)
+        public async Task<ActionResult<DetailJob>> Delete(int jobId)
         {
             try
             {

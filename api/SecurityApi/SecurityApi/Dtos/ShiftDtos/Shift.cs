@@ -10,7 +10,7 @@ public record Shift(
     DateTime? EndTime,
     float? EarnedMoney,
     Person Person,
-    Job Job,
+    DetailJob Job,
     Status status,
     Wage Wage
     );

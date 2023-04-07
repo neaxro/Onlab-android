@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import hu.bme.aut.android.securityapp.data.model.RegisterData
-import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.feature.ui.navigation.Screen
 
