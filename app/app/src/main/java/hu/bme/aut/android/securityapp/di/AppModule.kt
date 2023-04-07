@@ -1,6 +1,7 @@
 package hu.bme.aut.android.securityapp.di
 
 import android.app.Application
+import android.os.Build
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -20,12 +21,38 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    private fun checkBuildConfig(): Boolean {
+        var isEmulator = (Build.MANUFACTURER.contains("Genymotion")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.toLowerCase().contains("droid4x")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.HARDWARE == "goldfish"
+                || Build.HARDWARE == "vbox86"
+                || Build.HARDWARE.toLowerCase().contains("nox")
+                || Build.FINGERPRINT.startsWith("generic")
+                || Build.PRODUCT == "sdk"
+                || Build.PRODUCT == "google_sdk"
+                || Build.PRODUCT == "sdk_x86"
+                || Build.PRODUCT == "vbox86p"
+                || Build.PRODUCT.toLowerCase().contains("nox")
+                || Build.BOARD.toLowerCase().contains("nox")
+                || (Build.BRAND.startsWith("generic") &&    Build.DEVICE.startsWith("generic")))
+        return isEmulator
+    }
+
+    private fun getUrl(): String{
+        return if(checkBuildConfig())
+            Constants.SERVER_ADDRESS
+        else
+            Constants.SERVER_ADDRESS_NOT_EMULATOR
+    }
 
     @Provides
     @Singleton
     fun provideLoginApi(): LoginApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.SERVER_ADDRESS)
+            .baseUrl(getUrl())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LoginApi::class.java)
@@ -44,7 +71,7 @@ object AppModule {
     @Singleton
     fun provideRegisterApi(): RegisterApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.SERVER_ADDRESS)
+            .baseUrl(getUrl())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RegisterApi::class.java)
