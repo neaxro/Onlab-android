@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
-import hu.bme.aut.android.securityapp.feature.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 private fun matchPasswords(pass1: String, pass2: String): Boolean = pass1 == pass2
 

@@ -8,8 +8,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import hu.bme.aut.android.securityapp.feature.createJob.CreateJobScreen
+import hu.bme.aut.android.securityapp.feature.mainmenu.MainMenuScreen
+import hu.bme.aut.android.securityapp.feature.nojob.NoJobScreen
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
-import hu.bme.aut.android.securityapp.feature.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @Composable
@@ -38,5 +41,17 @@ fun MyAppNavHost(
                 navController = navController,
                 viewModel = viewModel
             )
+        }
+
+        composable(route = Screen.NoJob.route){
+            NoJobScreen(navController = navController)
+        }
+
+        composable(route = Screen.CreateJob.route){
+            CreateJobScreen(navController = navController)
+        }
+
+        composable(route = Screen.MainMenu.route){
+            MainMenuScreen(navController = navController)
         }
     }

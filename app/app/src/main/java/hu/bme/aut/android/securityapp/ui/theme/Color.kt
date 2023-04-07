@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.feature.ui.theme
+package hu.bme.aut.android.securityapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

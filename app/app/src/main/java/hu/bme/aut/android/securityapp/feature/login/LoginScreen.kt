@@ -16,7 +16,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import hu.bme.aut.android.securityapp.feature.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @Composable
@@ -84,7 +84,24 @@ fun LoginScreen(
         Spacer(modifier = Modifier.padding(20.dp))
 
         LoginOrRegister(navController = navController){
-            viewModel.LoginUser()
+            viewModel.LoginUser(){numberOfJobs ->
+                if(numberOfJobs > 0){
+                    // Navigate to Main Screen
+                    navController.navigate(Screen.MainMenu.route){
+                        popUpTo(Screen.Login.route){
+                            inclusive = true
+                        }
+                    }
+                }
+                else {
+                    // Navigate to No Job screen
+                    navController.navigate(Screen.NoJob.route) {
+                        popUpTo(Screen.Login.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            }
         }
 
         // TODO: Kicsit szebben megoldani a visszajelzést, esetleg egy loading effektet használni stb..
