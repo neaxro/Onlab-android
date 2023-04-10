@@ -27,30 +27,38 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    private fun checkBuildConfig(): Boolean {
-        var isEmulator = (Build.MANUFACTURER.contains("Genymotion")
+    val isProbablyRunningOnEmulator: Boolean by lazy {
+        // Android SDK emulator
+        return@lazy ((Build.MANUFACTURER == "Google" && Build.BRAND == "google" &&
+                ((Build.FINGERPRINT.startsWith("google/sdk_gphone_")
+                        && Build.FINGERPRINT.endsWith(":user/release-keys")
+                        && Build.PRODUCT.startsWith("sdk_gphone_")
+                        && Build.MODEL.startsWith("sdk_gphone_"))
+                        //alternative
+                        || (Build.FINGERPRINT.startsWith("google/sdk_gphone64_")
+                        && (Build.FINGERPRINT.endsWith(":userdebug/dev-keys") || Build.FINGERPRINT.endsWith(":user/release-keys"))
+                        && Build.PRODUCT.startsWith("sdk_gphone64_")
+                        && Build.MODEL.startsWith("sdk_gphone64_"))))
+                //
+                || Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
                 || Build.MODEL.contains("google_sdk")
-                || Build.MODEL.toLowerCase().contains("droid4x")
                 || Build.MODEL.contains("Emulator")
                 || Build.MODEL.contains("Android SDK built for x86")
-                || Build.HARDWARE == "goldfish"
-                || Build.HARDWARE == "vbox86"
-                || Build.HARDWARE.toLowerCase().contains("nox")
-                || Build.FINGERPRINT.startsWith("generic")
-                || Build.PRODUCT == "sdk"
-                || Build.PRODUCT == "google_sdk"
-                || Build.PRODUCT == "sdk_x86"
-                || Build.PRODUCT == "vbox86p"
-                || Build.PRODUCT.toLowerCase().contains("nox")
-                || Build.BOARD.toLowerCase().contains("nox")
-                || (Build.BRAND.startsWith("generic") &&    Build.DEVICE.startsWith("generic")))
-        return isEmulator
+                //bluestacks
+                || "QC_Reference_Phone" == Build.BOARD && !"Xiaomi".equals(Build.MANUFACTURER, ignoreCase = true)
+                //bluestacks
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.HOST.startsWith("Build")
+                //MSI App Player
+                || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+                || Build.PRODUCT == "google_sdk")
     }
 
     private fun getUrl(): String{
         return Constants.SERVER_ADDRESS
 
-        return if(checkBuildConfig())
+        return if(isProbablyRunningOnEmulator)
             Constants.SERVER_ADDRESS
         else
             Constants.SERVER_ADDRESS_NOT_EMULATOR
