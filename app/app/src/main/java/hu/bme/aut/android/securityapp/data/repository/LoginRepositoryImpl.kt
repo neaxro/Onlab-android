@@ -22,7 +22,7 @@ class LoginRepositoryImpl(
                 }
                 else{
                     // Server error
-                    Resource.Error(message = "Server error occured: ${response.errorBody()!!.string()}")
+                    Resource.Error(message = response.errorBody()!!.string())
                 }
 
             res

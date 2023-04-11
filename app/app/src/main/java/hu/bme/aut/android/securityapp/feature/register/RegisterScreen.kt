@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -9,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -27,6 +29,8 @@ fun RegisterScreen(
     navController: NavHostController,
     viewModel: RegisterViewModel = hiltViewModel()
 ){
+    val context = LocalContext.current
+
     var fullName by remember {viewModel.fullName}
     var fullNameError by remember { mutableStateOf("") }
 
@@ -47,8 +51,6 @@ fun RegisterScreen(
     var passwordVisible2 by remember { mutableStateOf(false) }
 
     var passwordsMatch by remember { mutableStateOf(true)}
-
-    var registerState by remember { viewModel.registrationState }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -128,7 +130,6 @@ fun RegisterScreen(
             onValueChange = {
                 password = it
                 passwordsMatch = matchPasswords(password, passwordAgain)
-                registerState = if(!passwordsMatch) "Passwords do not match!" else ""
                 passwordError = validatePassword(password)
             },
             label = {Text(text = "Password")},
@@ -159,7 +160,6 @@ fun RegisterScreen(
             onValueChange = {
                 passwordAgain = it
                 passwordsMatch = matchPasswords(password, passwordAgain)
-                registerState = if(!passwordsMatch) "Passwords do not match!" else ""
             },
             label = {Text(text = "Verify password")},
             singleLine = true,
@@ -199,7 +199,14 @@ fun RegisterScreen(
                         && !anyFieldEmpty(fullName, username, nickname, email, password, passwordAgain)
                         && anyFieldEmpty(fullNameError, usernameError, nicknameError, emailError, passwordError)
                     ){
-                        viewModel.register()
+                        viewModel.register(
+                            onSuccess = {
+                                Toast.makeText(context, "Successful!", Toast.LENGTH_LONG).show()
+                            },
+                            onError = {errorMessage ->
+                                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                            }
+                        )
                     }
               },
             ) {
@@ -219,9 +226,6 @@ fun RegisterScreen(
                 }
             }
         }
-
-        // TODO: Kicsit szebben megoldani a visszajelzést, esetleg egy loading effektet használni stb..
-        Text(text = registerState)
     }
 }
 

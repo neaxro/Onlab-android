@@ -14,8 +14,8 @@ namespace SecurityApi.Services
         IEnumerable<Job> GetAllAvailableForPerson(int personId);
         IEnumerable<Person> AllPersonInJob(int jobId);
         Task<String> SelectJob(SelectJob selectJob);
-        Task<DetailJob> Get(int jobId);
-        Task<DetailJob> Create(CreateJob job);
+        Task<Job> Get(int jobId);
+        Task<Job> Create(CreateJob job);
         Task<DetailJob> Delete(int jobId);
         Task<PersonJob> ConnectToJob(string pin, int personId, int roleId);
         Task<PersonJob> ChangePersonRole(int jobId, ChangeRole change);

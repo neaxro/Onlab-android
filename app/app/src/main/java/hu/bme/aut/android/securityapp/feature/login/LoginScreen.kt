@@ -1,5 +1,7 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -9,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -24,6 +27,8 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: LoginViewModel
 ){
+    val context = LocalContext.current
+
     var username by remember { viewModel.username }
     var usernameError = remember { mutableStateOf(false) }
 
@@ -31,7 +36,6 @@ fun LoginScreen(
     var passwordError = remember { mutableStateOf(false) }
 
     var passwordVisible by remember { mutableStateOf(false) }
-    var loginResult by remember { viewModel.login }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -102,7 +106,8 @@ fun LoginScreen(
                     passwordError.value = true
                 }
 
-                viewModel.LoginUser(){ numberOfJobs ->
+                viewModel.LoginUser(
+                    onSuccess = { numberOfJobs ->
                     // If login is successful navigate to the proper screen
                     if(numberOfJobs > 0){
                         // Navigate to Main Screen
@@ -120,7 +125,11 @@ fun LoginScreen(
                             }
                         }
                     }
-                }
+                },
+                    onError = {errorMessage ->
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                    }
+                )
             },
         ) {
             Text(text = "Sign in")
@@ -138,8 +147,5 @@ fun LoginScreen(
                 Text(text = "Join now")
             }
         }
-
-        // TODO: Kicsit szebben megoldani a visszajelzést, esetleg egy loading effektet használni stb..
-        Text(text = loginResult)
     }
 }

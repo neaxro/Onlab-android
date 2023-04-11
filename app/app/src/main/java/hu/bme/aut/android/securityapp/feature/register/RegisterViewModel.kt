@@ -9,6 +9,7 @@ import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,9 +23,7 @@ class RegisterViewModel @Inject constructor(
     var passwordAgain = mutableStateOf("")
     var username = mutableStateOf("")
 
-    var registrationState = mutableStateOf("")
-
-    fun register(){
+    fun register(onSuccess: () -> Unit, onError: (String) -> Unit){
         val registerData = RegisterData(email.value, fullName.value, nickname.value, password.value, username.value)
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,10 +31,14 @@ class RegisterViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success<RegisterData> -> {
-                    registrationState.value = "Success"
+                    withContext(Dispatchers.Main){
+                        onSuccess()
+                    }
                 }
                 is Resource.Error<RegisterData> -> {
-                    registrationState.value = result.message!!
+                    withContext(Dispatchers.Main){
+                        onError(result.message!!)
+                    }
                 }
             }
         }

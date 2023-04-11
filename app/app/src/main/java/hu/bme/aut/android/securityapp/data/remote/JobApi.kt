@@ -25,7 +25,10 @@ interface JobApi {
     suspend fun getJobById(@Path("jobId") jobId: Int)
 
     @POST("/api/job")
-    suspend fun createJob(@Body createJobData: CreateJobData)
+    suspend fun createJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Body createJobData: CreateJobData
+    ): Response<Job>
 
     @POST("/api/job/connect/{jobPin}/{personId}")
     suspend fun connectPersonToJob(@Path("jobPin") jobPin: String, @Path("personId") personId: Int)

@@ -23,7 +23,7 @@ class RegisterRepositoryImpl(
             }
             // Server error
             else{
-                Resource.Error(message = "Server error: ${response.errorBody()!!.string()}")
+                Resource.Error(message = response.errorBody()!!.string())
             }
             res
         }

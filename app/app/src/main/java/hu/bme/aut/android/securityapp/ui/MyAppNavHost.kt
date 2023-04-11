@@ -1,6 +1,7 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -9,12 +10,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobScreen
+import hu.bme.aut.android.securityapp.feature.createJob.CreateJobViewModel
 import hu.bme.aut.android.securityapp.feature.mainmenu.MainMenuScreen
 import hu.bme.aut.android.securityapp.feature.nojob.NoJobScreen
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyAppNavHost(
     modifier: Modifier = Modifier,
@@ -48,7 +51,11 @@ fun MyAppNavHost(
         }
 
         composable(route = Screen.CreateJob.route){
-            CreateJobScreen(navController = navController)
+            val viewModel = hiltViewModel<CreateJobViewModel>()
+            CreateJobScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
         }
 
         composable(route = Screen.MainMenu.route){

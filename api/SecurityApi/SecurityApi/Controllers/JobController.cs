@@ -54,7 +54,7 @@ namespace SecurityApi.Controllers
         [HttpGet("{jobId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DetailJob>> Get(int jobId)
+        public async Task<ActionResult<Job>> Get(int jobId)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace SecurityApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DetailJob>> Create([FromBody] CreateJob job)
+        public async Task<ActionResult<Job>> Create([FromBody] CreateJob job)
         {
             try
             {

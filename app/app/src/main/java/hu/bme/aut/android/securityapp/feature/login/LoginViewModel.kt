@@ -14,6 +14,7 @@ import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -23,10 +24,9 @@ class LoginViewModel @Inject constructor(
     var username = mutableStateOf("")
     var password = mutableStateOf("")
 
-    var login = mutableStateOf("")
     var numberOfJobs = mutableStateOf(0)
 
-    fun LoginUser(loginSuccess: (Int) -> Unit){
+    fun LoginUser(onSuccess: (Int) -> Unit, onError: (String) -> Unit){
         if(username.value.isEmpty() || password.value.isEmpty()) return
 
         val loginData = LoginData(username.value.trim(), password.value.trim())
@@ -41,12 +41,14 @@ class LoginViewModel @Inject constructor(
                     // Check for number of jobs the Person is participated
                     checkPersonJobs(LoggedPerson.ID, jobRepository, this@LoginViewModel){
                         numberOfJobs.value = it
-                        loginSuccess(it)
+                        onSuccess(it)
                         //login.value = "Success! ID: ${LoggedPerson.ID} #Jobs: ${numberOfJobs.value}"
                     }
                 }
                 is Resource.Error<LoginResponse> -> {
-                    login.value = loginResult.message!!
+                    withContext(Dispatchers.Main){
+                        onError(loginResult.message!!)
+                    }
                 }
             }
         }
