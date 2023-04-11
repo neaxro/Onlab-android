@@ -25,10 +25,12 @@ fun LoginScreen(
     viewModel: LoginViewModel
 ){
     var username by remember { viewModel.username }
+    var usernameError = remember { mutableStateOf(false) }
+
     var password by remember { viewModel.password }
+    var passwordError = remember { mutableStateOf(false) }
 
     var passwordVisible by remember { mutableStateOf(false) }
-
     var loginResult by remember { viewModel.login }
 
     Column(
@@ -44,20 +46,23 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.padding(30.dp))
 
-        TextField(
+        OutlinedTextField(
             value = username,
             onValueChange = {
+                usernameError.value = false
                 username = it
             },
             label = {Text(text = "Username")},
-            singleLine = true
+            singleLine = true,
+            isError = usernameError.value
         )
-        
-        Spacer(modifier = Modifier.padding(20.dp))
-        
-        TextField(
+
+        Spacer(modifier = Modifier.height(5.dp))
+
+        OutlinedTextField(
             value = password,
             onValueChange = {
+                passwordError.value = false
                 password = it
             },
             label = {Text(text = "Password")},
@@ -77,52 +82,46 @@ fun LoginScreen(
                     Icon(imageVector = image, description)
                 }
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+            ),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            isError = passwordError.value
         )
 
-        Spacer(modifier = Modifier.padding(20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        LoginOrRegister(navController = navController){
-            viewModel.LoginUser(){numberOfJobs ->
-                if(numberOfJobs > 0){
-                    // Navigate to Main Screen
-                    navController.navigate(Screen.MainMenu.route){
-                        popUpTo(Screen.Login.route){
-                            inclusive = true
-                        }
-                    }
-                }
-                else {
-                    // Navigate to No Job screen
-                    navController.navigate(Screen.NoJob.route) {
-                        popUpTo(Screen.Login.route) {
-                            inclusive = true
-                        }
-                    }
-                }
-            }
-        }
-
-        // TODO: Kicsit szebben megoldani a visszajelzést, esetleg egy loading effektet használni stb..
-        Text(text = loginResult)
-    }
-}
-
-@Composable
-fun LoginOrRegister(
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
-    loginAction: () -> Unit = {}
-){
-    Column(modifier = modifier
-        .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
         Button(
             modifier = Modifier
                 .fillMaxWidth(0.8f),
-            onClick = { loginAction() },
+            onClick = {
+                if(username.isEmpty()){
+                    usernameError.value = true
+                }
+                else if(password.isEmpty()){
+                    passwordError.value = true
+                }
+
+                viewModel.LoginUser(){ numberOfJobs ->
+                    // If login is successful navigate to the proper screen
+                    if(numberOfJobs > 0){
+                        // Navigate to Main Screen
+                        navController.navigate(Screen.MainMenu.route){
+                            popUpTo(Screen.Login.route){
+                                inclusive = true
+                            }
+                        }
+                    }
+                    else {
+                        // Navigate to No Job screen
+                        navController.navigate(Screen.NoJob.route) {
+                            popUpTo(Screen.Login.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                }
+            },
         ) {
             Text(text = "Sign in")
         }
@@ -139,5 +138,8 @@ fun LoginOrRegister(
                 Text(text = "Join now")
             }
         }
+
+        // TODO: Kicsit szebben megoldani a visszajelzést, esetleg egy loading effektet használni stb..
+        Text(text = loginResult)
     }
 }

@@ -21,24 +21,26 @@ import androidx.navigation.NavHostController
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
-private fun matchPasswords(pass1: String, pass2: String): Boolean = pass1 == pass2
-
-private fun anyFieldEmpty(vararg fields: String): Boolean{
-    return fields.any {
-        it.isEmpty()
-    }
-}
-
+@ExperimentalMaterial3Api
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
     viewModel: RegisterViewModel = hiltViewModel()
 ){
     var fullName by remember {viewModel.fullName}
+    var fullNameError by remember { mutableStateOf("") }
+
     var username by remember {viewModel.username}
+    var usernameError by remember { mutableStateOf("") }
+
     var nickname by remember {viewModel.nickname}
+    var nicknameError by remember { mutableStateOf("") }
+
     var email by remember {viewModel.email}
+    var emailError by remember { mutableStateOf("") }
+
     var password by remember {viewModel.password}
+    var passwordError by remember { mutableStateOf("") }
     var passwordAgain by remember {viewModel.passwordAgain}
 
     var passwordVisible1 by remember { mutableStateOf(false) }
@@ -46,9 +48,7 @@ fun RegisterScreen(
 
     var passwordsMatch by remember { mutableStateOf(true)}
 
-    var registerState by remember {
-        viewModel.registrationState
-    }
+    var registerState by remember { viewModel.registrationState }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -66,61 +66,70 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        TextField(
+        OutlinedTextField(
             value = fullName,
             onValueChange = {
                 fullName = it
+                fullNameError = validateFullname(fullName)
             },
             label = {
                 Text(text = "Full name")
             },
             singleLine = true,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(5.dp),
+            isError = fullNameError.isNotEmpty()
         )
 
-        TextField(
+        OutlinedTextField(
             value = username,
             onValueChange = {
                 username = it
+                usernameError = validateUsername(username)
             },
             label = {
                 Text(text = "Username")
             },
             singleLine = true,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(5.dp),
+            isError = usernameError.isNotEmpty()
         )
 
-        TextField(
+        OutlinedTextField(
             value = nickname,
             onValueChange = {
                 nickname = it
+                nicknameError = validateNickname(nickname)
             },
             label = {
                 Text(text = "Nickname")
             },
             singleLine = true,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(5.dp),
+            isError = nicknameError.isNotEmpty()
         )
 
-        TextField(
+        OutlinedTextField(
             value = email,
             onValueChange = {
                 email = it
+                emailError = validateEmail(email)
             },
             label = {
                 Text(text = "Email address")
             },
             singleLine = true,
             modifier = Modifier.padding(5.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            isError = emailError.isNotEmpty()
         )
 
-        TextField(
+        OutlinedTextField(
             value = password,
             onValueChange = {
                 password = it
                 passwordsMatch = matchPasswords(password, passwordAgain)
                 registerState = if(!passwordsMatch) "Passwords do not match!" else ""
+                passwordError = validatePassword(password)
             },
             label = {Text(text = "Password")},
             singleLine = true,
@@ -142,9 +151,10 @@ fun RegisterScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = if (passwordVisible1) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier.padding(5.dp),
+            isError = passwordError.isNotEmpty() || !passwordsMatch
         )
 
-        TextField(
+        OutlinedTextField(
             value = passwordAgain,
             onValueChange = {
                 passwordAgain = it
@@ -171,14 +181,42 @@ fun RegisterScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = if (passwordVisible2) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier.padding(5.dp),
+            isError = !passwordsMatch
         )
 
         Spacer(modifier = Modifier.padding(20.dp))
 
-        RegisterOrLogin(navController = navController){
+        Column(modifier = Modifier
+            .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f),
+                onClick = {
+                    if(
+                        passwordsMatch
+                        && !anyFieldEmpty(fullName, username, nickname, email, password, passwordAgain)
+                        && anyFieldEmpty(fullNameError, usernameError, nicknameError, emailError, passwordError)
+                    ){
+                        viewModel.register()
+                    }
+              },
+            ) {
+                Text(text = "Register Now")
+            }
 
-            if(passwordsMatch && !anyFieldEmpty(fullName, username, nickname, email, password, passwordAgain)){
-                viewModel.register()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(text = "Already have account?")
+
+                TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
+                    Text(text = "Login now")
+                }
             }
         }
 
@@ -187,35 +225,43 @@ fun RegisterScreen(
     }
 }
 
-@Composable
-fun RegisterOrLogin(
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
-    registerAction: () -> Unit = {}
-){
-    Column(modifier = modifier
-        .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(
-            modifier = Modifier
-                .fillMaxWidth(0.8f),
-            onClick = { registerAction() },
-        ) {
-            Text(text = "Register Now")
-        }
+private fun validateFullname(fullname: String): String{
+    if(fullname.isEmpty()) return "Fullname is empty!"
+    if(fullname.length > 30) return "Fullname is too long!"
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            Text(text = "Already have account?")
-            
-            TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
-                Text(text = "Login now")
-            }
-        }
+    return ""
+}
+
+private fun validateUsername(username: String): String{
+    if(!username.matches(Regex("\\S+"))) return "Username must not contain whitespaces!"
+
+    return ""
+}
+
+private fun validateNickname(nickname: String): String{
+    if(!nickname.matches(Regex("\\S+"))) return "Nickname must not contain whitespaces!"
+    if(!nickname.matches(Regex("^[a-zA-Z]+\$"))) return "Nickname must contains only letters!"
+
+    return ""
+}
+
+private fun validateEmail(email: String): String{
+    if(!email.matches(Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))) return "Invalid email address format!"
+
+    return ""
+}
+
+private fun validatePassword(password: String): String{
+    if(password.length < 8) return "Password is too short!"
+    if(password.length > 30) return "Password is too long!"
+
+    return ""
+}
+
+private fun matchPasswords(pass1: String, pass2: String): Boolean = pass1 == pass2
+
+private fun anyFieldEmpty(vararg fields: String): Boolean{
+    return fields.any {
+        it.isEmpty()
     }
 }
