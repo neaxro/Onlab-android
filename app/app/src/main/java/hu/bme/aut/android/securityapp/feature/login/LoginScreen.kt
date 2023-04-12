@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,6 +21,7 @@ import androidx.navigation.NavHostController
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     navController: NavHostController,
@@ -30,10 +30,10 @@ fun LoginScreen(
     val context = LocalContext.current
 
     var username by remember { viewModel.username }
-    var usernameError = remember { mutableStateOf(false) }
+    val usernameError = remember { mutableStateOf(false) }
 
     var password by remember { viewModel.password }
-    var passwordError = remember { mutableStateOf(false) }
+    val passwordError = remember { mutableStateOf(false) }
 
     var passwordVisible by remember { mutableStateOf(false) }
 

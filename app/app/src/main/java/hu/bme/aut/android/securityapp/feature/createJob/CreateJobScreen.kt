@@ -3,7 +3,11 @@ package hu.bme.aut.android.securityapp.feature.createJob
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+//import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -16,7 +20,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateJobScreen(
     viewModel: CreateJobViewModel,
@@ -39,7 +45,7 @@ fun CreateJobScreen(
                 jobname = it
             },
             label = { Text(text = "Name of the job")},
-            singleLine = true
+            singleLine = true,
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -61,8 +67,12 @@ fun CreateJobScreen(
             onClick = {
                 viewModel.createJob(
                 onSuccess = {
-                        // TODO: navigate to the main menu
-                        Toast.makeText(context, "Successfully created!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Successfully created!", Toast.LENGTH_LONG).show()
+                    navController.navigate(Screen.MainMenu.route){
+                        popUpTo(Screen.CreateJob.route){
+                            inclusive = true
+                        }
+                    }
                 },
                 onError = {errorMessage ->
                     Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()

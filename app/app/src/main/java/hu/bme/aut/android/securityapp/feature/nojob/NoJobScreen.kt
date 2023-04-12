@@ -1,8 +1,6 @@
 package hu.bme.aut.android.securityapp.feature.nojob
 
-import android.widget.Space
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,8 +38,7 @@ fun NoJobScreen(
         Row {
             OutlinedButton(
                 onClick = {
-                // TODO: Navigate
-                navController.navigate(Screen.CreateJob.route)
+                    navController.navigate(Screen.CreateJob.route)
                 }
             ) {
                 Text(text = "Create One")
@@ -53,7 +50,7 @@ fun NoJobScreen(
             )
 
             OutlinedButton(onClick = {
-                // TODO: Navigate
+                // TODO: Navigate to connection screen
                 navController.navigate(Screen.Login.route)
             }) {
                 Text(text = "Join One")
