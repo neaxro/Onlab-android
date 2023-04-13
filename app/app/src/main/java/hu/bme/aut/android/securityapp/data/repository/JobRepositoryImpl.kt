@@ -1,22 +1,18 @@
 package hu.bme.aut.android.securityapp.data.repository
 
 import android.app.Application
-import android.widget.Toast
-import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.job.CreateJobData
 import hu.bme.aut.android.securityapp.data.model.job.Job
-import hu.bme.aut.android.securityapp.data.model.job.JobResponse
 import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
-import javax.inject.Inject
 
 class JobRepositoryImpl (
     private val api: JobApi,
     private val app: Application
 ): JobRepository{
 
-    override suspend fun getAllJobForPerson(personId: Int): Resource<List<JobResponse>> {
+    override suspend fun getAllJobForPerson(personId: Int): Resource<List<Job>> {
         val jobs = try{
             val result = api.getAllJobForPerson(personId = personId)
 

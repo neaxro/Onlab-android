@@ -22,7 +22,7 @@ import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 fun MyAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.Login.route
+    startDestination: String = Screen.MainMenu.route
 ) =
     NavHost(
         navController = navController,

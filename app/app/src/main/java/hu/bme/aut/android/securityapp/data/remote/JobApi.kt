@@ -19,7 +19,7 @@ interface JobApi {
     suspend fun getAllJobForPerson(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("personId") personId: Int,
-    ): Response<List<JobResponse>>
+    ): Response<List<Job>>
 
     @GET("/api/job/{jobId}")
     suspend fun getJobById(@Path("jobId") jobId: Int)
