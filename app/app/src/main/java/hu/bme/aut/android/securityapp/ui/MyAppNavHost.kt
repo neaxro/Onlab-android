@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +21,7 @@ import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 fun MyAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.MainMenu.route
+    startDestination: String = Screen.Login.route
 ) =
     NavHost(
         navController = navController,

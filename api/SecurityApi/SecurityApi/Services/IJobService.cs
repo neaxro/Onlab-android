@@ -11,7 +11,7 @@ namespace SecurityApi.Services
     public interface IJobService
     {
         IEnumerable<DetailJob> GetAll();
-        IEnumerable<Job> GetAllAvailableForPerson(int personId);
+        IEnumerable<DetailJob> GetAllAvailableForPerson(int personId);
         IEnumerable<Person> AllPersonInJob(int jobId);
         Task<String> SelectJob(SelectJob selectJob);
         Task<Job> Get(int jobId);

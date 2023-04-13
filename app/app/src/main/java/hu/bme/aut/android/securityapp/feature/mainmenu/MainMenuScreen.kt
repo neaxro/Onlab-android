@@ -33,6 +33,7 @@ import hu.bme.aut.android.securityapp.feature.mainmenu.menus.DashboardScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.JobsScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.ShiftScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.StatisticsScreen
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobsViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 data class NavigationItem(
@@ -91,7 +92,8 @@ fun MainMenuNavHost(
     ){
 
         composable(route = Screen.Jobs.route){
-            JobsScreen()
+            val jobViewModel = hiltViewModel<JobsViewModel>()
+            JobsScreen(jobViewModel)
         }
 
         composable(route = Screen.Dashboard.route){

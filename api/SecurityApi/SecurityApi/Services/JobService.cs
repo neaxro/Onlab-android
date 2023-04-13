@@ -324,7 +324,7 @@ namespace SecurityApi.Services
             return jobs;
         }
 
-        public IEnumerable<Job> GetAllAvailableForPerson(int personId)
+        public IEnumerable<DetailJob> GetAllAvailableForPerson(int personId)
         {
             var jobs = _context.PeopleJobs
                 .Include(pj => pj.Job)
@@ -333,7 +333,7 @@ namespace SecurityApi.Services
                 .Include(pj => pj.Wage)
                 .Where(pj => pj.PeopleId == personId)
                 .Select(pj => pj.Job)
-                .Select(_converter.ToModel)
+                .Select(_converter.ToDetailedModel)
                 .ToList();
 
             return jobs;

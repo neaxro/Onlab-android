@@ -2,45 +2,42 @@ package hu.bme.aut.android.securityapp.feature.mainmenu.menus
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.data.Group
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
-import hu.bme.aut.android.securityapp.data.model.job.Job
 import hu.bme.aut.android.securityapp.data.model.people.Person
-import java.util.Base64
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobsViewModel
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun JobsScreen(){
+fun JobsScreen(
+    viewModel: JobsViewModel
+){
     val jobs = listOf(
         DetailedJob(2, "East Fest 2023 Fesztivál", "Fishing On Orfű 2023 szöveg szöveg szöveg szöveg szöveg szöveg szöveg szöveg", "ASD123", Person(1, "Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com", null)),
         DetailedJob(2, "FOO 2023", "Fishing On Orfű 2023", "ASD123", Person(1, "Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com", "")),
@@ -54,7 +51,10 @@ fun JobsScreen(){
         DetailedJob(2, "FOO 2023", "Fishing On Orfű 2023", "ASD123", Person(1, "Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com", "null")),
     )
 
+    val context = LocalContext.current
     val scrollState = rememberLazyStaggeredGridState()
+    val jobList = remember { viewModel.jobs }
+    viewModel.loadAllJobs()
 
     Scaffold(
         topBar = {
@@ -68,6 +68,13 @@ fun JobsScreen(){
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                 ),
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.loadAllJobs()
+                    }) {
+                        Icon(imageVector = Icons.Rounded.Refresh, contentDescription = "Refresh")
+                    }
+                },
             )
         }
     ) {
@@ -84,8 +91,10 @@ fun JobsScreen(){
             verticalItemSpacing = 10.dp,
             state = scrollState
         ){
-            items(jobs){ item ->
-                JobCard(job = item, onClicked = {})
+            items(jobList){ item ->
+                JobCard(job = item, onClicked = {
+                    Toast.makeText(context, "Clicked item with ID: $it!", Toast.LENGTH_SHORT).show()
+                })
             }
         }
     }
@@ -157,7 +166,7 @@ fun JobCard(job: DetailedJob, modifier: Modifier = Modifier, onClicked: (Int) ->
 @Preview(showBackground = true)
 @Composable
 fun PreviewScreenJobs(){
-    JobsScreen()
+    //JobsScreen(rem)
 }
 
 @Preview(showBackground = false)

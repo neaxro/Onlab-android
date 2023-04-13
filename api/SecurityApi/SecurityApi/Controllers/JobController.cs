@@ -68,7 +68,7 @@ namespace SecurityApi.Controllers
 
         [Authorize]
         [HttpGet("availablefor/{personId}")]
-        public ActionResult<IEnumerable<Job>> GetAllAvailableForPerson(int personId)
+        public ActionResult<IEnumerable<DetailJob>> GetAllAvailableForPerson(int personId)
         {
             var result = _service.GetAllAvailableForPerson(personId);
             return Ok(result);
