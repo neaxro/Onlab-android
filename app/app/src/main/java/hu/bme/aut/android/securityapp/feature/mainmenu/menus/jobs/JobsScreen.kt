@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -69,11 +70,19 @@ fun JobsScreen(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                 ),
                 actions = {
+
                     IconButton(onClick = {
                         viewModel.loadAllJobs()
                     }) {
                         Icon(imageVector = Icons.Rounded.Refresh, contentDescription = "Refresh")
                     }
+
+                    IconButton(onClick = {
+                        jobList.addAll(0, jobs)
+                    }) {
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Examples")
+                    }
+
                 },
             )
         }
