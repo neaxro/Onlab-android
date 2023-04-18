@@ -25,7 +25,7 @@ import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    viewModel: LoginViewModel
+    viewModel: LoginViewModel,
 ){
     val context = LocalContext.current
 

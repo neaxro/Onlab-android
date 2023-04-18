@@ -39,7 +39,7 @@ fun MainMenuNavHost(
                     navController.navigate(Screen.CreateJob.route)
                 },
                 navigateToConnectJob = {
-                    // TODO: Navigate to connect job
+                    navController.navigate(Screen.ConnectToJob.route)
                 }
             )
         }

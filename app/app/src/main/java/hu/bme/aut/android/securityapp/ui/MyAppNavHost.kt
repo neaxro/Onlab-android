@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobScreen
+import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobViewModel
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobScreen
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobViewModel
 import hu.bme.aut.android.securityapp.feature.mainmenu.MainMenuScreen
@@ -59,5 +61,16 @@ fun MyAppNavHost(
 
         composable(route = Screen.MainMenu.route){
             MainMenuScreen(navController = navController)
+        }
+
+        composable(route = Screen.ConnectToJob.route){
+            val viewModel = hiltViewModel<ConnectToJobViewModel>()
+            ConnectToJobScreen(viewModel = viewModel) {
+                navController.navigate(Screen.MainMenu.route){
+                    popUpTo(Screen.ConnectToJob.route){
+                        inclusive = true
+                    }
+                }
+            }
         }
     }

@@ -50,4 +50,23 @@ class JobRepositoryImpl (
 
         return createdJob
     }
+
+    override suspend fun connectPersonToJob(personId: Int, pin: String): Resource<DetailedJob> {
+        var connection = try{
+            val result = api.connectPersonToJob(personId = personId, jobPin = pin)
+
+            val data = if(result.isSuccessful && result.code() == 201){
+                Resource.Success(message = "Succesfully connected to job!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
 }

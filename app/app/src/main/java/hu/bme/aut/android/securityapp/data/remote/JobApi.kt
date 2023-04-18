@@ -31,7 +31,11 @@ interface JobApi {
     ): Response<Job>
 
     @POST("/api/job/connect/{jobPin}/{personId}")
-    suspend fun connectPersonToJob(@Path("jobPin") jobPin: String, @Path("personId") personId: Int)
+    suspend fun connectPersonToJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobPin") jobPin: String,
+        @Path("personId") personId: Int
+    ): Response<DetailedJob>
 
     @POST("/api/job/select")
     suspend fun selectJob(@Body selectJobData: SelectJobData)
