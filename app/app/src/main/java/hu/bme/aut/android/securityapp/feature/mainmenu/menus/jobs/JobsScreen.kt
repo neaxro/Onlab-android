@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.AddBox
+import androidx.compose.material.icons.rounded.AddLink
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -32,12 +34,15 @@ import androidx.compose.ui.unit.sp
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobsViewModel
+import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun JobsScreen(
-    viewModel: JobsViewModel
+    viewModel: JobsViewModel,
+    navigateToCreateJob: () -> Unit,
+    navigateToConnectJob: () -> Unit,
 ){
     val jobs = listOf(
         DetailedJob(2, "East Fest 2023 Fesztivál", "Fishing On Orfű 2023 szöveg szöveg szöveg szöveg szöveg szöveg szöveg szöveg", "ASD123", Person(1, "Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com", null)),
@@ -80,7 +85,19 @@ fun JobsScreen(
                     IconButton(onClick = {
                         jobList.addAll(0, jobs)
                     }) {
-                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Examples")
+                        Icon(imageVector = Icons.Rounded.AddBox, contentDescription = "Add Examples")
+                    }
+
+                    IconButton(onClick = {
+                        navigateToCreateJob()
+                    }) {
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Create new job")
+                    }
+
+                    IconButton(onClick = {
+                        navigateToConnectJob()
+                    }) {
+                        Icon(imageVector = Icons.Rounded.AddLink, contentDescription = "Connect for job")
                     }
 
                 },
@@ -125,7 +142,7 @@ fun JobCard(job: DetailedJob, modifier: Modifier = Modifier, onClicked: (Int) ->
             defaultElevation = 10.dp
         ),
         colors = CardDefaults.cardColors(
-            containerColor = Color(211, 243, 107)
+            containerColor = LimeMain
         ),
         onClick = {
             onClicked(job.id)
