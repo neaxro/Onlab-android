@@ -5,14 +5,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobScreen
 import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobViewModel
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobScreen
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobViewModel
 import hu.bme.aut.android.securityapp.feature.mainmenu.MainMenuScreen
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailViewModel
 import hu.bme.aut.android.securityapp.feature.nojob.NoJobScreen
 import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
@@ -72,5 +76,25 @@ fun MyAppNavHost(
                     }
                 }
             }
+        }
+
+        composable(
+            route = Screen.JobDetail.route,
+            arguments = listOf(
+                navArgument("jobId"){type = NavType.IntType}
+            )
+        ){
+            val viewModel = hiltViewModel<JobDetailViewModel>()
+            JobDetailScreen(
+                jobId = it.arguments?.getInt("jobId")!!,
+                viewModel = viewModel,
+                onNavigateBack = {
+                    navController.navigate(Screen.MainMenu.route){
+                        popUpTo(Screen.JobDetail.route){
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }

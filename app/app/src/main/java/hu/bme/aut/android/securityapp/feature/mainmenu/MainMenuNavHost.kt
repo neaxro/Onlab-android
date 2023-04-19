@@ -40,6 +40,10 @@ fun MainMenuNavHost(
                 },
                 navigateToConnectJob = {
                     navController.navigate(Screen.ConnectToJob.route)
+                },
+                navigateToDetailJob = { jobId ->
+                    // TODO: Szebben megcsinálni a route-ot
+                    navController.navigate("jobdetail_screen/$jobId")
                 }
             )
         }
@@ -60,6 +64,5 @@ fun MainMenuNavHost(
             val createJobViewModel = hiltViewModel<CreateJobViewModel>()
             CreateJobScreen(viewModel = createJobViewModel, navController = mainMenuNavController)
         }
-
     }
 }
