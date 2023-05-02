@@ -7,12 +7,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.bme.aut.android.securityapp.constants.Constants
+import hu.bme.aut.android.securityapp.data.remote.DashboardApi
 import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
+import hu.bme.aut.android.securityapp.data.repository.DashboardRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.JobRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepositoryImpl
+import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
@@ -98,6 +101,21 @@ object AppModule {
             .create(JobApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideDashboardApi(): DashboardApi {
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HeaderInterceptor())
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(getUrl())
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(DashboardApi::class.java)
+    }
+
     // REPOSITORY-s
     @Provides
     @Singleton
@@ -124,5 +142,14 @@ object AppModule {
         app: Application
     ): JobRepository {
         return JobRepositoryImpl(api, app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDashboardRepository(
+        api: DashboardApi,
+        app: Application
+    ): DashboardRepository {
+        return DashboardRepositoryImpl(api, app)
     }
 }

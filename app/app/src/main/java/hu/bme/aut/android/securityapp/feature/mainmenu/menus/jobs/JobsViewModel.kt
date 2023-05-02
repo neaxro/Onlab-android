@@ -25,9 +25,6 @@ class JobsViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    // Choose a default job
-                    LoggedPerson.CURRENT_JOB_ID = result.data!![0].id
-
                     jobs.removeAll(jobs)
                     jobs.addAll(result.data!!)
                 }
@@ -41,8 +38,10 @@ class JobsViewModel @Inject constructor(
     }
 
     fun selectJob(jobId: Int, onSuccess: (String) -> Unit, onError: (String) -> Unit){
+        LoggedPerson.CURRENT_JOB_ID = jobId
+
         viewModelScope.launch(Dispatchers.IO) {
-            var token = repository.selectJob(jobId, LoggedPerson.ID)
+            var token = repository.selectJob(LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID)
 
             when(token){
                 is Resource.Success -> {

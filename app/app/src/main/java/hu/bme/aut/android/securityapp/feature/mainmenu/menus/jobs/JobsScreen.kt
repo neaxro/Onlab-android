@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.feature.mainmenu.menus
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.feature.common.JobCard
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobsViewModel
 
@@ -124,6 +126,7 @@ fun JobsScreen(
                         navigateToDetailJob(item.id)
                     },
                     onClicked = {
+                        Log.d("JOB_PERSON", "[SCREEN] JobId: ${LoggedPerson.CURRENT_JOB_ID} \tPersonId: ${LoggedPerson.ID}")
                         viewModel.selectJob(
                             item.id,
                             onSuccess = { successMessage ->
