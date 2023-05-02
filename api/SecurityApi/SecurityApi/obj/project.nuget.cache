@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NqaSxdi+TufgOPfvssedj18qV9/PplkAOAe7SShm6giKFNI8B1tAc74Ren8yNVtl+YQ1ugdxm3jFfGL3O/9ikw==",
+  "dgSpecHash": "wr48LUTldS1tIpt9XDS2HFcO/oN6U4AlWDB2lXLp6qC2LuNT/R4mGeDT/A6aamMijfSugLe62zZaG2n9GpztuQ==",
   "success": true,
   "projectFilePath": "C:\\GIT\\Onlab\\Onlab-android\\api\\SecurityApi\\SecurityApi\\SecurityApi.csproj",
   "expectedPackageFiles": [
@@ -60,6 +60,7 @@
     "C:\\Users\\Work\\.nuget\\packages\\microsoft.identitymodel.protocols\\6.21.0\\microsoft.identitymodel.protocols.6.21.0.nupkg.sha512",
     "C:\\Users\\Work\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\6.21.0\\microsoft.identitymodel.protocols.openidconnect.6.21.0.nupkg.sha512",
     "C:\\Users\\Work\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.27.0\\microsoft.identitymodel.tokens.6.27.0.nupkg.sha512",
+    "C:\\Users\\Work\\.nuget\\packages\\microsoft.net.build.containers\\0.3.2\\microsoft.net.build.containers.0.3.2.nupkg.sha512",
     "C:\\Users\\Work\\.nuget\\packages\\microsoft.net.stringtools\\17.3.2\\microsoft.net.stringtools.17.3.2.nupkg.sha512",
     "C:\\Users\\Work\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.1\\microsoft.netcore.platforms.1.1.1.nupkg.sha512",
     "C:\\Users\\Work\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",

@@ -131,7 +131,6 @@ namespace SecurityApi.Controllers
             {
                 var result = await _service.SelectJob(selectJob);
                 return Ok(new { Token = result });
-                //return Ok(result);
             } catch(Exception ex)
             {
                 return BadRequest(ex.Message);

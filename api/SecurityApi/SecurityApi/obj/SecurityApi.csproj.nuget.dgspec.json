@@ -72,6 +72,11 @@
               "target": "Package",
               "version": "[7.0.4, )"
             },
+            "Microsoft.NET.Build.Containers": {
+              "target": "Package",
+              "version": "[0.3.2, )",
+              "autoReferenced": true
+            },
             "Microsoft.OpenApi": {
               "target": "Package",
               "version": "[1.6.3, )"

@@ -11,6 +11,6 @@
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_DbContextTypeFullName>SecurityApi.Context.OnlabContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
-    <NameOfLastUsedPublishProfile>C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\GIT\Onlab\Onlab-android\api\SecurityApi\SecurityApi\Properties\PublishProfiles\registry.hub.docker.com_nemesaxel.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
