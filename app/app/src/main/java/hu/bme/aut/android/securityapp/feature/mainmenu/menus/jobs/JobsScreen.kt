@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobsViewModel
@@ -120,14 +121,7 @@ fun JobsScreen(
                 JobCard(
                     job = item,
                     onDetaileClicked = {
-                        // TODO: Detail navigation
                         navigateToDetailJob(item.id)
-
-                        Toast.makeText(
-                            context,
-                            "Detail clicked item with Title: ${it.title}!",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     },
                     onClicked = {
                         // TODO: network call
@@ -242,7 +236,12 @@ fun JobCard(
 @Preview(showBackground = true)
 @Composable
 fun PreviewScreenJobs() {
-    //JobsScreen(rem)
+    JobsScreen(
+        viewModel = viewModel(),
+        {},
+        {},
+        {}
+    )
 }
 
 @Preview(showBackground = false)

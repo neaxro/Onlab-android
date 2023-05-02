@@ -1,28 +1,27 @@
 package hu.bme.aut.android.securityapp.ui.viewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
-import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
-import javax.inject.Inject
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
 import hu.bme.aut.android.securityapp.data.model.people.LoginResponse
 import hu.bme.aut.android.securityapp.domain.repository.JobRepository
+import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: LoginRepository,
     private val jobRepository: JobRepository
 ): ViewModel() {
-    var username = mutableStateOf("")
-    var password = mutableStateOf("")
+    var username = mutableStateOf("nemesa")
+    var password = mutableStateOf("Asdasd11")
 
     var numberOfJobs = mutableStateOf(0)
 

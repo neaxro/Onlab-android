@@ -11,4 +11,6 @@ interface JobRepository {
     suspend fun createJob(createJobData: CreateJobData): Resource<Job>
 
     suspend fun connectPersonToJob(personId: Int, pin: String): Resource<DetailedJob>
+
+    suspend fun getJobById(jobId: Int): Resource<DetailedJob>
 }

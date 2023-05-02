@@ -2,6 +2,7 @@ package hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,10 +56,14 @@ fun JobDetailScreen(
     jobId: Int,
     onNavigateBack: () -> Unit
 ){
-    val scrollState = rememberScrollState()
-    var job = remember { viewModel.job }
+    val context = LocalContext.current
 
-    job.value = job.value.copy(title = "JobId: $jobId")
+    val scrollState = rememberScrollState()
+    val job = remember { viewModel.job }
+
+    viewModel.getJobById(jobId){ errorMessage ->
+        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+    }
 
     Scaffold(
         topBar = {

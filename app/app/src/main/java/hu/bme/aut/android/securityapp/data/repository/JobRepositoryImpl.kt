@@ -34,7 +34,7 @@ class JobRepositoryImpl (
 
     override suspend fun createJob(createJobData: CreateJobData): Resource<Job> {
         val createdJob = try{
-            var result = api.createJob(createJobData = createJobData)
+            val result = api.createJob(createJobData = createJobData)
 
             val data = if(result.isSuccessful && result.code() == 201){
                 Resource.Success(message = "Successful! Code: ${result.code()}", data = result.body()!!)
@@ -52,7 +52,7 @@ class JobRepositoryImpl (
     }
 
     override suspend fun connectPersonToJob(personId: Int, pin: String): Resource<DetailedJob> {
-        var connection = try{
+        val connection = try{
             val result = api.connectPersonToJob(personId = personId, jobPin = pin)
 
             val data = if(result.isSuccessful && result.code() == 201){
@@ -64,6 +64,25 @@ class JobRepositoryImpl (
 
             data
         } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
+    override suspend fun getJobById(jobId: Int): Resource<DetailedJob> {
+        val connection = try {
+            val result = api.getJobById(jobId = jobId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
             Resource.Error("Network error occured: ${e.message}")
         }
 

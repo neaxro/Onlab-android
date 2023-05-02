@@ -9,10 +9,14 @@ using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Dtos.RoleDtos;
 using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Enums;
+using SecurityApi.Model;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Job = SecurityApi.Dtos.JobDtos.Job;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
+
 
 namespace SecurityApi.Services
 {
@@ -303,7 +307,7 @@ namespace SecurityApi.Services
         public async Task<Job> Get(int jobId)
         {
             var job = await _context.Jobs
-                .Include(j => j.People)
+                //.Include(j => j.People)
                 .FirstOrDefaultAsync(j => j.Id == jobId);
 
             if(job == null)
@@ -353,6 +357,20 @@ namespace SecurityApi.Services
             }
 
             return _converter.ToModel(connection);
+        }
+
+        public async Task<DetailJob> GetDetailed(int jobId)
+        {
+            var job = await _context.Jobs
+                .Include(j => j.People)
+                .FirstOrDefaultAsync(j => j.Id == jobId);
+
+            if (job == null)
+            {
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            return _converter.ToDetailedModel(job);
         }
 
         public async Task<String> SelectJob(SelectJob selectJob)

@@ -67,6 +67,22 @@ namespace SecurityApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("{jobId}/detail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<DetailJob>> GetDetailed(int jobId)
+        {
+            try
+            {
+                var result = await _service.GetDetailed(jobId);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpGet("availablefor/{personId}")]
         public ActionResult<IEnumerable<DetailJob>> GetAllAvailableForPerson(int personId)
         {
