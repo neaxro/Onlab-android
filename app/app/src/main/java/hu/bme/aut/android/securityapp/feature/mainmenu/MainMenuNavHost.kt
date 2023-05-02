@@ -23,7 +23,7 @@ fun MainMenuNavHost(
     modifier: Modifier = Modifier,
     navController: NavController,
     mainMenuNavController: NavHostController,
-    startDestination: String = Screen.Jobs.route
+    startDestination: String = Screen.Dashboard.route
 ){
     NavHost(
         modifier = modifier
@@ -51,7 +51,12 @@ fun MainMenuNavHost(
 
         composable(route = Screen.Dashboard.route){
             val dashboardViewModel = hiltViewModel<DashboardViewModel>()
-            DashboardScreen(viewModel = dashboardViewModel)
+            DashboardScreen(
+                viewModel = dashboardViewModel,
+                navigateToCreateMessage = {
+                    navController.navigate(Screen.CreateDashboardMessage.route)
+                }
+            )
         }
 
         composable(route = Screen.Shift.route){

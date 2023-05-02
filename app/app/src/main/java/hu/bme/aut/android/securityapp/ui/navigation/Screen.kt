@@ -11,6 +11,7 @@ sealed class Screen(val route: String){
     object Jobs: Screen(route = "jobs_screen")
     object JobDetail: Screen(route = "jobdetail_screen/{jobId}")
     object Dashboard: Screen(route = "dashboard_screen")
+    object CreateDashboardMessage: Screen(route = "create_dashboard_screen")
     object Shift: Screen(route = "shift_screen")
     object Statistics: Screen(route = "statistics_screen")
 }

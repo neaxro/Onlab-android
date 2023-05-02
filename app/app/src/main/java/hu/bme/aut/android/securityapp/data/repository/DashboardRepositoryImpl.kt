@@ -29,4 +29,8 @@ class DashboardRepositoryImpl (
 
         return connection
     }
+
+    override suspend fun createDashboard() {
+        TODO("Not yet implemented")
+    }
 }

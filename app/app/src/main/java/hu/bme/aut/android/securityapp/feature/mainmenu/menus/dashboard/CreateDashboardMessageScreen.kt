@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +12,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material.icons.rounded.Title
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -25,6 +30,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,15 +38,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.data.model.wage.Wage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateDashboardMessgaeScreen(
+    viewModel: CreateDashboardMessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     navigateBack: () -> Unit
 ){
+    val context = LocalContext.current
     val maxTitleLength = 20
     val maxMessageLength = 200
 
@@ -50,6 +60,20 @@ fun CreateDashboardMessgaeScreen(
 
     var message by remember { mutableStateOf("") }
     var messageLength by remember { mutableStateOf(0) }
+
+    var expanded by remember { mutableStateOf(false) }
+    var categories = remember { viewModel.categories }
+
+    var selectedItem by remember {
+        mutableStateOf<Wage?>(null)
+    }
+
+
+    LaunchedEffect(true){
+        viewModel.loadCategories { errorMessage ->
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -144,6 +168,54 @@ fun CreateDashboardMessgaeScreen(
                         .width(300.dp),
                 )
 
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = {
+                        expanded = it
+                    }
+                ) {
+                    OutlinedTextField(
+                        value = selectedItem?.name ?: "",
+                        onValueChange = {},
+                        label = {
+                            Text(text = "Category")
+                        },
+                        leadingIcon = {
+                              Icon(
+                                  imageVector = Icons.Rounded.Category,
+                                  contentDescription = "Categories"
+                              )
+                        },
+                        readOnly = true,
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        },
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                        modifier = Modifier
+                            .menuAnchor()
+                            .width(300.dp),
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        categories.forEach { category ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = category.name)
+                                       },
+                                onClick = {
+                                    selectedItem = category
+                                    expanded = false
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(30.dp))
+
                 OutlinedButton(
                     onClick = {
                         // TODO: click
@@ -178,7 +250,5 @@ private fun checkTitle(title: String): Boolean{
 @Preview(showBackground = true)
 @Composable
 fun CreateDashboardMessgaeScreenPreview(){
-    CreateDashboardMessgaeScreen(
-        navigateBack = {}
-    )
+    //CreateDashboardMessgaeScreen(navigateBack = {})
 }

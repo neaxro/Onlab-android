@@ -15,6 +15,8 @@ import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobViewModel
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobScreen
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobViewModel
 import hu.bme.aut.android.securityapp.feature.mainmenu.MainMenuScreen
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.CreateDashboardMessageViewModel
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.CreateDashboardMessgaeScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailViewModel
 import hu.bme.aut.android.securityapp.feature.nojob.NoJobScreen
@@ -91,6 +93,20 @@ fun MyAppNavHost(
                 onNavigateBack = {
                     navController.navigate(Screen.MainMenu.route){
                         popUpTo(Screen.JobDetail.route){
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
+        composable(route = Screen.CreateDashboardMessage.route){
+            val viewModel = hiltViewModel<CreateDashboardMessageViewModel>()
+            CreateDashboardMessgaeScreen(
+                viewModel = viewModel,
+                navigateBack = {
+                    navController.navigate(Screen.MainMenu.route){
+                        popUpTo(Screen.CreateDashboardMessage.route){
                             inclusive = true
                         }
                     }

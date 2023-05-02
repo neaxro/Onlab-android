@@ -38,7 +38,8 @@ import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.Dashboard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel
+    viewModel: DashboardViewModel,
+    navigateToCreateMessage: () -> Unit,
 ){
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
@@ -77,7 +78,7 @@ fun DashboardScreen(
             if(role is Roles.Owner || role is Roles.Admin){
                 FloatingActionButton(
                     onClick = {
-                          // Todo: Uj uzenet letrehozasa
+                          navigateToCreateMessage()
                     },
                     shape = ShapeDefaults.Medium,
                     content = {

@@ -11,14 +11,17 @@ import hu.bme.aut.android.securityapp.data.remote.DashboardApi
 import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
+import hu.bme.aut.android.securityapp.data.remote.WageApi
 import hu.bme.aut.android.securityapp.data.repository.DashboardRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.JobRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepositoryImpl
+import hu.bme.aut.android.securityapp.data.repository.WageRepositoryImpl
 import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
+import hu.bme.aut.android.securityapp.domain.repository.WageRepository
 import hu.bme.aut.android.securityapp.network.HeaderInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -104,16 +107,21 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDashboardApi(): DashboardApi {
-        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(HeaderInterceptor())
-            .build()
-
         return Retrofit.Builder()
             .baseUrl(getUrl())
-            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DashboardApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWageApi(): WageApi {
+        return Retrofit.Builder()
+            .baseUrl(getUrl())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(WageApi::class.java)
     }
 
     // REPOSITORY-s
@@ -151,5 +159,14 @@ object AppModule {
         app: Application
     ): DashboardRepository {
         return DashboardRepositoryImpl(api, app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWageRepository(
+        api: WageApi,
+        app: Application
+    ): WageRepository {
+        return WageRepositoryImpl(api, app)
     }
 }
