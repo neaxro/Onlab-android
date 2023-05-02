@@ -87,6 +87,9 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.2'
+
+    // JWT token decoder
+    implementation 'com.auth0.android:jwtdecode:2.0.2'
 }
 
 // Allow references to generated code | Dagger hilt

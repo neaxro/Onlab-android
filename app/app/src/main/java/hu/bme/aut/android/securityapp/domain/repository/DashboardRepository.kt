@@ -5,4 +5,6 @@ import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 interface DashboardRepository {
     suspend fun getAllDashboards(jobId: Int, personId: Int): Resource<List<Dashboard>>
+
+    suspend fun createDashboard()
 }

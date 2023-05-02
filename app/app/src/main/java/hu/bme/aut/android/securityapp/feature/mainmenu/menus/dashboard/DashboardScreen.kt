@@ -7,9 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.Person
+import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.feature.common.DashboardCard
 import hu.bme.aut.android.securityapp.feature.common.WelcomeBoard
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.DashboardViewModel
@@ -62,6 +69,23 @@ fun DashboardScreen(
                     colors = TopAppBarDefaults.mediumTopAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                     ),
+                )
+            }
+        },
+        floatingActionButton = {
+            val role = LoggedPerson.getRole()
+            if(role is Roles.Owner || role is Roles.Admin){
+                FloatingActionButton(
+                    onClick = {
+                          // Todo: Uj uzenet letrehozasa
+                    },
+                    shape = ShapeDefaults.Medium,
+                    content = {
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = "Create new message"
+                        )
+                    }
                 )
             }
         }
