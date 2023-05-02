@@ -1,7 +1,5 @@
 package hu.bme.aut.android.securityapp.feature.mainmenu.menus
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -26,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.people.Person
+import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobsViewModel
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 import java.util.*
@@ -170,11 +168,8 @@ fun JobCard(
                     .padding(5.dp)
             ) {
                 if (job.owner.profilePicture != null) {
-                    val imageBytes = Base64.getDecoder().decode(job.owner.profilePicture)
-                    val image: Bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-
                     Image(
-                        bitmap = image.asImageBitmap(),
+                        bitmap = job.owner.getProfileBitmap(),
                         contentDescription = "Owner profile picture",
                         modifier = Modifier
                             .size(50.dp)

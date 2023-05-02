@@ -41,7 +41,10 @@ interface JobApi {
     ): Response<DetailedJob>
 
     @POST("/api/job/select")
-    suspend fun selectJob(@Body selectJobData: SelectJobData)
+    suspend fun selectJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Body selectJobData: SelectJobData
+    ): Response<String>
 
     @PATCH("/api/job/changerole/{jobId}")
     suspend fun changeRoleForPerson(@Path("jobId") jobId: Int, @Body changeRoleData: ChangeRoleData)

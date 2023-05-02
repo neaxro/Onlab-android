@@ -1,7 +1,5 @@
 package hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,14 +38,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.Base64
+import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,11 +116,8 @@ fun JobDetailScreen(
                 ) {
 
                     if(job.value.owner.profilePicture != null) {
-                        val imageBytes = Base64.getDecoder().decode(job.value.owner.profilePicture)
-                        val image: Bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-
                         Image(
-                            bitmap = image.asImageBitmap(),
+                            bitmap = job.value.owner.getProfileBitmap(),
                             contentDescription = "Profile picture",
                             modifier = Modifier
                                 .size(100.dp)
