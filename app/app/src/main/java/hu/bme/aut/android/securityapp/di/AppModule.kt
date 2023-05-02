@@ -2,7 +2,6 @@ package hu.bme.aut.android.securityapp.di
 
 import android.app.Application
 import android.os.Build
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +20,6 @@ import hu.bme.aut.android.securityapp.network.HeaderInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module

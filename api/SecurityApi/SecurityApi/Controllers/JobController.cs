@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Common;
 using SecurityApi.Context;
 using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
@@ -129,7 +130,8 @@ namespace SecurityApi.Controllers
             try
             {
                 var result = await _service.SelectJob(selectJob);
-                return Ok(result);
+                return Ok(new { Token = result });
+                //return Ok(result);
             } catch(Exception ex)
             {
                 return BadRequest(ex.Message);

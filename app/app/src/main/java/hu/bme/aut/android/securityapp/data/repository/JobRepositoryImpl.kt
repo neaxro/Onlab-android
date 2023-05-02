@@ -4,6 +4,8 @@ import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.job.CreateJobData
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.job.Job
+import hu.bme.aut.android.securityapp.data.model.job.JobSelectToken
+import hu.bme.aut.android.securityapp.data.model.job.SelectJobData
 import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
@@ -87,5 +89,26 @@ class JobRepositoryImpl (
         }
 
         return connection
+    }
+
+    override suspend fun selectJob(jobId: Int, personId: Int): Resource<JobSelectToken> {
+        val selectJobData = SelectJobData(jobId, personId)
+
+        val token = try {
+            val result = api.selectJob(selectJobData = selectJobData)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Job succesfully selected!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return token
     }
 }

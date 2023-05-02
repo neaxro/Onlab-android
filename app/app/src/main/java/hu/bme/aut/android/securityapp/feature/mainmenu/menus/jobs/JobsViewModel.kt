@@ -19,17 +19,43 @@ class JobsViewModel @Inject constructor(
 
     var jobs: MutableList<DetailedJob> = mutableStateListOf()
 
-    fun loadAllJobs(){
+    fun loadAllJobs(onError: (String) -> Unit){
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getAllJobForPerson(LoggedPerson.ID)
 
             when(result){
                 is Resource.Success -> {
+                    // Choose a default job
+                    LoggedPerson.CURRENT_JOB_ID = result.data!![0].id
+
                     jobs.removeAll(jobs)
                     jobs.addAll(result.data!!)
                 }
                 is Resource.Error -> {
-                    // TODO: Show error!
+                    viewModelScope.launch(Dispatchers.Main) {
+                        onError(result.message!!)
+                    }
+                }
+            }
+        }
+    }
+
+    fun selectJob(jobId: Int, onSuccess: (String) -> Unit, onError: (String) -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {
+            var token = repository.selectJob(jobId, LoggedPerson.ID)
+
+            when(token){
+                is Resource.Success -> {
+                    LoggedPerson.TOKEN = token.data!!.token
+
+                    viewModelScope.launch(Dispatchers.Main) {
+                        onSuccess("Successfully selected!")
+                    }
+                }
+                is Resource.Error -> {
+                    viewModelScope.launch(Dispatchers.Main) {
+                        onError(token.message!!)
+                    }
                 }
             }
         }
