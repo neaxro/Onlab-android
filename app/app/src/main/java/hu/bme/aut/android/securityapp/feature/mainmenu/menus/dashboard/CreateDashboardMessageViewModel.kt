@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
+import hu.bme.aut.android.securityapp.data.model.dashboard.CreateDashboardData
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.repository.WageRepository
@@ -21,6 +22,7 @@ class CreateDashboardMessageViewModel @Inject constructor(
 
     var title = mutableStateOf("")
     var message = mutableStateOf("")
+    var selectedCategory = mutableStateOf<Wage?>(null)
 
     var categories = mutableListOf<Wage>()
 
@@ -43,5 +45,32 @@ class CreateDashboardMessageViewModel @Inject constructor(
 
     fun createMessage(onSuccess: () -> Unit, onError: (String) -> Unit){
 
+        if(selectedCategory.value == null){
+            return
+        }
+
+        val newDashboard = CreateDashboardData(
+            title = title.value,
+            message = message.value,
+            jobid = LoggedPerson.CURRENT_JOB_ID,
+            creatorId = LoggedPerson.ID,
+            groupId = selectedCategory.value!!.id
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repository.createDashboard(newDashboard)
+
+            when(result){
+                is Resource.Success -> {
+                    viewModelScope.launch(Dispatchers.Main) {
+                        onSuccess()
+                    }
+                    loadCategories(onError)
+                }
+                is Resource.Error -> {
+                    onError(result.message!!)
+                }
+            }
+        }
     }
 }

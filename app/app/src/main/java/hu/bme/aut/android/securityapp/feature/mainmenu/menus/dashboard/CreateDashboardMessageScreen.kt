@@ -40,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 
@@ -54,19 +53,17 @@ fun CreateDashboardMessgaeScreen(
     val maxTitleLength = 20
     val maxMessageLength = 200
 
-    var title by remember { mutableStateOf("") }
+    var title by remember { viewModel.title }
     var titleLength by remember { mutableStateOf(0) }
     var titleError by remember { mutableStateOf(false) }
 
-    var message by remember { mutableStateOf("") }
+    var message by remember { viewModel.message }
     var messageLength by remember { mutableStateOf(0) }
 
     var expanded by remember { mutableStateOf(false) }
-    var categories = remember { viewModel.categories }
 
-    var selectedItem by remember {
-        mutableStateOf<Wage?>(null)
-    }
+    var categories = remember { viewModel.categories }
+    var selectedItem by remember { viewModel.selectedCategory }
 
 
     LaunchedEffect(true){
@@ -218,7 +215,18 @@ fun CreateDashboardMessgaeScreen(
 
                 OutlinedButton(
                     onClick = {
-                        // TODO: click
+                        val canUpload = isReadyForUpload(titleError, selectedItem){ errorMessage ->
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                        }
+
+                        if(canUpload){
+                            viewModel.createMessage(
+                                onSuccess = navigateBack,
+                                onError = { errorMessage ->
+                                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                        }
                     }
                 ) {
                     Row(
@@ -244,11 +252,16 @@ private fun checkTitle(title: String): Boolean{
 
     val result = title.contains(numberRegex) || title.contains(specialCharacterRegex)
 
-    return result
+    return title.length == 0 && result
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CreateDashboardMessgaeScreenPreview(){
-    //CreateDashboardMessgaeScreen(navigateBack = {})
+private fun isReadyForUpload(titleError: Boolean, category: Wage?, onError: (String) -> Unit): Boolean{
+    if(titleError) return false
+
+    if(category == null){
+        onError("Select a category!")
+        return false
+    }
+
+    return true
 }

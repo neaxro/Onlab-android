@@ -1,6 +1,7 @@
 package hu.bme.aut.android.securityapp.data.repository
 
 import android.app.Application
+import hu.bme.aut.android.securityapp.data.model.dashboard.CreateDashboardData
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.remote.DashboardApi
 import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
@@ -30,7 +31,22 @@ class DashboardRepositoryImpl (
         return connection
     }
 
-    override suspend fun createDashboard() {
-        TODO("Not yet implemented")
+    override suspend fun createDashboard(dashboard: CreateDashboardData): Resource<Dashboard> {
+        val connection = try {
+            val result = api.insertDashboard(dashboard = dashboard)
+
+            val data = if(result.isSuccessful && result.code() == 201){
+                Resource.Success(message = "Dashboard succesfully created!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
     }
 }
