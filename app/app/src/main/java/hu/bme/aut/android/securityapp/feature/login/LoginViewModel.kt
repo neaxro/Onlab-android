@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(
 
     var numberOfJobs = mutableStateOf(0)
 
-    fun LoginUser(onSuccess: (Int) -> Unit, onError: (String) -> Unit){
+    fun loginUser(onSuccess: (Int) -> Unit, onError: (String) -> Unit){
         if(username.value.isEmpty() || password.value.isEmpty()) return
 
         val loginData = LoginData(username.value.trim(), password.value.trim())
@@ -35,7 +35,7 @@ class LoginViewModel @Inject constructor(
             when(loginResult){
                 is Resource.Success<LoginResponse> -> {
                     LoggedPerson.ID = loginResult.data!!.id
-                    LoggedPerson.TOKEN = loginResult.data!!.token
+                    LoggedPerson.TOKEN = loginResult.data.token
 
                     // Check for number of jobs the Person is participated
                     checkPersonJobs(LoggedPerson.ID, jobRepository, this@LoginViewModel){

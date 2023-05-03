@@ -9,7 +9,7 @@ import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 class DashboardRepositoryImpl (
     private val api: DashboardApi,
-    private val appContext: Application
+    private val app: Application
 ): DashboardRepository {
 
     override suspend fun getAllDashboards( jobId: Int, personId: Int): Resource<List<Dashboard>> {

@@ -62,7 +62,7 @@ fun CreateDashboardMessgaeScreen(
 
     var expanded by remember { mutableStateOf(false) }
 
-    var categories = remember { viewModel.categories }
+    val categories = remember { viewModel.categories }
     var selectedItem by remember { viewModel.selectedCategory }
 
 
@@ -248,7 +248,7 @@ fun CreateDashboardMessgaeScreen(
 
 private fun checkTitle(title: String): Boolean{
     val numberRegex = Regex("^[0-9*#+]+\$")
-    val specialCharacterRegex = Regex("[!\\\"#\$%&'()*+,-./:;\\\\\\\\<=>?@\\\\[\\\\]^_`{|}~]")
+    val specialCharacterRegex = Regex("[!#\$%&'()*+,-./:;\\\\<=>?@[\\\\]^_`{|}~]")
 
     val result = title.contains(numberRegex) || title.contains(specialCharacterRegex)
 

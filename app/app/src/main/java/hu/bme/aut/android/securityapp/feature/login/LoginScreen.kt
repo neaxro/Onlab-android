@@ -106,7 +106,7 @@ fun LoginScreen(
                     passwordError.value = true
                 }
 
-                viewModel.LoginUser(
+                viewModel.loginUser(
                     onSuccess = { numberOfJobs ->
                     // If login is successful navigate to the proper screen
                     if(numberOfJobs > 0){

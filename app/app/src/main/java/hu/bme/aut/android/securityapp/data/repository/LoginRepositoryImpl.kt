@@ -9,7 +9,7 @@ import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 class LoginRepositoryImpl(
     private val api: LoginApi,
-    private val appContext: Application
+    private val app: Application
 ): LoginRepository {
     override suspend fun loginPerson(loginData: LoginData): Resource<LoginResponse> {
 

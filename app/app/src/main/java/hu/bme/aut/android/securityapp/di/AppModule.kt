@@ -1,7 +1,6 @@
 package hu.bme.aut.android.securityapp.di
 
 import android.app.Application
-import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,49 +33,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    val isProbablyRunningOnEmulator: Boolean by lazy {
-        // Android SDK emulator
-        return@lazy ((Build.MANUFACTURER == "Google" && Build.BRAND == "google" &&
-                ((Build.FINGERPRINT.startsWith("google/sdk_gphone_")
-                        && Build.FINGERPRINT.endsWith(":user/release-keys")
-                        && Build.PRODUCT.startsWith("sdk_gphone_")
-                        && Build.MODEL.startsWith("sdk_gphone_"))
-                        //alternative
-                        || (Build.FINGERPRINT.startsWith("google/sdk_gphone64_")
-                        && (Build.FINGERPRINT.endsWith(":userdebug/dev-keys") || Build.FINGERPRINT.endsWith(":user/release-keys"))
-                        && Build.PRODUCT.startsWith("sdk_gphone64_")
-                        && Build.MODEL.startsWith("sdk_gphone64_"))))
-                //
-                || Build.FINGERPRINT.startsWith("generic")
-                || Build.FINGERPRINT.startsWith("unknown")
-                || Build.MODEL.contains("google_sdk")
-                || Build.MODEL.contains("Emulator")
-                || Build.MODEL.contains("Android SDK built for x86")
-                //bluestacks
-                || "QC_Reference_Phone" == Build.BOARD && !"Xiaomi".equals(Build.MANUFACTURER, ignoreCase = true)
-                //bluestacks
-                || Build.MANUFACTURER.contains("Genymotion")
-                || Build.HOST.startsWith("Build")
-                //MSI App Player
-                || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
-                || Build.PRODUCT == "google_sdk")
-    }
 
-    private fun getUrl(): String{
-        return Constants.SERVER_ADDRESS
-
-        return if(isProbablyRunningOnEmulator)
-            Constants.SERVER_ADDRESS
-        else
-            Constants.SERVER_ADDRESS_NOT_EMULATOR
-    }
 
     // API-s
     @Provides
     @Singleton
     fun provideLoginApi(): LoginApi {
         return Retrofit.Builder()
-            .baseUrl(getUrl())
+            .baseUrl(Constants.SERVER_ADDRESS)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LoginApi::class.java)
@@ -86,7 +50,7 @@ object AppModule {
     @Singleton
     fun provideRegisterApi(): RegisterApi {
         return Retrofit.Builder()
-            .baseUrl(getUrl())
+            .baseUrl(Constants.SERVER_ADDRESS)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RegisterApi::class.java)
@@ -100,7 +64,7 @@ object AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(getUrl())
+            .baseUrl(Constants.SERVER_ADDRESS)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -111,7 +75,7 @@ object AppModule {
     @Singleton
     fun provideDashboardApi(): DashboardApi {
         return Retrofit.Builder()
-            .baseUrl(getUrl())
+            .baseUrl(Constants.SERVER_ADDRESS)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DashboardApi::class.java)
@@ -121,7 +85,7 @@ object AppModule {
     @Singleton
     fun provideWageApi(): WageApi {
         return Retrofit.Builder()
-            .baseUrl(getUrl())
+            .baseUrl(Constants.SERVER_ADDRESS)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(WageApi::class.java)
@@ -131,7 +95,7 @@ object AppModule {
     @Singleton
     fun providePersonApi(): PersonApi {
         return Retrofit.Builder()
-            .baseUrl(getUrl())
+            .baseUrl(Constants.SERVER_ADDRESS)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(PersonApi::class.java)

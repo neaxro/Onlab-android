@@ -1,9 +1,6 @@
 package hu.bme.aut.android.securityapp.feature.createJob
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel

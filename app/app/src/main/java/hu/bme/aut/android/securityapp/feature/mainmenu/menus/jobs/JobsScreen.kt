@@ -116,7 +116,7 @@ fun JobsScreen(
                     end = 10.dp
                 ),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalItemSpacing = 10.dp,
+            verticalItemSpacing = 5.dp,
             state = scrollState
         ) {
             items(jobList) { item ->
@@ -136,7 +136,8 @@ fun JobsScreen(
                                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         )
-                    }
+                    },
+                    modifier = Modifier.padding(top = 10.dp)
                 )
             }
         }

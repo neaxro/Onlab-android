@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.feature.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,12 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.people.Person
-import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +36,8 @@ fun JobCard(
     job: DetailedJob,
     modifier: Modifier = Modifier,
     onDetaileClicked: (DetailedJob) -> Unit,
-    onClicked: (Int) -> Unit
+    onClicked: (Int) -> Unit,
+    canEdit: Boolean = false
 ) {
     Card(
         modifier = modifier
@@ -69,57 +65,63 @@ fun JobCard(
                     .fillMaxWidth()
                     .padding(5.dp)
             ) {
-                if (job.owner.profilePicture != null) {
-                    Image(
-                        bitmap = job.owner.getProfileBitmap(),
-                        contentDescription = "Owner profile picture",
+                Text(
+                    text = job.title,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+
+                Column {
+                    IconButton(
+                        onClick = {
+                            onDetaileClicked(job)
+                        },
                         modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape),
-                    )
-                }
-                else{
-                    Image(
-                        imageVector = Icons.Rounded.Person,
-                        contentDescription = "Owner profile picture",
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape),
-                    )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Info,
+                            contentDescription = "Show details",
+                        )
+                    }
+                    /*
+                    if (job.owner.profilePicture != null) {
+                        Image(
+                            bitmap = job.owner.getProfileBitmap(),
+                            contentDescription = "Owner profile picture",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clip(CircleShape),
+                        )
+                    }
+                    else{
+                        Image(
+                            imageVector = Icons.Rounded.Person,
+                            contentDescription = "Owner profile picture",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clip(CircleShape),
+                        )
+                    }*/
                 }
 
-                IconButton(
-                    modifier = Modifier,
-                    onClick = {
-                        onDetaileClicked(job)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Info,
-                        contentDescription = "Show details",
-                    )
-                }
             }
 
-            Text(
-                text = job.title,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 10.dp)
-            )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(5.dp))
                     .background(Color.Black)
-                    .padding(10.dp)
+                    .padding(14.dp)
             ) {
                 if (job.description.isNotEmpty()) {
                     Text(
                         text = job.description,
                         color = Color(211, 243, 107),
-                        fontSize = 15.sp,
+                        fontSize = 10.sp,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -133,7 +135,7 @@ fun JobCard(
 @Composable
 fun PreviewJobCard() {
     val jobData = DetailedJob(
-        2, "Fishong On orfű 2023 nagyon fa", "Fishing On Orfű 2023 nagyon faxa feszt Fishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa feszt", "ASD123",
+        2, "Fishong On orfű 2023 nagyon faasdasdasdasd asd asd", "Fishing On Orfű 2023 nagyon faxa feszt Fishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa fesztFishing On Orfű 2023 nagyon faxa feszt", "ASD123",
         Person(1, "Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com", null)
     )
 

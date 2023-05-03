@@ -41,7 +41,7 @@ class JobsViewModel @Inject constructor(
         LoggedPerson.CURRENT_JOB_ID = jobId
 
         viewModelScope.launch(Dispatchers.IO) {
-            var token = repository.selectJob(LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID)
+            val token = repository.selectJob(LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID)
 
             when(token){
                 is Resource.Success -> {

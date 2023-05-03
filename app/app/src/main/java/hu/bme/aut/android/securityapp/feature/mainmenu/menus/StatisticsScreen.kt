@@ -16,7 +16,7 @@ fun StatisticsScreen(){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text(text = "Statistics SCREEN")
+        Text(text = "More SCREEN")
     }
 }
 

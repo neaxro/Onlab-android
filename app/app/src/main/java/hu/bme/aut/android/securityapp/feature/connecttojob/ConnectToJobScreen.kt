@@ -39,7 +39,7 @@ fun ConnectToJobScreen(
     onSuccess: () -> Unit
 ){
     val context = LocalContext.current
-    var digits = remember {
+    val digits = remember {
         viewModel.digits
     }
 
@@ -68,7 +68,7 @@ fun ConnectToJobScreen(
                 if(digits.value.length == viewModel.numberOfDigits){
 
                     // Connect person to job
-                    viewModel.connectPersonToJob(onSuccess = { onSuccess() }){ errorMessage ->
+                    viewModel.connectPersonToJob(onSuccess = onSuccess){ errorMessage ->
                         Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
                     }
                     Log.d("CONNECTJOB_KEYBOARDACTION", "Digits: $digits")

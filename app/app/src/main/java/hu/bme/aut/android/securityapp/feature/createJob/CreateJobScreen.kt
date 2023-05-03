@@ -93,16 +93,3 @@ fun screenPrev(){
         rememberNavController()
     )
 }
-
-private fun validateName(name: String): String{
-    if(name.isEmpty()) return "Name must not be empty!"
-    if(name.length > 30) return "Name is too long!"
-
-    return ""
-}
-
-private fun validateDesc(desc: String): String{
-    if(desc.length > 150) return "Description is too long!"
-
-    return ""
-}

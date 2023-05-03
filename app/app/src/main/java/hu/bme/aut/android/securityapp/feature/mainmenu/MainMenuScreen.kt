@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Dashboard
-import androidx.compose.material.icons.rounded.Leaderboard
+import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Work
 import androidx.compose.material3.*
@@ -38,7 +38,7 @@ fun MainMenuScreen(
         NavigationItem(name = "Jobs", screen = Screen.Jobs, icon = Icons.Rounded.Work, badgeCount = 0),
         NavigationItem(name = "Dashboard", screen = Screen.Dashboard, icon = Icons.Rounded.Dashboard, badgeCount = 0),
         NavigationItem(name = "Shift", screen = Screen.Shift, icon = Icons.Rounded.Shield, badgeCount = 0),
-        NavigationItem(name = "Statistics", screen = Screen.Statistics, icon = Icons.Rounded.Leaderboard, badgeCount = 0),
+        NavigationItem(name = "More", screen = Screen.Statistics, icon = Icons.Rounded.MoreHoriz, badgeCount = 0),
     )
 
     Scaffold(
@@ -114,6 +114,6 @@ fun BottomNavigationBar(
 
 @Preview(showBackground = true)
 @Composable
-fun showBottomNavBar(){
+fun ShowBottomNavBar(){
     MainMenuScreen(rememberNavController())
 }
