@@ -21,15 +21,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
-import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.feature.common.DashboardCard
 import hu.bme.aut.android.securityapp.feature.common.WelcomeBoard
@@ -44,15 +43,17 @@ fun DashboardScreen(
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
 
-    val person by remember {
-        mutableStateOf(Person(0, "Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com", null))
-    }
-
+    val person by remember { viewModel.person }
     val messages = remember { viewModel.dashboardMessages }
 
-    viewModel.loadAllDashboards { errorMessage ->
-        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+    LaunchedEffect(true){
+        viewModel.loadAllDashboards { errorMessage ->
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.loadPersonData()
     }
+
 
     Scaffold(
         topBar = {

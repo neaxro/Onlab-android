@@ -10,16 +10,19 @@ import hu.bme.aut.android.securityapp.constants.Constants
 import hu.bme.aut.android.securityapp.data.remote.DashboardApi
 import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
+import hu.bme.aut.android.securityapp.data.remote.PersonApi
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
 import hu.bme.aut.android.securityapp.data.remote.WageApi
 import hu.bme.aut.android.securityapp.data.repository.DashboardRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.JobRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
+import hu.bme.aut.android.securityapp.data.repository.PersonRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.WageRepositoryImpl
 import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
+import hu.bme.aut.android.securityapp.domain.repository.PersonRepository
 import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.repository.WageRepository
 import hu.bme.aut.android.securityapp.network.HeaderInterceptor
@@ -124,6 +127,16 @@ object AppModule {
             .create(WageApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun providePersonApi(): PersonApi {
+        return Retrofit.Builder()
+            .baseUrl(getUrl())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(PersonApi::class.java)
+    }
+
     // REPOSITORY-s
     @Provides
     @Singleton
@@ -168,5 +181,14 @@ object AppModule {
         app: Application
     ): WageRepository {
         return WageRepositoryImpl(api, app)
+    }
+
+    @Provides
+    @Singleton
+    fun providePersonRepository(
+        api: PersonApi,
+        app: Application
+    ): PersonRepository {
+        return PersonRepositoryImpl(api, app)
     }
 }
