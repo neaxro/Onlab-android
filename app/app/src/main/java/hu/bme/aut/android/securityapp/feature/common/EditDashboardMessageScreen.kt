@@ -43,20 +43,26 @@ import hu.bme.aut.android.securityapp.data.model.wage.Wage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditDashboardMessageScreen(
+    message: CreateDashboardData = CreateDashboardData("", "", LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID, 0),
     wages: List<Wage>,
     onUpload: (CreateDashboardData) -> Unit,
+    isReadOnly: Boolean = false,
     modifier: Modifier = Modifier,
 ){
     val context = LocalContext.current
     val maxTitleLength = 20
     val maxMessageLength = 200
 
-    var message by remember { mutableStateOf(CreateDashboardData("", "", LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID, 0)) }
+    var message by remember { mutableStateOf(message) }
     var titleLength by remember { mutableStateOf(0) }
     var messageLength by remember { mutableStateOf(0) }
     var titleError by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var selectedItem: Wage? by remember { mutableStateOf(null) }
+
+    if(message.groupId > 0 && wages.isNotEmpty()){
+        selectedItem = wages.first { it.id == message.groupId }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,6 +102,8 @@ fun EditDashboardMessageScreen(
                     Icon(imageVector = Icons.Rounded.Check, contentDescription = "Valid Title", tint = Color.Green)
                 }
             },
+            readOnly = isReadOnly,
+            enabled = !isReadOnly,
             modifier = Modifier.width(300.dp)
         )
 
@@ -119,6 +127,8 @@ fun EditDashboardMessageScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
             },
+            readOnly = isReadOnly,
+            enabled = !isReadOnly,
             modifier = Modifier
                 .height(180.dp)
                 .width(300.dp),
@@ -142,11 +152,12 @@ fun EditDashboardMessageScreen(
                         contentDescription = "Categories"
                     )
                 },
-                readOnly = true,
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                enabled = !isReadOnly,
+                readOnly = true,
                 modifier = Modifier
                     .menuAnchor()
                     .width(300.dp),
@@ -230,7 +241,9 @@ fun EditDashboardMessageScreenPreview(){
         Wage(3, "Special", 1000, "Valami"),
     )
     EditDashboardMessageScreen(
+        message = CreateDashboardData("Valami", "Hello vilag mi a helyzet?", LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID, 2),
         wages = wages,
-        onUpload = {}
+        onUpload = {},
+        isReadOnly = true
     )
 }
