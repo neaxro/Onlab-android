@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SecurityApi.props" />
+</Project>

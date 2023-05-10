@@ -247,12 +247,12 @@ fun CreateDashboardMessgaeScreen(
 }
 
 private fun checkTitle(title: String): Boolean{
-    val numberRegex = Regex("^[0-9*#+]+\$")
-    val specialCharacterRegex = Regex("[!#\$%&'()*+,-./:;\\\\<=>?@[\\\\]^_`{|}~]")
+    val numberRegex = Regex(".*[0-9]+.*")
+    val specialCharacterRegex = Regex(".*[!#\$%&'()*+,-./:;\\\\<=>?@[\\\\]^_`{|}~].*")
 
-    val result = title.contains(numberRegex) || title.contains(specialCharacterRegex)
+    val result = title.matches(numberRegex) || title.matches(specialCharacterRegex)
 
-    return title.length == 0 && result
+    return title.isEmpty() || result
 }
 
 private fun isReadyForUpload(titleError: Boolean, category: Wage?, onError: (String) -> Unit): Boolean{
