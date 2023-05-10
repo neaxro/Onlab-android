@@ -11,6 +11,8 @@ import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,12 +21,17 @@ class CreateDashboardMessageViewModel @Inject constructor(
     private val repository: DashboardRepository,
     private val wageRepository: WageRepository,
 ): ViewModel() {
-
     var title = mutableStateOf("")
     var message = mutableStateOf("")
     var selectedCategory = mutableStateOf<Wage?>(null)
 
-    var categories = mutableListOf<Wage>()
+    //var categories = mutableListOf<Wage>()
+    private val _categories = MutableStateFlow<List<Wage>>(listOf())
+    val categories = _categories.asStateFlow()
+
+    init {
+        loadCategories({})
+    }
 
     fun loadCategories(onError: (String) -> Unit){
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,7 +39,7 @@ class CreateDashboardMessageViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    categories.addAll(result.data!!)
+                    _categories.value = result.data!!
                 }
                 is Resource.Error -> {
                     viewModelScope.launch(Dispatchers.Main) {
@@ -43,29 +50,19 @@ class CreateDashboardMessageViewModel @Inject constructor(
         }
     }
 
-    fun createMessage(onSuccess: () -> Unit, onError: (String) -> Unit){
-
-        if(selectedCategory.value == null){
-            return
-        }
-
-        val newDashboard = CreateDashboardData(
-            title = title.value,
-            message = message.value,
-            jobid = LoggedPerson.CURRENT_JOB_ID,
-            creatorId = LoggedPerson.ID,
-            groupId = selectedCategory.value!!.id
-        )
-
+    fun createMessage(
+        message: CreateDashboardData,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ){
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.createDashboard(newDashboard)
+            val result = repository.createDashboard(message)
 
             when(result){
                 is Resource.Success -> {
                     viewModelScope.launch(Dispatchers.Main) {
                         onSuccess()
                     }
-                    loadCategories(onError)
                 }
                 is Resource.Error -> {
                     onError(result.message!!)
