@@ -93,7 +93,7 @@ fun MyAppNavHost(
                 viewModel = viewModel,
                 onNavigateBack = {
                     navController.navigate(Screen.MainMenu.baseRoute){
-                        popUpTo(Screen.JobDetail.baseRoute){
+                        popUpTo(Screen.JobDetail.fullRoute){
                             inclusive = true
                         }
                     }
@@ -122,7 +122,14 @@ fun MyAppNavHost(
             ),
         ){
             DashboardDetailScreen(
-                messageId = it.arguments?.getInt("messageId")!!
+                messageId = it.arguments?.getInt("messageId")!!,
+                navigateBack = {
+                    navController.navigate(Screen.MainMenu.baseRoute){
+                        popUpTo(Screen.DashboardDetails.fullRoute){
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
     }

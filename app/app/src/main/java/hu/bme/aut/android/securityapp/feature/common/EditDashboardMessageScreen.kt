@@ -1,10 +1,10 @@
 package hu.bme.aut.android.securityapp.feature.common
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,7 +45,8 @@ import hu.bme.aut.android.securityapp.data.model.wage.Wage
 fun EditDashboardMessageScreen(
     message: CreateDashboardData = CreateDashboardData("", "", LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID, 0),
     wages: List<Wage>,
-    onUpload: (CreateDashboardData) -> Unit,
+    onClick: (CreateDashboardData) -> Unit,
+    buttonContent: @Composable RowScope.() -> Unit,
     isReadOnly: Boolean = false,
     modifier: Modifier = Modifier,
 ){
@@ -163,50 +164,48 @@ fun EditDashboardMessageScreen(
                     .width(300.dp),
             )
 
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                wages.forEach { category ->
-                    DropdownMenuItem(
-                        text = {
-                            Text(text = category.name)
-                        },
-                        onClick = {
-                            selectedItem = category
-                            message = message.copy(groupId = selectedItem!!.id)
-                            expanded = false
-                        }
-                    )
+            if(!isReadOnly) {
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    wages.forEach { category ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = category.name)
+                            },
+                            onClick = {
+                                selectedItem = category
+                                message = message.copy(groupId = selectedItem!!.id)
+                                expanded = false
+                            }
+                        )
+                    }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
 
-        OutlinedButton(
-            onClick = {
-                val canUpload = isReadyForUpload(titleError, selectedItem){ errorMessage ->
-                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                }
+        if(!isReadOnly) {
+            Spacer(modifier = Modifier.height(30.dp))
 
-                if(canUpload){
-                    // TODO: Upload
-                    onUpload(message)
-                    Log.d("CreateDashboard", message.toString())
+            OutlinedButton(
+                onClick = {
+                    val canUpload = isReadyForUpload(titleError, selectedItem) { errorMessage ->
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+
+                    if (canUpload) {
+                        onClick(message)
+                    }
                 }
-            }
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.Done,
-                    contentDescription = "Create Message"
-                )
-                Spacer(modifier = Modifier.width(20.dp))
-                Text(text = "Create")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    buttonContent()
+                }
             }
         }
     }
@@ -243,7 +242,15 @@ fun EditDashboardMessageScreenPreview(){
     EditDashboardMessageScreen(
         message = CreateDashboardData("Valami", "Hello vilag mi a helyzet?", LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID, 2),
         wages = wages,
-        onUpload = {},
-        isReadOnly = true
+        onClick = {},
+        isReadOnly = false,
+        buttonContent = {
+            Icon(
+                imageVector = Icons.Rounded.Done,
+                contentDescription = "Create Message"
+            )
+            Spacer(modifier = Modifier.width(20.dp))
+            Text(text = "Create")
+        }
     )
 }
