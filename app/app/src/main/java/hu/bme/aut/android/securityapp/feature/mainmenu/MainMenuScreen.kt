@@ -48,7 +48,7 @@ fun MainMenuScreen(
                mainMenuNavController = mainMenuNavController,
                modifier = Modifier,
                onItemClicked = {
-                   mainMenuNavController.navigate(it.screen.route)
+                   mainMenuNavController.navigate(it.screen.baseRoute)
                },
            )
         }
@@ -83,7 +83,7 @@ fun BottomNavigationBar(
         tonalElevation = 5.dp
     ) {
         items.forEach { item ->
-            val selected = item.screen.route == backStackEntry.value?.destination?.route
+            val selected = item.screen.baseRoute == backStackEntry.value?.destination?.route
 
             NavigationBarItem(
                 selected = selected,

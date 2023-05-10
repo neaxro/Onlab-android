@@ -17,13 +17,14 @@ import hu.bme.aut.android.securityapp.feature.mainmenu.menus.StatisticsScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.DashboardViewModel
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobsViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.ui.navigation.withArgs
 
 @Composable
 fun MainMenuNavHost(
     modifier: Modifier = Modifier,
     navController: NavController,
     mainMenuNavController: NavHostController,
-    startDestination: String = Screen.Dashboard.route
+    startDestination: String = Screen.Dashboard.baseRoute
 ){
     NavHost(
         modifier = modifier
@@ -32,42 +33,44 @@ fun MainMenuNavHost(
         startDestination = startDestination
     ){
 
-        composable(route = Screen.Jobs.route){
+        composable(route = Screen.Jobs.baseRoute){
             val jobViewModel = hiltViewModel<JobsViewModel>()
             JobsScreen(
                 viewModel = jobViewModel,
                 navigateToCreateJob = {
-                    navController.navigate(Screen.CreateJob.route)
+                    navController.navigate(Screen.CreateJob.baseRoute)
                 },
                 navigateToConnectJob = {
-                    navController.navigate(Screen.ConnectToJob.route)
+                    navController.navigate(Screen.ConnectToJob.baseRoute)
                 },
                 navigateToDetailJob = { jobId ->
-                    // TODO: Szebben megcsinálni a route-ot
-                    navController.navigate("jobdetail_screen/$jobId")
+                    navController.navigate(Screen.JobDetail.withArgs(jobId.toString()))
                 }
             )
         }
 
-        composable(route = Screen.Dashboard.route){
+        composable(route = Screen.Dashboard.baseRoute){
             val dashboardViewModel = hiltViewModel<DashboardViewModel>()
             DashboardScreen(
                 viewModel = dashboardViewModel,
                 navigateToCreateMessage = {
-                    navController.navigate(Screen.CreateDashboardMessage.route)
+                    navController.navigate(Screen.CreateDashboardMessage.baseRoute)
+                },
+                navigateToDetails = { messageId ->
+                    navController.navigate(Screen.DashboardDetails.withArgs(messageId.toString()))
                 }
             )
         }
 
-        composable(route = Screen.Shift.route){
+        composable(route = Screen.Shift.baseRoute){
             ShiftScreen()
         }
 
-        composable(route = Screen.Statistics.route){
+        composable(route = Screen.Statistics.baseRoute){
             StatisticsScreen()
         }
 
-        composable(route = Screen.CreateJob.route){
+        composable(route = Screen.CreateJob.baseRoute){
             val createJobViewModel = hiltViewModel<CreateJobViewModel>()
             CreateJobScreen(viewModel = createJobViewModel, navController = mainMenuNavController)
         }

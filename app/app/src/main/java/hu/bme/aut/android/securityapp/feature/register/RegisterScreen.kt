@@ -238,7 +238,7 @@ fun RegisterScreen(
             ) {
                 Text(text = "Already have account?")
 
-                TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
+                TextButton(onClick = { navController.navigate(Screen.Login.baseRoute) }) {
                     Text(text = "Login now")
                 }
             }

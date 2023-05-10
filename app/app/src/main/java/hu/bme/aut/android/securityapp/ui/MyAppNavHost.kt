@@ -15,8 +15,9 @@ import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobViewModel
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobScreen
 import hu.bme.aut.android.securityapp.feature.createJob.CreateJobViewModel
 import hu.bme.aut.android.securityapp.feature.mainmenu.MainMenuScreen
-import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.CreateDashboardMessageViewModel
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.CreateDashboardMessageScreen
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.CreateDashboardMessageViewModel
+import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailViewModel
 import hu.bme.aut.android.securityapp.feature.nojob.NoJobScreen
@@ -29,7 +30,7 @@ import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 fun MyAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.Login.route
+    startDestination: String = Screen.Login.baseRoute
 ) =
     NavHost(
         navController = navController,
@@ -37,7 +38,7 @@ fun MyAppNavHost(
         modifier = modifier
     ){
 
-        composable(route = Screen.Login.route){
+        composable(route = Screen.Login.baseRoute){
             val viewModel = hiltViewModel<LoginViewModel>()
             LoginScreen(
                 navController = navController,
@@ -45,7 +46,7 @@ fun MyAppNavHost(
             )
         }
 
-        composable(route = Screen.Register.route){
+        composable(route = Screen.Register.baseRoute){
             val viewModel = hiltViewModel<RegisterViewModel>()
             RegisterScreen(
                 navController = navController,
@@ -53,11 +54,11 @@ fun MyAppNavHost(
             )
         }
 
-        composable(route = Screen.NoJob.route){
+        composable(route = Screen.NoJob.baseRoute){
             NoJobScreen(navController = navController)
         }
 
-        composable(route = Screen.CreateJob.route){
+        composable(route = Screen.CreateJob.baseRoute){
             val viewModel = hiltViewModel<CreateJobViewModel>()
             CreateJobScreen(
                 viewModel = viewModel,
@@ -65,15 +66,15 @@ fun MyAppNavHost(
             )
         }
 
-        composable(route = Screen.MainMenu.route){
+        composable(route = Screen.MainMenu.baseRoute){
             MainMenuScreen(navController = navController)
         }
 
-        composable(route = Screen.ConnectToJob.route){
+        composable(route = Screen.ConnectToJob.baseRoute){
             val viewModel = hiltViewModel<ConnectToJobViewModel>()
             ConnectToJobScreen(viewModel = viewModel) {
-                navController.navigate(Screen.MainMenu.route){
-                    popUpTo(Screen.ConnectToJob.route){
+                navController.navigate(Screen.MainMenu.baseRoute){
+                    popUpTo(Screen.ConnectToJob.baseRoute){
                         inclusive = true
                     }
                 }
@@ -81,7 +82,7 @@ fun MyAppNavHost(
         }
 
         composable(
-            route = Screen.JobDetail.route,
+            route = Screen.JobDetail.fullRoute,
             arguments = listOf(
                 navArgument("jobId"){type = NavType.IntType}
             )
@@ -91,8 +92,8 @@ fun MyAppNavHost(
                 jobId = it.arguments?.getInt("jobId")!!,
                 viewModel = viewModel,
                 onNavigateBack = {
-                    navController.navigate(Screen.MainMenu.route){
-                        popUpTo(Screen.JobDetail.route){
+                    navController.navigate(Screen.MainMenu.baseRoute){
+                        popUpTo(Screen.JobDetail.baseRoute){
                             inclusive = true
                         }
                     }
@@ -100,17 +101,28 @@ fun MyAppNavHost(
             )
         }
 
-        composable(route = Screen.CreateDashboardMessage.route){
+        composable(route = Screen.CreateDashboardMessage.baseRoute){
             val viewModel = hiltViewModel<CreateDashboardMessageViewModel>()
             CreateDashboardMessageScreen(
                 viewModel = viewModel,
                 navigateBack = {
-                    navController.navigate(Screen.MainMenu.route){
-                        popUpTo(Screen.CreateDashboardMessage.route){
+                    navController.navigate(Screen.MainMenu.baseRoute){
+                        popUpTo(Screen.CreateDashboardMessage.baseRoute){
                             inclusive = true
                         }
                     }
                 }
+            )
+        }
+
+        composable(
+            route = Screen.DashboardDetails.fullRoute,
+            arguments = listOf(
+                navArgument("messageId"){type = NavType.IntType}
+            ),
+        ){
+            DashboardDetailScreen(
+                messageId = it.arguments?.getInt("messageId")!!
             )
         }
     }

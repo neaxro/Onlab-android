@@ -45,7 +45,7 @@ fun NoJobScreen(
         Row {
             OutlinedButton(
                 onClick = {
-                    navController.navigate(Screen.CreateJob.route)
+                    navController.navigate(Screen.CreateJob.baseRoute)
                 }
             ) {
                 Text(text = "Create One")
@@ -57,7 +57,7 @@ fun NoJobScreen(
             )
 
             OutlinedButton(onClick = {
-                navController.navigate(Screen.ConnectToJob.route)
+                navController.navigate(Screen.ConnectToJob.baseRoute)
             }) {
                 Text(text = "Join One")
             }

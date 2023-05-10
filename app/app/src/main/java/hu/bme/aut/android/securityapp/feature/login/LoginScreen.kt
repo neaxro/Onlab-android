@@ -111,16 +111,16 @@ fun LoginScreen(
                     // If login is successful navigate to the proper screen
                     if(numberOfJobs > 0){
                         // Navigate to Main Screen
-                        navController.navigate(Screen.MainMenu.route){
-                            popUpTo(Screen.Login.route){
+                        navController.navigate(Screen.MainMenu.baseRoute){
+                            popUpTo(Screen.Login.baseRoute){
                                 inclusive = true
                             }
                         }
                     }
                     else {
                         // Navigate to No Job screen
-                        navController.navigate(Screen.NoJob.route) {
-                            popUpTo(Screen.Login.route) {
+                        navController.navigate(Screen.NoJob.baseRoute) {
+                            popUpTo(Screen.Login.baseRoute) {
                                 inclusive = true
                             }
                         }
@@ -143,7 +143,7 @@ fun LoginScreen(
         ) {
             Text(text = "Not a member?")
 
-            TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
+            TextButton(onClick = { navController.navigate(Screen.Register.baseRoute) }) {
                 Text(text = "Join now")
             }
         }

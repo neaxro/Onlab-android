@@ -39,6 +39,7 @@ import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.Dashboard
 fun DashboardScreen(
     viewModel: DashboardViewModel,
     navigateToCreateMessage: () -> Unit,
+    navigateToDetails: (Int) -> Unit,
 ){
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
@@ -109,6 +110,9 @@ fun DashboardScreen(
                     items(messages){message ->
                         DashboardCard(
                             message,
+                            onDetails = { messageId ->
+                                navigateToDetails(messageId)
+                            },
                             modifier = Modifier.padding(bottom = 10.dp)
                         )
                     }

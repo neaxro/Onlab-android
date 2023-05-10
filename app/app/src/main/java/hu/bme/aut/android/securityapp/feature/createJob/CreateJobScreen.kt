@@ -67,8 +67,8 @@ fun CreateJobScreen(
                 viewModel.createJob(
                 onSuccess = {
                     Toast.makeText(context, "Successfully created!", Toast.LENGTH_LONG).show()
-                    navController.navigate(Screen.MainMenu.route){
-                        popUpTo(Screen.CreateJob.route){
+                    navController.navigate(Screen.MainMenu.baseRoute){
+                        popUpTo(Screen.CreateJob.baseRoute){
                             inclusive = true
                         }
                     }

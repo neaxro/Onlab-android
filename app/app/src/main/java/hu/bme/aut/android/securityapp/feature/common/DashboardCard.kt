@@ -17,10 +17,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +47,7 @@ import java.util.Base64
 @Composable
 fun DashboardCard(
     dashboard: Dashboard,
+    onDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ){
     var extended by remember { mutableStateOf(false) }
@@ -114,6 +117,10 @@ fun DashboardCard(
                             .clip(RoundedCornerShape(30.dp))
                     )
                 }
+
+                IconButton(onClick = { onDetails(dashboard.id) }) {
+                    Image(imageVector = Icons.Default.MoreHoriz, contentDescription = "Details")
+                }
             }
 
             if(extended){
@@ -145,5 +152,5 @@ fun DashboardTag(text: String){
 @Composable
 fun PreviewScreenDasboard(){
     val das = Dashboard(1, "Üdvözlő üzenet", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at massa vel neque porta finibus eget ac mi. Mauris eleifend ipsum id ultrices feugiat. Aenean tempus nec eros at tempus. Morbi feugiat vehicula orci quis iaculis. Vestibulum purus nulla, fringilla porta mauris a, semper blandit dolor. Etiam varius porta sem, vel scelerisque nisi sodales quis. Quisque laoreet diam eget tortor malesuada tempus. Nullam ut urna eleifend, egestas ligula sit amet, mollis arcu. Cras sodales eros a justo sollicitudin auctor. In lectus felis, dapibus sit amet cursus et, pulvinar maximus nunc.", "2023-03-27T22:13:17.1233333", "Nemes Axel Roland", null, 1, "Sima")
-    DashboardCard(das)
+    DashboardCard(das, {})
 }
