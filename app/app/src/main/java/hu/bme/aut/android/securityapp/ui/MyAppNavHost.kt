@@ -10,18 +10,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobScreen
-import hu.bme.aut.android.securityapp.feature.connecttojob.ConnectToJobViewModel
-import hu.bme.aut.android.securityapp.feature.createJob.CreateJobScreen
-import hu.bme.aut.android.securityapp.feature.createJob.CreateJobViewModel
-import hu.bme.aut.android.securityapp.feature.mainmenu.MainMenuScreen
-import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.CreateDashboardMessageScreen
-import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.CreateDashboardMessageViewModel
-import hu.bme.aut.android.securityapp.feature.mainmenu.menus.dashboard.DashboardDetailScreen
-import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailScreen
-import hu.bme.aut.android.securityapp.feature.mainmenu.menus.jobs.JobDetailViewModel
-import hu.bme.aut.android.securityapp.feature.nojob.NoJobScreen
-import hu.bme.aut.android.securityapp.feature.register.RegisterViewModel
+import hu.bme.aut.android.securityapp.ui.feature.connecttojob.ConnectToJobScreen
+import hu.bme.aut.android.securityapp.ui.feature.connecttojob.ConnectToJobViewModel
+import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobScreen
+import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobViewModel
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.CreateDashboardMessageScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.CreateDashboardMessageViewModel
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.DashboardDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.jobs.JobDetailViewModel
+import hu.bme.aut.android.securityapp.ui.feature.nojob.NoJobScreen
+import hu.bme.aut.android.securityapp.ui.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
@@ -122,7 +122,6 @@ fun MyAppNavHost(
             ),
         ){
             DashboardDetailScreen(
-                messageId = it.arguments?.getInt("messageId")!!,
                 navigateBack = {
                     navController.navigate(Screen.MainMenu.baseRoute){
                         popUpTo(Screen.DashboardDetails.fullRoute){
