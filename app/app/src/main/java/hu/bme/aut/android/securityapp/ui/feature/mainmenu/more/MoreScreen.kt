@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.QueryStats
@@ -31,6 +32,7 @@ fun MoreScreen(
     navigateTo: (String) -> Unit,
 ){
     val userMenuItems = listOf(
+        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = ""),
         MoreMenu(title = "My Statistics", icon = Icons.Default.QueryStats, url = ""),
     )
     val adminMenuItems = listOf(
