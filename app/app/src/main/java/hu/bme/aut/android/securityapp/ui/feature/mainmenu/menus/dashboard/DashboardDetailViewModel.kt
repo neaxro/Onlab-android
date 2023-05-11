@@ -6,11 +6,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.dashboard.asDashboardUi
+import hu.bme.aut.android.securityapp.data.model.dashboard.asUpdateDashboardData
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import hu.bme.aut.android.securityapp.ui.model.DashboardUi
+import hu.bme.aut.android.securityapp.ui.model.asDashboard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -97,11 +99,22 @@ class DashboardDetailViewModel @Inject constructor(
     }
 
     private fun updateDashboard(){
-        
+        val dashboard = _screenState.value.message!!.asDashboard()
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateDashboard(
+                dashboardId = dashboard.id,
+                dashboardData = dashboard.asUpdateDashboardData()
+            )
+        }
     }
 
     private fun deleteDashboard(){
-
+        val dashboard = _screenState.value.message!!.asDashboard()
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteDashboard(
+                dashboardId = dashboard.id
+            )
+        }
     }
 
     private fun loadMessage(messageId: Int){

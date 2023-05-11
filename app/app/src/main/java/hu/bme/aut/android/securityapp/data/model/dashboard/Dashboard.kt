@@ -36,3 +36,11 @@ fun Dashboard.asDashboardUi(): DashboardUi{
         wage = Wage(id = groupId, name = groupName)
     )
 }
+
+fun Dashboard.asUpdateDashboardData(): UpdateDashboardData{
+    return UpdateDashboardData(
+        title = title,
+        message = message,
+        groupId = groupId,
+    )
+}

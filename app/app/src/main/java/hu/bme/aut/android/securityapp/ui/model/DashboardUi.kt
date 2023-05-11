@@ -13,7 +13,7 @@ data class DashboardUi(
     val wage: Wage = Wage(),
 )
 
-fun DashboardUi.toDashboard(): Dashboard{
+fun DashboardUi.asDashboard(): Dashboard{
     return Dashboard(
         id = id,
         title = title,
