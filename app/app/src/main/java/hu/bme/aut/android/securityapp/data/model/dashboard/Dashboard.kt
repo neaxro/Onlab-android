@@ -21,7 +21,7 @@ fun Dashboard.asCreateDashboardData(): CreateDashboardData{
         message = message,
         jobid = LoggedPerson.CURRENT_JOB_ID,
         creatorId = LoggedPerson.ID,
-        groupId = 0
+        groupId = groupId
     )
 }
 

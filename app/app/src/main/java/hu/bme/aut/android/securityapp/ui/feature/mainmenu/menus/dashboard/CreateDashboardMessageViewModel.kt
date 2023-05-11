@@ -1,18 +1,20 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
-import hu.bme.aut.android.securityapp.data.model.dashboard.CreateDashboardData
+import hu.bme.aut.android.securityapp.data.model.dashboard.asCreateDashboardData
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import hu.bme.aut.android.securityapp.ui.model.DashboardUi
+import hu.bme.aut.android.securityapp.ui.model.asDashboard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,53 +23,89 @@ class CreateDashboardMessageViewModel @Inject constructor(
     private val repository: DashboardRepository,
     private val wageRepository: WageRepository,
 ): ViewModel() {
-    var title = mutableStateOf("")
-    var message = mutableStateOf("")
-    var selectedCategory = mutableStateOf<Wage?>(null)
 
-    //var categories = mutableListOf<Wage>()
-    private val _categories = MutableStateFlow<List<Wage>>(listOf())
-    val categories = _categories.asStateFlow()
+    private val _screenState = MutableStateFlow<CreateDashboardState>(CreateDashboardState())
+    val state = _screenState.asStateFlow()
+
+    private val _wages = MutableStateFlow<List<Wage>>(listOf())
+    val wages = _wages.asStateFlow()
 
     init {
-        loadCategories({})
+        loadWages()
     }
 
-    fun loadCategories(onError: (String) -> Unit){
+    fun onEvoke(event: CreateDashboardEvent){
+        when(event) {
+            is CreateDashboardEvent.ChangeTitle -> {
+                _screenState.update {
+                    it.copy(
+                        message = it.message?.copy(title = event.title)
+                    )
+                }
+            }
+            is CreateDashboardEvent.ChangeMessageBody -> {
+                _screenState.update {
+                    it.copy(
+                        message = it.message?.copy(message = event.body)
+                    )
+                }
+            }
+            is CreateDashboardEvent.ChangeWage -> {
+                _screenState.update {
+                    it.copy(
+                        message = it.message?.copy(wage = event.wage)
+                    )
+                }
+            }
+
+            CreateDashboardEvent.SaveDashboard -> {
+                saveDashboard()
+            }
+        }
+
+    }
+
+    private fun saveDashboard(){
         viewModelScope.launch(Dispatchers.IO) {
+            _screenState.update {
+                it.copy(isLoading = true)
+            }
+            val dashboard = _screenState.value.message!!.asDashboard().asCreateDashboardData()
+            repository.createDashboard(dashboard = dashboard)
+
+            _screenState.update {
+                it.copy(isLoading = false)
+            }
+        }
+    }
+
+    private fun loadWages(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _screenState.update { it.copy(isLoading = true) }
             val result = wageRepository.getCategories(LoggedPerson.CURRENT_JOB_ID)
 
             when(result){
                 is Resource.Success -> {
-                    _categories.value = result.data!!
+                    _screenState.update { it.copy(isLoading = false) }
+                    _wages.value = result.data!!
                 }
                 is Resource.Error -> {
-                    viewModelScope.launch(Dispatchers.Main) {
-                        onError(result.message!!)
-                    }
+                    _screenState.update { it.copy(error = result.message!!) }
                 }
             }
         }
     }
+}
 
-    fun createMessage(
-        message: CreateDashboardData,
-        onSuccess: () -> Unit,
-        onError: (String) -> Unit
-    ){
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.createDashboard(message)
+data class CreateDashboardState(
+    val message: DashboardUi? = DashboardUi(),
+    val isLoading: Boolean = false,
+    val error: String = "",
+)
 
-            when(result){
-                is Resource.Success -> {
-                    viewModelScope.launch(Dispatchers.Main) {
-                        onSuccess()
-                    }
-                }
-                is Resource.Error -> {
-                    onError(result.message!!)
-                }
-            }
-        }
-    }
+sealed class CreateDashboardEvent{
+    object SaveDashboard: CreateDashboardEvent()
+    data class ChangeTitle(val title: String): CreateDashboardEvent()
+    data class ChangeMessageBody(val body: String): CreateDashboardEvent()
+    data class ChangeWage(val wage: Wage): CreateDashboardEvent()
 }

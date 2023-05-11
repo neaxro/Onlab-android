@@ -42,7 +42,6 @@ fun DashboardDetailScreen(
 ){
     var isEditing by remember { mutableStateOf(false) }
 
-    //val message = viewModel.message.collectAsState().value
     val state = viewModel.screenState.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
 
