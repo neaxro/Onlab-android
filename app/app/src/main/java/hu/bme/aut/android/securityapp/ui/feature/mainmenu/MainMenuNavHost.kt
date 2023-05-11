@@ -12,10 +12,10 @@ import hu.bme.aut.android.securityapp.feature.mainmenu.menus.DashboardScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.JobsScreen
 import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobScreen
 import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobViewModel
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.ShiftScreen
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.MoreScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardViewModel
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsViewModel
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.MoreScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.ShiftScreen
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.navigation.withArgs
 
@@ -67,7 +67,11 @@ fun MainMenuNavHost(
         }
 
         composable(route = Screen.Statistics.baseRoute){
-            MoreScreen()
+            MoreScreen(
+                navigateTo = {
+                    // TODO: Navigation to the specific url
+                }
+            )
         }
 
         composable(route = Screen.CreateJob.baseRoute){
