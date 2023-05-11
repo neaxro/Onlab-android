@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,14 +54,14 @@ fun WelcomeBoard(
     }
 
     Surface(
-        modifier = modifier.clip(RoundedCornerShape(15.dp)),
+        modifier = modifier.shadow(10.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = modifier
                 .fillMaxWidth()
-                .background(Color(211, 243, 107), RoundedCornerShape(15.dp))
+                .background(Color(211, 243, 107))
                 .padding(15.dp)
 
         ) {

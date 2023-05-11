@@ -19,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.Email
@@ -27,11 +26,8 @@ import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
+import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,28 +61,11 @@ fun JobDetailScreen(
 
     Scaffold(
         topBar = {
-            Surface(
-                shadowElevation = 20.dp
-            ) {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = job.value.title,
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            onNavigateBack()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = "Navigate back"
-                            )
-                        }
-                    }
-                )
-            }
+
+             MyTopAppBar(
+                 title = job.value.title,
+                 onNavigate = onNavigateBack
+             )
         },
         content = {
             Column(modifier = Modifier

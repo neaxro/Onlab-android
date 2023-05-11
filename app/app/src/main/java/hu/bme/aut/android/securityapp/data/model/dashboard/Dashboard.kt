@@ -15,6 +15,16 @@ data class Dashboard(
     val groupName: String = ""
 )
 
+fun Dashboard.getCreationTime(): String{
+    val sliced = creationTime.split(' ')
+    return sliced[sliced.lastIndex]
+}
+
+fun Dashboard.getCreationDate(): String{
+    val sliced = creationTime.split(' ')
+    return "${sliced[0]} ${sliced[1]}"
+}
+
 fun Dashboard.asCreateDashboardData(): CreateDashboardData{
     return CreateDashboardData(
         title = title,

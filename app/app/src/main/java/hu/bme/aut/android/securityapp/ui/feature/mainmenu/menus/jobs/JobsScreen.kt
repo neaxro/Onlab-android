@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.JobCard
+import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.jobs.JobsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -55,55 +56,40 @@ fun JobsScreen(
 
     Scaffold(
         topBar = {
-            Surface(
-                shadowElevation = 10.dp,
-                tonalElevation = 5.dp
-            ) {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = "Jobs",
-                            fontWeight = FontWeight.Bold
+
+            MyTopAppBar(
+                title = "Jobs",
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.loadAllJobs(){ errorMessage ->
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Refresh,
+                            contentDescription = "Refresh"
                         )
-                    },
-                    colors = TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
-                    ),
-                    actions = {
+                    }
 
-                        IconButton(onClick = {
-                            viewModel.loadAllJobs(){ errorMessage ->
-                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Refresh,
-                                contentDescription = "Refresh"
-                            )
-                        }
+                    IconButton(onClick = {
+                        navigateToCreateJob()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = "Create new job"
+                        )
+                    }
 
-                        IconButton(onClick = {
-                            navigateToCreateJob()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Add,
-                                contentDescription = "Create new job"
-                            )
-                        }
-
-                        IconButton(onClick = {
-                            navigateToConnectJob()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.AddLink,
-                                contentDescription = "Connect for job"
-                            )
-                        }
-
-                    },
-                )
-            }
-
+                    IconButton(onClick = {
+                        navigateToConnectJob()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.AddLink,
+                            contentDescription = "Connect for job"
+                        )
+                    }
+                }
+            )
         }
     ) {
         LazyVerticalStaggeredGrid(
@@ -130,14 +116,14 @@ fun JobsScreen(
                         viewModel.selectJob(
                             item.id,
                             onSuccess = { successMessage ->
-                                Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
+                                //Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
                             },
                             onError = { errorMessage ->
                                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         )
                     },
-                    modifier = Modifier.padding(top = 10.dp)
+                    modifier = Modifier.padding(top = 5.dp)
                 )
             }
         }

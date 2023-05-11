@@ -37,7 +37,6 @@ fun JobCard(
     modifier: Modifier = Modifier,
     onDetaileClicked: (DetailedJob) -> Unit,
     onClicked: (Int) -> Unit,
-    canEdit: Boolean = false
 ) {
     Card(
         modifier = modifier
@@ -53,10 +52,9 @@ fun JobCard(
         },
     ) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth(),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -86,27 +84,7 @@ fun JobCard(
                             contentDescription = "Show details",
                         )
                     }
-                    /*
-                    if (job.owner.profilePicture != null) {
-                        Image(
-                            bitmap = job.owner.getProfileBitmap(),
-                            contentDescription = "Owner profile picture",
-                            modifier = Modifier
-                                .size(50.dp)
-                                .clip(CircleShape),
-                        )
-                    }
-                    else{
-                        Image(
-                            imageVector = Icons.Rounded.Person,
-                            contentDescription = "Owner profile picture",
-                            modifier = Modifier
-                                .size(50.dp)
-                                .clip(CircleShape),
-                        )
-                    }*/
                 }
-
             }
 
 

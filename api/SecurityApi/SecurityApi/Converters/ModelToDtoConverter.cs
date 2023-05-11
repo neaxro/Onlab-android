@@ -1,4 +1,5 @@
-﻿using SecurityApi.Dtos.DashboardDtos;
+﻿using NuGet.Protocol;
+using SecurityApi.Dtos.DashboardDtos;
 using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
 using SecurityApi.Dtos.PersonDtos;
@@ -51,7 +52,7 @@ namespace SecurityApi.Converters
 
         public Dashboard ToModel(Model.Dashboard dashboard)
         {
-            return new Dtos.DashboardDtos.Dashboard(dashboard.Id, dashboard.Title, dashboard.Message, dashboard.CreationTime, dashboard.People.Name, dashboard.People.ProfilePicture, dashboard.Wage.Id, dashboard.Wage.Name);
+            return new Dtos.DashboardDtos.Dashboard(dashboard.Id, dashboard.Title, dashboard.Message, dashboard.CreationTime.Value.ToString("MMM d H:m"), dashboard.People.Name, dashboard.People.ProfilePicture, dashboard.Wage.Id, dashboard.Wage.Name);
         }
 
         public Position ToModel(Model.Position position)

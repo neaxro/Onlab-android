@@ -1,8 +1,10 @@
 package hu.bme.aut.android.securityapp.feature.mainmenu.menus
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,25 +14,21 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShapeDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardCard
+import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WelcomeBoard
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.DashboardViewModel
 
@@ -58,22 +56,7 @@ fun DashboardScreen(
 
     Scaffold(
         topBar = {
-            Surface(
-                shadowElevation = 10.dp,
-                tonalElevation = 5.dp
-            ){
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = "Dashboard",
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    colors = TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
-                    ),
-                )
-            }
+             MyTopAppBar(title = "Dashboard")
         },
         floatingActionButton = {
             val role = LoggedPerson.getRole()
@@ -93,21 +76,23 @@ fun DashboardScreen(
             }
         }
     ) {
-        Surface(
+        Box(
             modifier = Modifier
                 .padding(top = it.calculateTopPadding())
         ) {
-            Column() {
-                WelcomeBoard(
-                    person,
-                    modifier = Modifier.padding(10.dp)
-                )
-
+            if(messages.isEmpty()){
+                Text(text = "There are no messages!", modifier = Modifier.align(Alignment.Center))
+            }
+            else{
                 LazyColumn(
                     state = lazyListState,
                     contentPadding = PaddingValues(10.dp)
                 ) {
                     items(messages){message ->
+                        if(messages.indexOf(message) == 0){
+                            Spacer(modifier = Modifier.height(120.dp))
+                        }
+
                         DashboardCard(
                             message,
                             onDetails = { messageId ->
@@ -118,6 +103,13 @@ fun DashboardScreen(
                     }
                 }
             }
+
+            WelcomeBoard(
+                person,
+                modifier = Modifier
+                    //.padding(10.dp)
+                    .align(Alignment.TopCenter)
+            )
         }
     }
 }
