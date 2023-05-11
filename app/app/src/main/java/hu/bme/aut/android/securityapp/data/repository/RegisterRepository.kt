@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.domain.repository
+package hu.bme.aut.android.securityapp.data.repository
 
 import hu.bme.aut.android.securityapp.data.model.people.RegisterData
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource

@@ -18,12 +18,12 @@ import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.PersonRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.WageRepositoryImpl
-import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
-import hu.bme.aut.android.securityapp.domain.repository.JobRepository
-import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
-import hu.bme.aut.android.securityapp.domain.repository.PersonRepository
-import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
-import hu.bme.aut.android.securityapp.domain.repository.WageRepository
+import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
+import hu.bme.aut.android.securityapp.data.repository.JobRepository
+import hu.bme.aut.android.securityapp.data.repository.LoginRepository
+import hu.bme.aut.android.securityapp.data.repository.PersonRepository
+import hu.bme.aut.android.securityapp.data.repository.RegisterRepository
+import hu.bme.aut.android.securityapp.data.repository.WageRepository
 import hu.bme.aut.android.securityapp.network.HeaderInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -116,7 +116,7 @@ object AppModule {
     fun provideRegisterRepository(
         api: RegisterApi,
         app: Application
-    ): RegisterRepository{
+    ): RegisterRepository {
         return RegisterRepositoryImpl(api, app)
     }
 

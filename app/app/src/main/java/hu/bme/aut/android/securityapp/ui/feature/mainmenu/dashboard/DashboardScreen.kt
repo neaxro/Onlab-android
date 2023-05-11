@@ -30,7 +30,7 @@ import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardCard
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WelcomeBoard
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.DashboardViewModel
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

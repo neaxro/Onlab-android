@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.job.CreateJobData
-import hu.bme.aut.android.securityapp.domain.repository.JobRepository
+import hu.bme.aut.android.securityapp.data.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

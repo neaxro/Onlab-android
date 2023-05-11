@@ -3,7 +3,6 @@ package hu.bme.aut.android.securityapp.data.repository
 import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.people.RegisterData
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
-import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 class RegisterRepositoryImpl(

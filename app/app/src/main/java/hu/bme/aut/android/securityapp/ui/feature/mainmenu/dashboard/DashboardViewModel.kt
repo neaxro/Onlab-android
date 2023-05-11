@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard
+package hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
@@ -9,8 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.model.people.Person
-import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
-import hu.bme.aut.android.securityapp.domain.repository.PersonRepository
+import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
+import hu.bme.aut.android.securityapp.data.repository.PersonRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

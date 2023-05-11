@@ -3,7 +3,6 @@ package hu.bme.aut.android.securityapp.data.repository
 import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.remote.PersonApi
-import hu.bme.aut.android.securityapp.domain.repository.PersonRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 class PersonRepositoryImpl constructor(

@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.domain.repository
+package hu.bme.aut.android.securityapp.data.repository
 
 import hu.bme.aut.android.securityapp.data.model.dashboard.CreateDashboardData
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard

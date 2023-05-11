@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.data.model.people.RegisterData
-import hu.bme.aut.android.securityapp.domain.repository.RegisterRepository
+import hu.bme.aut.android.securityapp.data.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

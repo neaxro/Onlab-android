@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.jobs
+package hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs
 
 import android.widget.Toast
 import androidx.compose.foundation.Image

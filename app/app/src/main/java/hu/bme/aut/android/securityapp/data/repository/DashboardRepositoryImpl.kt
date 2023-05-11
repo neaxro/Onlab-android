@@ -5,7 +5,6 @@ import hu.bme.aut.android.securityapp.data.model.dashboard.CreateDashboardData
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.model.dashboard.UpdateDashboardData
 import hu.bme.aut.android.securityapp.data.remote.DashboardApi
-import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import okhttp3.ResponseBody
 

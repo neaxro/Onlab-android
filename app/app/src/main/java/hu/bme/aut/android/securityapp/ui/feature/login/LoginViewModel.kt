@@ -7,8 +7,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
 import hu.bme.aut.android.securityapp.data.model.people.LoginResponse
-import hu.bme.aut.android.securityapp.domain.repository.JobRepository
-import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
+import hu.bme.aut.android.securityapp.data.repository.JobRepository
+import hu.bme.aut.android.securityapp.data.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

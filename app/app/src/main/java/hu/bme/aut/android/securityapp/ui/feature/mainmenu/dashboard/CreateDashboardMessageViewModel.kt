@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard
+package hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,8 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.dashboard.asCreateDashboardData
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
-import hu.bme.aut.android.securityapp.domain.repository.DashboardRepository
-import hu.bme.aut.android.securityapp.domain.repository.WageRepository
+import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
+import hu.bme.aut.android.securityapp.data.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import hu.bme.aut.android.securityapp.ui.model.DashboardUi
 import hu.bme.aut.android.securityapp.ui.model.asDashboard

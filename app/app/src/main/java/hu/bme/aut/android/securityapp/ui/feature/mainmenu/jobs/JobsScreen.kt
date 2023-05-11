@@ -35,7 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.JobCard
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.jobs.JobsViewModel
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard
+package hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

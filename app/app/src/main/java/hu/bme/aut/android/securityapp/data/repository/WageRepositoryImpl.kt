@@ -3,7 +3,6 @@ package hu.bme.aut.android.securityapp.data.repository
 import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.data.remote.WageApi
-import hu.bme.aut.android.securityapp.domain.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 class WageRepositoryImpl constructor(

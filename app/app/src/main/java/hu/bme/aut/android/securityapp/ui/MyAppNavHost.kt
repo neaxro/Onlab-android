@@ -15,11 +15,11 @@ import hu.bme.aut.android.securityapp.ui.feature.connecttojob.ConnectToJobViewMo
 import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobScreen
 import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobViewModel
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.CreateDashboardMessageScreen
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.CreateDashboardMessageViewModel
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.dashboard.DashboardDetailScreen
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.jobs.JobDetailScreen
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.jobs.JobDetailViewModel
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageViewModel
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailViewModel
 import hu.bme.aut.android.securityapp.ui.feature.nojob.NoJobScreen
 import hu.bme.aut.android.securityapp.ui.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.navigation.Screen

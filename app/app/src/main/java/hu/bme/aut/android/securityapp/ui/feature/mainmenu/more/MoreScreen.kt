@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun StatisticsScreen(){
+fun MoreScreen(){
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -23,5 +23,5 @@ fun StatisticsScreen(){
 @Preview(showBackground = true)
 @Composable
 fun PreviewScreenStatistics(){
-    StatisticsScreen()
+    MoreScreen()
 }

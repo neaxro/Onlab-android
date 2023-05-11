@@ -7,13 +7,12 @@ import hu.bme.aut.android.securityapp.data.model.job.Job
 import hu.bme.aut.android.securityapp.data.model.job.JobSelectToken
 import hu.bme.aut.android.securityapp.data.model.job.SelectJobData
 import hu.bme.aut.android.securityapp.data.remote.JobApi
-import hu.bme.aut.android.securityapp.domain.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 class JobRepositoryImpl (
     private val api: JobApi,
     private val app: Application
-): JobRepository{
+): JobRepository {
 
     override suspend fun getAllJobForPerson(personId: Int): Resource<List<DetailedJob>> {
         val jobs = try{

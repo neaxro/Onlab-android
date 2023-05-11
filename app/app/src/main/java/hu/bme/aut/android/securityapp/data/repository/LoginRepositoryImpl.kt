@@ -4,7 +4,6 @@ import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
 import hu.bme.aut.android.securityapp.data.model.people.LoginResponse
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
-import hu.bme.aut.android.securityapp.domain.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
 class LoginRepositoryImpl(
