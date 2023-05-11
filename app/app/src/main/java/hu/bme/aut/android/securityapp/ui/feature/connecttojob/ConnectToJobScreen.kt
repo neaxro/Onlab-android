@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,50 +34,64 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConnectToJobScreen(
     viewModel: ConnectToJobViewModel,
-    onSuccess: () -> Unit
+    onNavigateBack: () -> Unit,
 ){
     val context = LocalContext.current
     val digits = remember {
         viewModel.digits
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ){
-        BasicTextField(
-            value = digits.value,
-            onValueChange = {
-                if(it.length <= viewModel.numberOfDigits) {
-                    digits.value = it.trim()
-                }
-            },
-            modifier = Modifier,
-            decorationBox = {
-                DecoratorBox(
-                    numberOfDigits = viewModel.numberOfDigits,
-                    digits = digits.value,
-                )
-            },
+    Scaffold(
+        topBar = {
+            MyTopAppBar(
+                title = "Connect to job",
+                onNavigate = onNavigateBack
+            )
+        }
+    ) {
+        val paddingTop = it.calculateTopPadding()
 
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, autoCorrect = false, KeyboardType.Text, imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = {
-                if(digits.value.length == viewModel.numberOfDigits){
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingTop),
+            contentAlignment = Alignment.Center,
+        ){
+            BasicTextField(
+                value = digits.value,
+                onValueChange = {
+                    if(it.length <= viewModel.numberOfDigits) {
+                        digits.value = it.trim()
+                    }
+                },
+                modifier = Modifier,
+                decorationBox = {
+                    DecoratorBox(
+                        numberOfDigits = viewModel.numberOfDigits,
+                        digits = digits.value,
+                    )
+                },
 
-                    // Connect person to job
-                    viewModel.connectPersonToJob(onSuccess = onSuccess){ errorMessage ->
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, autoCorrect = false, KeyboardType.Text, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    if(digits.value.length == viewModel.numberOfDigits){
+
+                        // Connect person to job
+                        viewModel.connectPersonToJob(onSuccess = onNavigateBack){ errorMessage ->
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                        }
+                        Log.d("CONNECTJOB_KEYBOARDACTION", "Digits: $digits")
                     }
                     Log.d("CONNECTJOB_KEYBOARDACTION", "Digits: $digits")
-                }
-                Log.d("CONNECTJOB_KEYBOARDACTION", "Digits: $digits")
-            })
-        )
+                })
+            )
+        }
     }
 }
 

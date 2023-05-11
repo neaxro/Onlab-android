@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,55 +34,73 @@ fun CreateJobScreen(
     var jobname by remember { viewModel.jobname }
     var description by remember { viewModel.description }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        OutlinedTextField(
-            value = jobname,
-            onValueChange = {
-                jobname = it
-            },
-            label = { Text(text = "Name of the job")},
-            singleLine = true,
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = description,
-            onValueChange = {
-                description = it
-            },
-            label = { Text(text = "Description")},
-            maxLines = 3,
-            modifier = Modifier.height(150.dp)
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        OutlinedButton(
-
-            onClick = {
-                viewModel.createJob(
-                onSuccess = {
-                    Toast.makeText(context, "Successfully created!", Toast.LENGTH_LONG).show()
+    Scaffold(
+        topBar = {
+            MyTopAppBar(
+                title = "Create Job",
+                onNavigate = {
                     navController.navigate(Screen.MainMenu.baseRoute){
                         popUpTo(Screen.CreateJob.baseRoute){
                             inclusive = true
                         }
                     }
-                },
-                onError = {errorMessage ->
-                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                })
-            },
+                }
+            )
+        }
+    ) {
+        val paddingTop = it.calculateTopPadding()
+
+        Column(
             modifier = Modifier
-                .fillMaxWidth(0.6f),
+                .fillMaxSize()
+                .padding(top = paddingTop),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            Text(text = "Create")
+            OutlinedTextField(
+                value = jobname,
+                onValueChange = {
+                    jobname = it
+                },
+                label = { Text(text = "Name of the job")},
+                singleLine = true,
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            OutlinedTextField(
+                value = description,
+                onValueChange = {
+                    description = it
+                },
+                label = { Text(text = "Description")},
+                maxLines = 3,
+                modifier = Modifier.height(150.dp)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            OutlinedButton(
+
+                onClick = {
+                    viewModel.createJob(
+                        onSuccess = {
+                            Toast.makeText(context, "Successfully created!", Toast.LENGTH_LONG).show()
+                            navController.navigate(Screen.MainMenu.baseRoute){
+                                popUpTo(Screen.CreateJob.baseRoute){
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        onError = {errorMessage ->
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                        })
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.6f),
+            ) {
+                Text(text = "Create")
+            }
         }
     }
 }

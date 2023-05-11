@@ -72,13 +72,16 @@ fun MyAppNavHost(
 
         composable(route = Screen.ConnectToJob.baseRoute){
             val viewModel = hiltViewModel<ConnectToJobViewModel>()
-            ConnectToJobScreen(viewModel = viewModel) {
-                navController.navigate(Screen.MainMenu.baseRoute){
-                    popUpTo(Screen.ConnectToJob.baseRoute){
-                        inclusive = true
+            ConnectToJobScreen(
+                viewModel = viewModel,
+                onNavigateBack = {
+                    navController.navigate(Screen.MainMenu.baseRoute){
+                        popUpTo(Screen.ConnectToJob.baseRoute){
+                            inclusive = true
+                        }
                     }
                 }
-            }
+            )
         }
 
         composable(
