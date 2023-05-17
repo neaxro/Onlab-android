@@ -3,7 +3,6 @@ package hu.bme.aut.android.securityapp.ui.feature.mainmenu
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,9 +10,6 @@ import androidx.navigation.compose.composable
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.DashboardScreen
 import hu.bme.aut.android.securityapp.feature.mainmenu.menus.JobsScreen
 import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobScreen
-import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobViewModel
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardViewModel
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsViewModel
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.MoreScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus.ShiftScreen
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
@@ -33,15 +29,15 @@ fun MainMenuNavHost(
         startDestination = startDestination
     ){
 
-        composable(route = Screen.Jobs.baseRoute){
-            val jobViewModel = hiltViewModel<JobsViewModel>()
+        composable(
+            route = Screen.Jobs.fullRoute
+        ){
             JobsScreen(
-                viewModel = jobViewModel,
                 navigateToCreateJob = {
-                    navController.navigate(Screen.CreateJob.baseRoute)
+                    navController.navigate(Screen.CreateJob.fullRoute)
                 },
                 navigateToConnectJob = {
-                    navController.navigate(Screen.ConnectToJob.baseRoute)
+                    navController.navigate(Screen.ConnectToJob.fullRoute)
                 },
                 navigateToDetailJob = { jobId ->
                     navController.navigate(Screen.JobDetail.withArgs(jobId.toString()))
@@ -49,12 +45,12 @@ fun MainMenuNavHost(
             )
         }
 
-        composable(route = Screen.Dashboard.baseRoute){
-            val dashboardViewModel = hiltViewModel<DashboardViewModel>()
+        composable(
+            route = Screen.Dashboard.fullRoute
+        ){
             DashboardScreen(
-                viewModel = dashboardViewModel,
                 navigateToCreateMessage = {
-                    navController.navigate(Screen.CreateDashboardMessage.baseRoute)
+                    navController.navigate(Screen.CreateDashboardMessage.fullRoute)
                 },
                 navigateToDetails = { messageId ->
                     navController.navigate(Screen.DashboardDetails.withArgs(messageId.toString()))
@@ -62,11 +58,15 @@ fun MainMenuNavHost(
             )
         }
 
-        composable(route = Screen.Shift.baseRoute){
+        composable(
+            route = Screen.Shift.fullRoute
+        ){
             ShiftScreen()
         }
 
-        composable(route = Screen.Statistics.baseRoute){
+        composable(
+            route = Screen.Statistics.fullRoute
+        ){
             MoreScreen(
                 navigateTo = {
                     // TODO: Navigation to the specific url
@@ -74,9 +74,18 @@ fun MainMenuNavHost(
             )
         }
 
-        composable(route = Screen.CreateJob.baseRoute){
-            val createJobViewModel = hiltViewModel<CreateJobViewModel>()
-            CreateJobScreen(viewModel = createJobViewModel, navController = mainMenuNavController)
+        composable(
+            route = Screen.CreateJob.baseRoute
+        ){
+            CreateJobScreen(
+                navigateToMainMenu = {
+                    mainMenuNavController.navigate(Screen.MainMenu.fullRoute){
+                        popUpTo(Screen.MainMenu.fullRoute){
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 }

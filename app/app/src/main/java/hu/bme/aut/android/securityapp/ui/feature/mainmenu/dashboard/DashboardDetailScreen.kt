@@ -37,8 +37,8 @@ import hu.bme.aut.android.securityapp.ui.model.DashboardUi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardDetailScreen(
+    viewModel: DashboardDetailViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
-    viewModel: DashboardDetailViewModel = hiltViewModel()
 ){
     var isEditing by remember { mutableStateOf(false) }
 

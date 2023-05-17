@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.JobCard
@@ -40,7 +41,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun JobsScreen(
-    viewModel: JobsViewModel,
+    viewModel: JobsViewModel = hiltViewModel(),
     navigateToCreateJob: () -> Unit,
     navigateToConnectJob: () -> Unit,
     navigateToDetailJob: (Int) -> Unit,

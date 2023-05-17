@@ -40,13 +40,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JobDetailScreen(
-    viewModel: JobDetailViewModel,
+    viewModel: JobDetailViewModel = hiltViewModel(),
     jobId: Int,
     onNavigateBack: () -> Unit
 ){

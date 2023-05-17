@@ -36,15 +36,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import hu.bme.aut.android.securityapp.ui.feature.register.RegisterViewModel
-import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 @ExperimentalMaterial3Api
 @Composable
 fun RegisterScreen(
-    navController: NavHostController,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: RegisterViewModel = hiltViewModel(),
+    navigateToLogin: () -> Unit = {},
 ){
     val context = LocalContext.current
 
@@ -238,7 +236,11 @@ fun RegisterScreen(
             ) {
                 Text(text = "Already have account?")
 
-                TextButton(onClick = { navController.navigate(Screen.Login.baseRoute) }) {
+                TextButton(
+                    onClick = {
+                        navigateToLogin()
+                    }
+                ) {
                     Text(text = "Login now")
                 }
             }

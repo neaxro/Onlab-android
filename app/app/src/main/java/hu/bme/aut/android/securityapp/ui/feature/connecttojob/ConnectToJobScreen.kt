@@ -34,12 +34,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConnectToJobScreen(
-    viewModel: ConnectToJobViewModel,
+    viewModel: ConnectToJobViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
 ){
     val context = LocalContext.current

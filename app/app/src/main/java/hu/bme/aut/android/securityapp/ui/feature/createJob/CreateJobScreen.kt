@@ -18,16 +18,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
-import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateJobScreen(
-    viewModel: CreateJobViewModel,
-    navController: NavController
+    viewModel: CreateJobViewModel = hiltViewModel(),
+    navigateToMainMenu: () -> Unit = {},
 ){
     val context = LocalContext.current
 
@@ -39,11 +36,7 @@ fun CreateJobScreen(
             MyTopAppBar(
                 title = "Create Job",
                 onNavigate = {
-                    navController.navigate(Screen.MainMenu.baseRoute){
-                        popUpTo(Screen.CreateJob.baseRoute){
-                            inclusive = true
-                        }
-                    }
+                    navigateToMainMenu()
                 }
             )
         }
@@ -86,11 +79,7 @@ fun CreateJobScreen(
                     viewModel.createJob(
                         onSuccess = {
                             Toast.makeText(context, "Successfully created!", Toast.LENGTH_LONG).show()
-                            navController.navigate(Screen.MainMenu.baseRoute){
-                                popUpTo(Screen.CreateJob.baseRoute){
-                                    inclusive = true
-                                }
-                            }
+                            navigateToMainMenu()
                         },
                         onError = {errorMessage ->
                             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
@@ -110,6 +99,5 @@ fun CreateJobScreen(
 fun screenPrev(){
     CreateJobScreen(
         hiltViewModel<CreateJobViewModel>(),
-        rememberNavController()
     )
 }

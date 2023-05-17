@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardCard
@@ -35,7 +36,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardVie
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel,
+    viewModel: DashboardViewModel = hiltViewModel(),
     navigateToCreateMessage: () -> Unit,
     navigateToDetails: (Int) -> Unit,
 ){

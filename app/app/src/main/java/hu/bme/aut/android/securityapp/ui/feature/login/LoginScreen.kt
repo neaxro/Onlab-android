@@ -17,15 +17,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import hu.bme.aut.android.securityapp.ui.navigation.Screen
+import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    navController: NavHostController,
-    viewModel: LoginViewModel,
+    viewModel: LoginViewModel = hiltViewModel(),
+    onSuccessLogin: () -> Unit = {},
+    navigateToRegister: () -> Unit = {},
 ){
     val context = LocalContext.current
 
@@ -109,22 +109,7 @@ fun LoginScreen(
                 viewModel.loginUser(
                     onSuccess = { numberOfJobs ->
                     // If login is successful navigate to the proper screen
-                    if(numberOfJobs > 0){
-                        // Navigate to Main Screen
-                        navController.navigate(Screen.MainMenu.baseRoute){
-                            popUpTo(Screen.Login.baseRoute){
-                                inclusive = true
-                            }
-                        }
-                    }
-                    else {
-                        // Navigate to No Job screen
-                        navController.navigate(Screen.NoJob.baseRoute) {
-                            popUpTo(Screen.Login.baseRoute) {
-                                inclusive = true
-                            }
-                        }
-                    }
+                    onSuccessLogin()
                 },
                     onError = {errorMessage ->
                         Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
@@ -143,7 +128,11 @@ fun LoginScreen(
         ) {
             Text(text = "Not a member?")
 
-            TextButton(onClick = { navController.navigate(Screen.Register.baseRoute) }) {
+            TextButton(
+                onClick = {
+                    navigateToRegister()
+                }
+            ) {
                 Text(text = "Join now")
             }
         }
