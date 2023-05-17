@@ -68,8 +68,10 @@ fun MainMenuNavHost(
             route = Screen.Statistics.fullRoute
         ){
             MoreScreen(
-                navigateTo = {
-                    // TODO: Navigation to the specific url
+                navigateTo = { url ->
+                    if(url.isNotEmpty()){
+                        navController.navigate(url)
+                    }
                 }
             )
         }

@@ -15,6 +15,8 @@ sealed class Screen(val baseRoute: String, val fullRoute: String = baseRoute){
     object DashboardDetails: Screen(baseRoute = "dashboard_details_screen", fullRoute = "dashboard_details_screen/{messageId}")
     object Shift: Screen(baseRoute = "shift_screen")
     object Statistics: Screen(baseRoute = "statistics_screen")
+
+    object Profile: Screen(baseRoute = "profile_screen", fullRoute = "profile_screen/{personId}")
 }
 
 fun Screen.withArgs(vararg args: String): String{

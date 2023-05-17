@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
@@ -24,6 +25,8 @@ import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.feature.common.MoreMenuItem
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.model.MoreMenu
+import hu.bme.aut.android.securityapp.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.ui.navigation.withArgs
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -31,8 +34,11 @@ fun MoreScreen(
     userRole: Roles = LoggedPerson.getRole(),
     navigateTo: (String) -> Unit,
 ){
+    val anonymousMenuItems = listOf(
+        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.withArgs(LoggedPerson.ID.toString()), backgroundColor = Color.Yellow),
+    )
     val userMenuItems = listOf(
-        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = ""),
+        *(anonymousMenuItems.toTypedArray()),
         MoreMenu(title = "My Statistics", icon = Icons.Default.QueryStats, url = ""),
     )
     val adminMenuItems = listOf(
@@ -41,7 +47,6 @@ fun MoreScreen(
         MoreMenu(title = "Wages", icon = Icons.Default.MonetizationOn, url = ""),
         MoreMenu(title = "Pending Shifts", icon = Icons.Default.WorkHistory, url = ""),
     )
-
     val ownerMenuItems = listOf(
         *(adminMenuItems.toTypedArray()),
     )
@@ -50,7 +55,7 @@ fun MoreScreen(
         is Roles.Owner -> ownerMenuItems
         is Roles.Admin -> adminMenuItems
         is Roles.User -> userMenuItems
-        else -> listOf()
+        else -> anonymousMenuItems
     }
 
     Scaffold(

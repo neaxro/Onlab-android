@@ -10,10 +10,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import hu.bme.aut.android.securityapp.ui.feature.connecttojob.ConnectToJobScreen
+import hu.bme.aut.android.securityapp.ui.feature.createJob.CreateJobScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.profile.ProfileScreen
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,11 +69,17 @@ fun MyAppNavHost(
         ){
             ConnectToJobScreen(
                 onNavigateBack = {
-                    navController.navigate(Screen.MainMenu.fullRoute){
-                        popUpTo(Screen.ConnectToJob.fullRoute){
-                            inclusive = true
-                        }
-                    }
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.CreateJob.fullRoute
+        ){
+            CreateJobScreen(
+                navigateToMainMenu = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -85,11 +93,7 @@ fun MyAppNavHost(
             JobDetailScreen(
                 jobId = it.arguments?.getInt("jobId")!!,
                 onNavigateBack = {
-                    navController.navigate(Screen.MainMenu.fullRoute){
-                        popUpTo(Screen.JobDetail.fullRoute){
-                            inclusive = true
-                        }
-                    }
+                    navController.popBackStack()
                 }
             )
         }
@@ -99,11 +103,7 @@ fun MyAppNavHost(
         ){
             CreateDashboardMessageScreen(
                 navigateBack = {
-                    navController.navigate(Screen.MainMenu.fullRoute){
-                        popUpTo(Screen.CreateDashboardMessage.fullRoute){
-                            inclusive = true
-                        }
-                    }
+                    navController.popBackStack()
                 }
             )
         }
@@ -116,11 +116,22 @@ fun MyAppNavHost(
         ){
             DashboardDetailScreen(
                 navigateBack = {
-                    navController.navigate(Screen.MainMenu.fullRoute){
-                        popUpTo(Screen.DashboardDetails.fullRoute){
-                            inclusive = true
-                        }
-                    }
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Profile.fullRoute,
+            arguments = listOf(
+                navArgument("personId"){
+                    type = NavType.IntType
+                },
+            )
+        ){
+            ProfileScreen(
+                navigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
