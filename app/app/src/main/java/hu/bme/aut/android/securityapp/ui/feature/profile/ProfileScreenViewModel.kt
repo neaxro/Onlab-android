@@ -62,4 +62,17 @@ class ProfileScreenViewModel @Inject constructor(
             )
         }
     }
+
+    fun logOut(
+        onFinished: () -> Unit
+    ){
+        val canLogOut = true
+
+        LoggedPerson.ID = 0
+        LoggedPerson.CURRENT_JOB_ID = 0
+
+        if(canLogOut) {
+            onFinished()
+        }
+    }
 }

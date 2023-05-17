@@ -127,6 +127,13 @@ fun MyAppNavHost(
             ProfileScreen(
                 navigateBack = {
                     navController.popBackStack()
+                },
+                onLogOut = {
+                    navController.navigate(Screen.Login.fullRoute){
+                        popUpTo(Screen.MainMenu.fullRoute){
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

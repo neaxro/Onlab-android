@@ -34,7 +34,8 @@ import hu.bme.aut.android.securityapp.ui.feature.common.PersonEditor
 @Composable
 fun ProfileScreen(
     navigateBack: () -> Unit = {},
-    viewModel: ProfileScreenViewModel = hiltViewModel()
+    viewModel: ProfileScreenViewModel = hiltViewModel(),
+    onLogOut: () -> Unit = {},
 ){
     var isReadOnly by rememberSaveable { mutableStateOf(true) }
     val person = viewModel.userData.collectAsState()
@@ -52,7 +53,11 @@ fun ProfileScreen(
                     }) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit profile")
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        viewModel.logOut(){
+                            onLogOut()
+                        }
+                    }) {
                         Icon(imageVector = Icons.Default.Logout, contentDescription = "Log out")
                     }
                 }
