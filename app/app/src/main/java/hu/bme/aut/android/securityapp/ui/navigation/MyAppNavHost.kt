@@ -123,11 +123,6 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.Profile.fullRoute,
-            arguments = listOf(
-                navArgument("personId"){
-                    type = NavType.IntType
-                },
-            )
         ){
             ProfileScreen(
                 navigateBack = {

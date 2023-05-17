@@ -207,7 +207,10 @@ namespace SecurityApi.Services
             person.Username = newData.Username;
             person.Nickname = newData.Nickname;
             person.Email = newData.Email;
-            person.Password = newData.Password;
+            if(newData.Password?.Length > 0)
+            {
+                person.Password = newData.Password;
+            }
 
             await _context.SaveChangesAsync();
 

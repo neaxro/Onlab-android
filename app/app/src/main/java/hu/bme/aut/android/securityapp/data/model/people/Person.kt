@@ -7,12 +7,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import java.util.Base64
 
 data class Person(
-    val id: Int,
-    val fullName: String,
-    val username: String,
-    val nickname: String,
-    val email: String,
-    val profilePicture: String?
+    val id: Int = 0,
+    val fullName: String = "",
+    val username: String = "",
+    val nickname: String = "",
+    val email: String = "",
+    val profilePicture: String? = ""
     )
 
 fun Person.getProfileBitmap(): ImageBitmap{

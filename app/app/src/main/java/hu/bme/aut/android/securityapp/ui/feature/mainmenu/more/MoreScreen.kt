@@ -26,7 +26,6 @@ import hu.bme.aut.android.securityapp.ui.feature.common.MoreMenuItem
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.model.MoreMenu
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
-import hu.bme.aut.android.securityapp.ui.navigation.withArgs
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -35,7 +34,7 @@ fun MoreScreen(
     navigateTo: (String) -> Unit,
 ){
     val anonymousMenuItems = listOf(
-        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.withArgs(LoggedPerson.ID.toString()), backgroundColor = Color.Yellow),
+        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.fullRoute, backgroundColor = Color.Yellow),
     )
     val userMenuItems = listOf(
         *(anonymousMenuItems.toTypedArray()),
