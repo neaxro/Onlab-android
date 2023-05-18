@@ -1,0 +1,11 @@
+version: '1.0'
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=asd
+    ports:
+      - 5000:3306
+
+  api:
+    image: axelnemes/securityapi:latest
