@@ -37,8 +37,10 @@ class LoginViewModel @Inject constructor(
                     LoggedPerson.ID = loginResult.data!!.id
                     LoggedPerson.TOKEN = loginResult.data.token
 
+                    // TODO: Save data into shared preferences
+
                     // Check for number of jobs the Person is participated
-                    checkPersonJobs(LoggedPerson.ID, jobRepository, this@LoginViewModel){
+                    checkPersonJobs(LoggedPerson.ID, jobRepository){
                         numberOfJobs.value = it
                         onSuccess(it)
                         //login.value = "Success! ID: ${LoggedPerson.ID} #Jobs: ${numberOfJobs.value}"
@@ -52,17 +54,17 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
-}
 
-private fun checkPersonJobs(personId: Int, jobRepository: JobRepository, viewModel: ViewModel, onResponse: (Int)->Unit){
-    viewModel.viewModelScope.launch {
-        val jobs = jobRepository.getAllJobForPerson(personId)
+    private fun checkPersonJobs(personId: Int, jobRepository: JobRepository, onResponse: (Int)->Unit){
+        viewModelScope.launch {
+            val jobs = jobRepository.getAllJobForPerson(personId)
 
-        when(jobs){
-            is Resource.Success -> {
-                onResponse(jobs.data!!.size)
+            when(jobs){
+                is Resource.Success -> {
+                    onResponse(jobs.data!!.size)
+                }
+                else -> {}
             }
-            else -> {}
         }
     }
 }
