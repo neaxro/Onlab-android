@@ -7,6 +7,8 @@ services:
       - MYSQL_ROOT_PASSWORD=asd
     ports:
       - 5306:3306
+    volumes:
+      - "./forrasok/DB/docker_schema_script.sql:/docker-entrypoint-initdb.d/1.sql"
 
   api:
     container_name: SecurityApi
