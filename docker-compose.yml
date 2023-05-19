@@ -6,8 +6,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=asd
     ports:
-      - 5000:3306
+      - 5306:3306
 
   api:
     container_name: SecurityApi
     image: axelnemes/securityapi:latest
+    ports:
+      - 5080:80
+      - 5443:443
