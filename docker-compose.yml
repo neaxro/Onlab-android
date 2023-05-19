@@ -1,6 +1,7 @@
 version: '1.0'
 services:
   db:
+    container_name: SecurityDB
     image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=asd
@@ -8,4 +9,5 @@ services:
       - 5000:3306
 
   api:
+    container_name: SecurityApi
     image: axelnemes/securityapi:latest
