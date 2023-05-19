@@ -1490,7 +1490,7 @@
           }
         }
       },
-      "Microsoft.NET.Build.Containers/0.3.2": {
+      "Microsoft.NET.Build.Containers/7.0.302": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.Build.Containers.props": {},
@@ -5873,33 +5873,59 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
-    "Microsoft.NET.Build.Containers/0.3.2": {
-      "sha512": "WkQ2M9PEUYDZM92Yfm6BBkHBTBQtET8Y30l5MOxU/IkiuAAnaGar/sMiNR5s4W+aMB3+S6lzndq9aMxUXw8hCA==",
+    "Microsoft.NET.Build.Containers/7.0.302": {
+      "sha512": "FT+IWJ2d72WA7ls+0dNjiIb3KE6MkV8A5eLgVq1Z3a83EiaOXxi+HCATHQZaSojmigEyvKw9I5oyga8ZCl1nYw==",
       "type": "package",
-      "path": "microsoft.net.build.containers/0.3.2",
+      "path": "microsoft.net.build.containers/7.0.302",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "Icon.png",
         "README.md",
         "build/Microsoft.NET.Build.Containers.props",
         "build/Microsoft.NET.Build.Containers.targets",
+        "containerize/Microsoft.DotNet.Cli.Utils.dll",
         "containerize/Microsoft.NET.Build.Containers.dll",
         "containerize/Newtonsoft.Json.dll",
         "containerize/NuGet.Common.dll",
         "containerize/NuGet.Configuration.dll",
+        "containerize/NuGet.DependencyResolver.Core.dll",
         "containerize/NuGet.Frameworks.dll",
+        "containerize/NuGet.LibraryModel.dll",
         "containerize/NuGet.Packaging.dll",
+        "containerize/NuGet.ProjectModel.dll",
+        "containerize/NuGet.Protocol.dll",
         "containerize/NuGet.Versioning.dll",
         "containerize/System.CommandLine.dll",
         "containerize/Valleysoft.DockerCredsProvider.dll",
         "containerize/containerize.dll",
         "containerize/containerize.runtimeconfig.json",
-        "microsoft.net.build.containers.0.3.2.nupkg.sha512",
+        "microsoft.net.build.containers.7.0.302.nupkg.sha512",
         "microsoft.net.build.containers.nuspec",
-        "tasks/net472/Microsoft.NET.Build.Containers.deps.json",
         "tasks/net472/Microsoft.NET.Build.Containers.dll",
+        "tasks/net472/Newtonsoft.Json.dll",
+        "tasks/net472/NuGet.Common.dll",
+        "tasks/net472/NuGet.Configuration.dll",
+        "tasks/net472/NuGet.DependencyResolver.Core.dll",
+        "tasks/net472/NuGet.Frameworks.dll",
+        "tasks/net472/NuGet.LibraryModel.dll",
+        "tasks/net472/NuGet.Packaging.Core.dll",
+        "tasks/net472/NuGet.Packaging.dll",
+        "tasks/net472/NuGet.ProjectModel.dll",
+        "tasks/net472/NuGet.Protocol.dll",
+        "tasks/net472/NuGet.Versioning.dll",
         "tasks/net7.0/Microsoft.NET.Build.Containers.deps.json",
         "tasks/net7.0/Microsoft.NET.Build.Containers.dll",
+        "tasks/net7.0/Newtonsoft.Json.dll",
+        "tasks/net7.0/NuGet.Common.dll",
+        "tasks/net7.0/NuGet.Configuration.dll",
+        "tasks/net7.0/NuGet.DependencyResolver.Core.dll",
+        "tasks/net7.0/NuGet.Frameworks.dll",
+        "tasks/net7.0/NuGet.LibraryModel.dll",
+        "tasks/net7.0/NuGet.Packaging.dll",
+        "tasks/net7.0/NuGet.ProjectModel.dll",
+        "tasks/net7.0/NuGet.Protocol.dll",
+        "tasks/net7.0/NuGet.Versioning.dll",
         "tasks/net7.0/Valleysoft.DockerCredsProvider.dll"
       ]
     },
@@ -11320,7 +11346,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.4",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.4",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.4",
-      "Microsoft.NET.Build.Containers >= 0.3.2",
+      "Microsoft.NET.Build.Containers >= 7.0.302",
       "Microsoft.OpenApi >= 1.6.3",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.17.2",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.5",
@@ -11331,7 +11357,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Work\\.nuget\\packages\\": {},
+    "C:\\Users\\neaxr\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
@@ -11340,14 +11366,14 @@
       "projectUniqueName": "C:\\GIT\\Onlab\\Onlab-android\\api\\SecurityApi\\SecurityApi\\SecurityApi.csproj",
       "projectName": "SecurityApi",
       "projectPath": "C:\\GIT\\Onlab\\Onlab-android\\api\\SecurityApi\\SecurityApi\\SecurityApi.csproj",
-      "packagesPath": "C:\\Users\\Work\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\neaxr\\.nuget\\packages\\",
       "outputPath": "C:\\GIT\\Onlab\\Onlab-android\\api\\SecurityApi\\SecurityApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Work\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\neaxr\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -11356,6 +11382,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11404,7 +11431,7 @@
           },
           "Microsoft.NET.Build.Containers": {
             "target": "Package",
-            "version": "[0.3.2, )",
+            "version": "[7.0.302, )",
             "autoReferenced": true
           },
           "Microsoft.OpenApi": {
@@ -11455,7 +11482,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
