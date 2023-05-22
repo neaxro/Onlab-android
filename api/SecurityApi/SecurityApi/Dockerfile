@@ -21,7 +21,7 @@
 # COPY --from=publish /app/publish .
 # ENTRYPOINT ["dotnet", "SecurityApi.dll"]
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim-amd64 AS base
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
