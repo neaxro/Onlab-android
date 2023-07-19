@@ -28,6 +28,7 @@ namespace SecurityApi.Controllers
             _service = service;
         }
 
+        // DEBUG ONLY
         [AllowAnonymous]
         [HttpGet("all")]
         public ActionResult<IEnumerable<Shift>> GetAll()
@@ -92,7 +93,7 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{shiftId}")]
         public async Task<ActionResult<Shift>> Get(int shiftId)
         {

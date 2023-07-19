@@ -1,0 +1,52 @@
+version: '3.0'
+services:
+  # db:
+  #   container_name: SecurityDB
+  #   image: mysql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: example
+  #   ports:
+  #     - 5306:3306
+  #   volumes:
+  #     - "./forrasok/DB/docker_schema_script.sql:/docker-entrypoint-initdb.d/1.sql"
+  #     - "./forrasok/DB/docker_default_data.sql:/docker-entrypoint-initdb.d/2.sql"
+  #   networks:
+  #     network:
+  #       ipv4_address: 192.168.1.101
+
+  db-mssql:
+    container_name: SecurityDB_MSSQL
+    build: ./forrasok/db
+    ports:
+      - 51433:1433
+    #command: bash -c "chmod -R 777 /usr/src/sql/ && /usr/src/sql/entrypoint.sh"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=example
+    volumes:
+      - database-data:/var/opt/mssql
+    networks:
+      network:
+        ipv4_address: 192.168.1.102
+
+  # api:
+  #   container_name: SecurityApi
+  #   #image: axelnemes/securityapi:latest
+  #   build: ./api/SecurityApi/SecurityApi
+  #   ports:
+  #     - 5080:80
+  #     - 5443:443
+  #   networks:
+  #     network:
+  #       ipv4_address: 192.168.1.100
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+
+volumes:
+    database-data:

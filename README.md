@@ -79,3 +79,8 @@ Másik hasznos funkciója az alkalmazásnak az a lokáció megosztás. Amennyibe
    - Authorizáció API
    - Tesztelni, hibákat javítani
    - Véglegesítani az API-t
+4. Sprint
+   - Issue-ban a módosítható, javítandó dolgokat (identity, stay logged in a refresh tokennel)
+   - Login-ál kapjon tokent
+   - AllowAnonymous-okat átnézni és javítani Auth-ra pl.: GetAllJobsForPerson
+   - Folytatni az app-ot

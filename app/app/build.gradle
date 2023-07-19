@@ -1,0 +1,95 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id("com.google.dagger.hilt.android")
+    id "org.jetbrains.kotlin.kapt"
+}
+
+android {
+    namespace 'hu.bme.aut.android.securityapp'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "hu.bme.aut.android.securityapp"
+        minSdk 26
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        compose true
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.2"
+    }
+
+}
+
+dependencies {
+    def composeBom = platform('androidx.compose:compose-bom:2023.03.00')
+    implementation composeBom
+    androidTestImplementation composeBom
+
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation "androidx.activity:activity-compose:1.7.2"
+    implementation "androidx.compose.ui:ui:1.4.3"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.4.3"
+    implementation 'androidx.compose.material3:material3'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.4.3"
+    debugImplementation "androidx.compose.ui:ui-tooling:1.4.3"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.4.3"
+    implementation "androidx.compose.material:material-icons-extended:1.4.3"
+
+    // Navigation controller
+    implementation("androidx.navigation:navigation-compose:2.6.0")
+
+    // Dagger hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.2'
+
+    // JWT token decoder
+    implementation 'com.auth0.android:jwtdecode:2.0.2'
+}
+
+// Allow references to generated code | Dagger hilt
+kapt {
+    correctErrorTypes = true
+}

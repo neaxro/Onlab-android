@@ -1,4 +1,5 @@
-﻿using SecurityApi.Dtos.DashboardDtos;
+﻿using NuGet.Protocol;
+using SecurityApi.Dtos.DashboardDtos;
 using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
 using SecurityApi.Dtos.PersonDtos;
@@ -38,21 +39,26 @@ namespace SecurityApi.Converters
             return new Dtos.PersonDtos.Person(person.Id, person.Name, person.Username, person.Nickname, person.Email, person.ProfilePicture);
         }
 
-        public Job ToModel(Model.Job job)
+        public DetailJob ToDetailedModel(Model.Job job)
         {
             Person owner = ToModel(job.People);
-            return new Dtos.JobDtos.Job(job.Id, job.Title, job.Pin, job.Description, owner);
+            return new Dtos.JobDtos.DetailJob(job.Id, job.Title, job.Pin, job.Description, owner);
+        }
+
+        public Job ToModel(Model.Job job)
+        {
+            return new Dtos.JobDtos.Job(job.Id, job.Title, job.Description);
         }
 
         public Dashboard ToModel(Model.Dashboard dashboard)
         {
-            return new Dtos.DashboardDtos.Dashboard(dashboard.Id, dashboard.Title, dashboard.Message, dashboard.CreationTime, dashboard.People.Name, dashboard.People.ProfilePicture, dashboard.Wage.Id, dashboard.Wage.Name);
+            return new Dtos.DashboardDtos.Dashboard(dashboard.Id, dashboard.Title, dashboard.Message, dashboard.CreationTime.Value.ToString("MMM d H:m"), dashboard.People.Name, dashboard.People.ProfilePicture, dashboard.Wage.Id, dashboard.Wage.Name);
         }
 
         public Position ToModel(Model.Position position)
         {
             Person positionedPerson = ToModel(position.People);
-            Job job = ToModel(position.Job);
+            DetailJob job = ToDetailedModel(position.Job);
 
             return new Dtos.PositionDtos.Position(position.Id, position.Time, position.Longitude, position.Latitude, positionedPerson, job);
         }
@@ -70,7 +76,7 @@ namespace SecurityApi.Converters
         public Shift ToModel(Model.Shift shift)
         {
             Person person = ToModel(shift.People);
-            Job job = ToModel(shift.Job);
+            DetailJob job = ToDetailedModel(shift.Job);
             Status status = ToModel(shift.Status);
             Wage wage = ToModel(shift.Wage);
 

@@ -5,7 +5,7 @@ public record Dashboard(
     int id,
     string Title,
     string Message,
-    DateTime? CreationTime,
+    string CreationTime,
     string CreatorName,
     byte[]? CreatorProfilePicture,
     int GroupId,

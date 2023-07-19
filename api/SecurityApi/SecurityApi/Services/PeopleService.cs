@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SecurityApi.Context;
 using SecurityApi.Converters;
 using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Model;
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Text.RegularExpressions;
 using Person = SecurityApi.Dtos.PersonDtos.Person;
 
@@ -14,11 +18,13 @@ namespace SecurityApi.Services
     {
         private readonly OnlabContext _context;
         private readonly ModelToDtoConverter _converter;
+        private readonly IConfiguration _configuration;
 
-        public PeopleService(OnlabContext context)
+        public PeopleService(IConfiguration configuration, OnlabContext context)
         {
             _context = context;
             _converter = new ModelToDtoConverter();
+            _configuration = configuration;
         }
 
         public async Task<Person> Delete(int personId)
@@ -57,7 +63,7 @@ namespace SecurityApi.Services
             return people;
         }
 
-        public async Task<Person> Login(LoginPerson loginInformation)
+        public async Task<LoginResponse> Login(LoginPerson loginInformation)
         {
             var person = await _context.People.FirstOrDefaultAsync(p => p.Username == loginInformation.Username);
             if(person == null)
@@ -70,7 +76,36 @@ namespace SecurityApi.Services
                 throw new Exception("Incorrect Password!");
             }
 
-            return _converter.ToModel(person);
+            string token = CreateToken(person);
+            return new LoginResponse(person.Id, token);
+        }
+
+        private string CreateToken(Model.Person person)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.SerialNumber, person?.Id.ToString()),
+                new Claim(ClaimTypes.Name, person?.Name),
+                new Claim(ClaimTypes.Email, person?.Email),
+                new Claim(ClaimTypes.Surname, person?.Username)
+            };
+
+
+            var symmetricKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    _configuration.GetSection("SymmetricKeys:MySecretToken").Value!));
+
+            var credentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: credentials
+                );
+
+            var JsonWebToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return JsonWebToken;
         }
 
         public async Task<Person> Register(CreatePerson newPerson)
@@ -95,6 +130,15 @@ namespace SecurityApi.Services
             if (!isEmailValid.Success)
             {
                 throw new Exception("Email address invalid format!");
+            }
+
+            if(newPerson.Password.Length < 8)
+            {
+                throw new Exception("Password min size is 8 characters!");
+            }
+            else if (newPerson.Password.Length > 30)
+            {
+                throw new Exception("Password max size is 30 characters!");
             }
 
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
@@ -163,7 +207,10 @@ namespace SecurityApi.Services
             person.Username = newData.Username;
             person.Nickname = newData.Nickname;
             person.Email = newData.Email;
-            person.Password = newData.Password;
+            if(newData.Password?.Length > 0)
+            {
+                person.Password = newData.Password;
+            }
 
             await _context.SaveChangesAsync();
 

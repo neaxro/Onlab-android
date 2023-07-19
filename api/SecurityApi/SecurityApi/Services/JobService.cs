@@ -9,10 +9,14 @@ using SecurityApi.Dtos.PersonDtos;
 using SecurityApi.Dtos.RoleDtos;
 using SecurityApi.Dtos.WageDtos;
 using SecurityApi.Enums;
+using SecurityApi.Model;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Job = SecurityApi.Dtos.JobDtos.Job;
+using Person = SecurityApi.Dtos.PersonDtos.Person;
+
 
 namespace SecurityApi.Services
 {
@@ -259,7 +263,7 @@ namespace SecurityApi.Services
             return _converter.ToModel(newJob);
         }
 
-        public async Task<Job> Delete(int jobId)
+        public async Task<DetailJob> Delete(int jobId)
         {
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
 
@@ -297,13 +301,13 @@ namespace SecurityApi.Services
             await _context.SaveChangesAsync();
             await tran.CommitAsync();
 
-            return _converter.ToModel(job);
+            return _converter.ToDetailedModel(job);
         }
 
         public async Task<Job> Get(int jobId)
         {
             var job = await _context.Jobs
-                .Include(j => j.People)
+                //.Include(j => j.People)
                 .FirstOrDefaultAsync(j => j.Id == jobId);
 
             if(job == null)
@@ -314,17 +318,17 @@ namespace SecurityApi.Services
             return _converter.ToModel(job);
         }
 
-        public IEnumerable<Job> GetAll()
+        public IEnumerable<DetailJob> GetAll()
         {
             var jobs = _context.Jobs
                 .Include(j => j.People)
-                .Select(_converter.ToModel)
+                .Select(_converter.ToDetailedModel)
                 .ToList();
 
             return jobs;
         }
 
-        public IEnumerable<Job> GetAllAvailableForPerson(int personId)
+        public IEnumerable<DetailJob> GetAllAvailableForPerson(int personId)
         {
             var jobs = _context.PeopleJobs
                 .Include(pj => pj.Job)
@@ -333,7 +337,7 @@ namespace SecurityApi.Services
                 .Include(pj => pj.Wage)
                 .Where(pj => pj.PeopleId == personId)
                 .Select(pj => pj.Job)
-                .Select(_converter.ToModel)
+                .Select(_converter.ToDetailedModel)
                 .ToList();
 
             return jobs;
@@ -353,6 +357,20 @@ namespace SecurityApi.Services
             }
 
             return _converter.ToModel(connection);
+        }
+
+        public async Task<DetailJob> GetDetailed(int jobId)
+        {
+            var job = await _context.Jobs
+                .Include(j => j.People)
+                .FirstOrDefaultAsync(j => j.Id == jobId);
+
+            if (job == null)
+            {
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            return _converter.ToDetailedModel(job);
         }
 
         public async Task<String> SelectJob(SelectJob selectJob)
