@@ -23,6 +23,12 @@ interface DashboardApi {
         @Path("personId") personId: Int,
     ): Response<List<Dashboard>>
 
+    @GET("/api/dashboard/allforjob/{jobId}")
+    suspend fun getAllForJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+    ): Response<List<Dashboard>>
+
     @GET("/api/dashboard/{dashboardId}")
     suspend fun getDashboard(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",

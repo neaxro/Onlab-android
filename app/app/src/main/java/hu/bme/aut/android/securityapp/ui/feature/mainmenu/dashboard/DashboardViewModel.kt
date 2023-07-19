@@ -47,6 +47,27 @@ class DashboardViewModel@Inject constructor(
         }
     }
 
+    fun loadAllForAdmin(onError: (String) -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val result = repository.getAllForJob(LoggedPerson.CURRENT_JOB_ID)
+
+            when(result){
+                is Resource.Success -> {
+                    dashboardMessages.removeAll(dashboardMessages)
+                    dashboardMessages.addAll(result.data!!)
+                }
+                is Resource.Error -> {
+                    viewModelScope.launch(Dispatchers.Main){
+                        if(LoggedPerson.CURRENT_JOB_ID > 0){
+                            onError(result.message!!)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     fun loadPersonData(){
         viewModelScope.launch(Dispatchers.IO) {
             val result = personRepository.getPerson(LoggedPerson.ID)

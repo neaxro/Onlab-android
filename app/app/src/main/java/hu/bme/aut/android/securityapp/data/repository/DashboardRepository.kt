@@ -11,6 +11,8 @@ interface DashboardRepository {
 
     suspend fun getDashboard(dashboardId: Int): Resource<Dashboard>
 
+    suspend fun getAllForJob(jobId: Int): Resource<List<Dashboard>>
+
     suspend fun createDashboard(dashboard: CreateDashboardData): Resource<Dashboard>
 
     suspend fun updateDashboard(dashboardId: Int, dashboardData: UpdateDashboardData): Resource<Dashboard>

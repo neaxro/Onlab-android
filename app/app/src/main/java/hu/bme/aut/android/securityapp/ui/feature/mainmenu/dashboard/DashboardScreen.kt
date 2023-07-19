@@ -47,8 +47,16 @@ fun DashboardScreen(
     val messages = remember { viewModel.dashboardMessages }
 
     LaunchedEffect(true){
-        viewModel.loadAllDashboards { errorMessage ->
-            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+
+        if(LoggedPerson.getRole() is Roles.Owner || LoggedPerson.getRole() is Roles.Admin){
+            viewModel.loadAllForAdmin { errorMessage ->
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+        else {
+            viewModel.loadAllDashboards { errorMessage ->
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
         }
 
         viewModel.loadPersonData()

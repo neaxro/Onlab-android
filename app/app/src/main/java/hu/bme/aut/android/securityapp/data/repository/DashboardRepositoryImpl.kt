@@ -51,6 +51,25 @@ class DashboardRepositoryImpl (
         return connection
     }
 
+    override suspend fun getAllForJob(jobId: Int): Resource<List<Dashboard>> {
+        val connection = try {
+            val result = api.getAllForJob(jobId = jobId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
     override suspend fun createDashboard(dashboard: CreateDashboardData): Resource<Dashboard> {
         val connection = try {
             val result = api.insertDashboard(dashboard = dashboard)
