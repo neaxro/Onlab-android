@@ -29,6 +29,14 @@ namespace SecurityApi.Controllers
 
         // DEBUG ONLY
         [AllowAnonymous]
+        [HttpGet("test")]
+        public ActionResult<String> Test()
+        {
+            return Ok("Succesfull test :)");
+        }
+
+        // DEBUG ONLY
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<Person>> ListAll()
         {

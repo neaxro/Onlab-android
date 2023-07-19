@@ -16,8 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<OnlabContext>(options =>
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DockerContainerConnection"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DockerContainerConnection"))
 );
 
 builder.Services.AddScoped<IPeopleService, PeopleService>();
