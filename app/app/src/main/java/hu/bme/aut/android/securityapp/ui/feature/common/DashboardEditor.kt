@@ -209,9 +209,9 @@ fun EditDashboardMessageScreenPreview(){
         mutableStateOf(Dashboard(groupId = 2))
     }
     val wages = listOf(
-        Wage(1, "Default", 1000, "Valami"),
-        Wage(2, "Dog", 1000, "Valami"),
-        Wage(3, "Special", 1000, "Valami"),
+        Wage(1, "Default", 1000.0, "Valami"),
+        Wage(2, "Dog", 1000.0, "Valami"),
+        Wage(3, "Special", 1000.0, "Valami"),
     )
 
     DashboardEditor(

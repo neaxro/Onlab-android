@@ -13,4 +13,10 @@ interface WageApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("jobId") jobId: Int,
     ): Response<List<Wage>>
+
+    @GET("/api/wage/forjob/{jobId}")
+    suspend fun getWages(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+    ): Response<List<Wage>>
 }

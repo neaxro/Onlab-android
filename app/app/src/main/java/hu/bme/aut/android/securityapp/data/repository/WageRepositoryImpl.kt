@@ -28,4 +28,23 @@ class WageRepositoryImpl constructor(
 
         return connection
     }
+
+    override suspend fun getWages(jobId: Int): Resource<List<Wage>> {
+        val connection = try{
+            val result = api.getWages(jobId = jobId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Succesfully connected to job!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
 }

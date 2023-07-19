@@ -16,6 +16,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashbo
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.profile.ProfileScreen
+import hu.bme.aut.android.securityapp.ui.feature.wages.WagesScreen
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -134,6 +135,16 @@ fun MyAppNavHost(
                             inclusive = true
                         }
                     }
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Wages.fullRoute,
+        ){
+            WagesScreen(
+                navigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
