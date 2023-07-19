@@ -29,7 +29,7 @@ class WagesViewModel @Inject constructor(
         loadAllWages()
     }
 
-    private fun loadAllWages(){
+    fun loadAllWages(){
         viewModelScope.launch(Dispatchers.IO) {
             val wages = repository.getWages(LoggedPerson.CURRENT_JOB_ID)
 

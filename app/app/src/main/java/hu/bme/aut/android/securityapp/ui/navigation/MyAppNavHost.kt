@@ -16,8 +16,11 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashbo
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.profile.ProfileScreen
+import hu.bme.aut.android.securityapp.ui.feature.wages.CreateWageScreen
+import hu.bme.aut.android.securityapp.ui.feature.wages.WageDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.wages.WagesScreen
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
+import hu.bme.aut.android.securityapp.ui.navigation.withArgs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,6 +146,35 @@ fun MyAppNavHost(
             route = Screen.Wages.fullRoute,
         ){
             WagesScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                },
+                navigateToCreate = {
+                    navController.navigate(Screen.WageCreate.fullRoute)
+                },
+                navigateToDetails = { wageId ->
+                    navController.navigate(Screen.WageDetail.withArgs(wageId.toString()))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.WageDetail.fullRoute,
+            arguments = listOf(
+                navArgument("wageId"){ type = NavType.IntType }
+            )
+        ){
+            WageDetailScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.WageCreate.fullRoute
+        ){
+            CreateWageScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }

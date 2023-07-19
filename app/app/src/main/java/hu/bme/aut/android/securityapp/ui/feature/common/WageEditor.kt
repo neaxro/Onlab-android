@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -33,18 +34,20 @@ fun WageEditor(
     onNameChange: (String) -> Unit = {},
     price: String,
     onPriceChange: (String) -> Unit = {},
-    isError: (Boolean) -> Unit = {}
+    isError: (Boolean) -> Unit = {},
+    isReadOnly: Boolean = false,
+    modifier: Modifier = Modifier
 ){
     val maxNameLength = 30
     val isNameError = checkName(name)
-    val isPriceError = price.isEmpty()
+    val isPriceError = price.isEmpty() || if(price.toDoubleOrNull() != null) price.toDouble() <= 0 else false
 
     isError(isNameError || isPriceError)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(10.dp)
+        modifier = modifier.padding(10.dp)
     ) {
 
         OutlinedTextField(
@@ -81,6 +84,9 @@ fun WageEditor(
                     )
                 }
             },
+            readOnly = isReadOnly,
+            enabled = !isReadOnly,
+            modifier = Modifier.width(300.dp)
         )
 
         OutlinedTextField(
@@ -105,7 +111,10 @@ fun WageEditor(
             trailingIcon = {
                 Text(text = "Ft/hour", modifier = Modifier.padding(end = 10.dp))
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            readOnly = isReadOnly,
+            enabled = !isReadOnly,
+            modifier = Modifier.width(300.dp)
         )
 
     }
