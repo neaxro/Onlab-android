@@ -88,6 +88,8 @@ class CreateDashboardMessageViewModel @Inject constructor(
                 is Resource.Success -> {
                     _screenState.update { it.copy(isLoading = false) }
                     _wages.value = result.data!!
+
+                    onEvoke(CreateDashboardEvent.ChangeWage(_wages.value[0]))
                 }
                 is Resource.Error -> {
                     _screenState.update { it.copy(error = result.message!!) }

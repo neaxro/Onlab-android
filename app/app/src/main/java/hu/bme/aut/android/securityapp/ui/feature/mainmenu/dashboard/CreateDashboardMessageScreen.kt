@@ -68,10 +68,13 @@ fun CreateDashboardMessageScreen(
                 onErrorChanged = {}
             )
 
-            OutlinedButton(onClick = {
-                viewModel.onEvoke(CreateDashboardEvent.SaveDashboard)
-                navigateBack()
-            }) {
+            OutlinedButton(
+                onClick = {
+                    viewModel.onEvoke(CreateDashboardEvent.SaveDashboard)
+                    navigateBack()
+                },
+                enabled = message.title.isNotEmpty()
+            ) {
                 Row {
                     Image(imageVector = Icons.Default.Save, contentDescription = "Save dashboard")
                     Spacer(modifier = Modifier.width(10.dp))

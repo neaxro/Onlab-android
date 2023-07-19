@@ -127,7 +127,7 @@ fun DashboardEditor(
             readOnly = isReadOnly,
             enabled = !isReadOnly,
             modifier = Modifier
-                .height(180.dp)
+                .height(220.dp)
                 .width(300.dp),
         )
 
