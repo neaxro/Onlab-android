@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 import java.time.LocalTime
@@ -81,6 +82,11 @@ fun WelcomeBoard(
                 Text(
                     text = person.nickname,
                     fontWeight = FontWeight.Light,
+                    fontSize = 15.sp,
+                )
+                Text(
+                    text = "Role: ${LoggedPerson.getRole().title}",
+                    fontWeight = FontWeight.Medium,
                     fontSize = 15.sp,
                 )
             }
