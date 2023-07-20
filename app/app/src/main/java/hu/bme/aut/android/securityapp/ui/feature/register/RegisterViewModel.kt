@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
+import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
@@ -24,18 +24,18 @@ class RegisterViewModel @Inject constructor(
     var username = mutableStateOf("")
 
     fun register(onSuccess: () -> Unit, onError: (String) -> Unit){
-        val registerData = PersonDetail(email.value, fullName.value, nickname.value, password.value, username.value)
+        val registerData = PersonDefault(email.value, fullName.value, nickname.value, password.value, username.value)
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result: Resource<PersonDetail> = repository.registerUser(registerData)
+            val result: Resource<PersonDefault> = repository.registerUser(registerData)
 
             when(result){
-                is Resource.Success<PersonDetail> -> {
+                is Resource.Success<PersonDefault> -> {
                     withContext(Dispatchers.Main){
                         onSuccess()
                     }
                 }
-                is Resource.Error<PersonDetail> -> {
+                is Resource.Error<PersonDefault> -> {
                     withContext(Dispatchers.Main){
                         onError(result.message!!)
                     }

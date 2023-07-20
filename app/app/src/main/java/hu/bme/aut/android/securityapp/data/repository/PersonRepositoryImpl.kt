@@ -2,7 +2,7 @@ package hu.bme.aut.android.securityapp.data.repository
 
 import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.people.Person
-import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
+import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.remote.PersonApi
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
@@ -29,7 +29,7 @@ class PersonRepositoryImpl constructor(
         return connection
     }
 
-    override suspend fun updatePerson(personId: Int, person: PersonDetail): Resource<PersonDetail> {
+    override suspend fun updatePerson(personId: Int, person: PersonDefault): Resource<PersonDefault> {
         val connection = try {
             val result = api.updatePerson(personId = personId, person = person)
 

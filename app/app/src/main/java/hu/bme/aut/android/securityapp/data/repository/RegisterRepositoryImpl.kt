@@ -1,7 +1,7 @@
 package hu.bme.aut.android.securityapp.data.repository
 
 import android.app.Application
-import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
+import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
@@ -10,7 +10,7 @@ class RegisterRepositoryImpl(
     private val appContext: Application
 ): RegisterRepository {
 
-    override suspend fun registerUser(registerData: PersonDetail): Resource<PersonDetail> {
+    override suspend fun registerUser(registerData: PersonDefault): Resource<PersonDefault> {
         val result = try{
             val response = api.register(registerData)
             // Check server response

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
-import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
+import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.repository.PersonRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import kotlinx.coroutines.Dispatchers
@@ -21,14 +21,14 @@ class ProfileScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
-    private var _userData = MutableStateFlow(PersonDetail())
+    private var _userData = MutableStateFlow(PersonDefault())
     val userData = _userData.asStateFlow()
 
     init {
         loadData(LoggedPerson.ID)
     }
 
-    fun changeUserData(userData: PersonDetail){
+    fun changeUserData(userData: PersonDefault){
         _userData.value = userData
     }
 

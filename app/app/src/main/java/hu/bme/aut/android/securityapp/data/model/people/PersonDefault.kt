@@ -1,6 +1,6 @@
 package hu.bme.aut.android.securityapp.data.model.people
 
-data class PersonDetail(
+data class PersonDefault(
     val fullName: String = "",
     val username: String = "",
     val nickname: String = "",

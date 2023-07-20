@@ -11,13 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
+import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonEditor(
-    person: PersonDetail = PersonDetail(),
-    onPersonChange: (PersonDetail) -> Unit = {},
+    person: PersonDefault = PersonDefault(),
+    onPersonChange: (PersonDefault) -> Unit = {},
     readOnly: Boolean = true,
     newPassword: Boolean = false,
     modifier: Modifier = Modifier,
@@ -102,7 +102,7 @@ fun PersonEditor(
 @Preview(showBackground = true)
 fun PersonEditorPreview(){
     PersonEditor(
-        person = PersonDetail("Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com"),
+        person = PersonDefault("Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com"),
         readOnly = false,
         newPassword = true,
     )
