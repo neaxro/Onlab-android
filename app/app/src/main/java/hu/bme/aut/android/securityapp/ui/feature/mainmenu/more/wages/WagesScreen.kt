@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.feature.wages
+package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

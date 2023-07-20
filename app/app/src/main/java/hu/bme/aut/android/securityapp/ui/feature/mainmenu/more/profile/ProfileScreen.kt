@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.feature.profile
+package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

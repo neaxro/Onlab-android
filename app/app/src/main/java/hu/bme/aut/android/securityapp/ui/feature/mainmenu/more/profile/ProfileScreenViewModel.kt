@@ -1,4 +1,4 @@
-package hu.bme.aut.android.securityapp.ui.feature.profile
+package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

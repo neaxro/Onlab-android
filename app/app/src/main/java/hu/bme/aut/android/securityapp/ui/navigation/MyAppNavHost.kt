@@ -15,10 +15,10 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
-import hu.bme.aut.android.securityapp.ui.feature.profile.ProfileScreen
-import hu.bme.aut.android.securityapp.ui.feature.wages.CreateWageScreen
-import hu.bme.aut.android.securityapp.ui.feature.wages.WageDetailScreen
-import hu.bme.aut.android.securityapp.ui.feature.wages.WagesScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile.ProfileScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.CreateWageScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.WageDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.WagesScreen
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.navigation.withArgs
 
