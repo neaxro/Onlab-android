@@ -1,4 +1,5 @@
 ﻿using Microsoft.Build.Framework;
+using SecurityApi.Dtos;
 using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
 using SecurityApi.Dtos.RoleDtos;
@@ -12,7 +13,7 @@ namespace SecurityApi.Services
     {
         IEnumerable<DetailJob> GetAll();
         IEnumerable<DetailJob> GetAllAvailableForPerson(int personId);
-        IEnumerable<Person> AllPersonInJob(int jobId);
+        IEnumerable<PersonDetailed> AllPersonInJob(int jobId);
         Task<String> SelectJob(SelectJob selectJob);
         Task<Job> Get(int jobId);
         Task<DetailJob> GetDetailed(int jobId);

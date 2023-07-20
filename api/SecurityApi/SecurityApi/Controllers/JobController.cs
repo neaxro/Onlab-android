@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Common;
 using SecurityApi.Context;
+using SecurityApi.Dtos;
 using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
 using SecurityApi.Dtos.RoleDtos;
@@ -45,7 +46,7 @@ namespace SecurityApi.Controllers
 
         [Authorize(Roles = "Admin, Owner")]
         [HttpGet("allonjob/{jobId}")]
-        public ActionResult<IEnumerable<Person>> GetAllOnJob(int jobId)
+        public ActionResult<IEnumerable<PersonDetailed>> GetAllOnJob(int jobId)
         {
             var result = _service.AllPersonInJob(jobId);
             return Ok(result);

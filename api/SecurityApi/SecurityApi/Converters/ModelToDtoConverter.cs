@@ -1,4 +1,5 @@
 ﻿using NuGet.Protocol;
+using SecurityApi.Dtos;
 using SecurityApi.Dtos.DashboardDtos;
 using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
@@ -37,6 +38,15 @@ namespace SecurityApi.Converters
         public Person ToModel(Model.Person person)
         {
             return new Dtos.PersonDtos.Person(person.Id, person.Name, person.Username, person.Nickname, person.Email, person.ProfilePicture);
+        }
+
+        public PersonDetailed ToDetailedModel(Model.PeopleJob person)
+        {
+            Person p = ToModel(person.People);
+            Wage w = ToModel(person.Wage);
+            Role r = ToModel(person.Role);
+
+            return new Dtos.PersonDetailed(p, w, r);
         }
 
         public DetailJob ToDetailedModel(Model.Job job)

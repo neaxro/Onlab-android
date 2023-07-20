@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SecurityApi.Context;
 using SecurityApi.Converters;
+using SecurityApi.Dtos;
 using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.PeopleJobDtos;
 using SecurityApi.Dtos.PersonDtos;
@@ -34,13 +35,16 @@ namespace SecurityApi.Services
             _configuration = configuration;
         }
 
-        public IEnumerable<Person> AllPersonInJob(int jobId)
+        public IEnumerable<PersonDetailed> AllPersonInJob(int jobId)
         {
+            // PersonDetailed kellene
             var people = _context.PeopleJobs
                 .Where(pj => pj.JobId == jobId)
                 .Include(pj => pj.People)
-                .Select(pj => pj.People)
-                .Select(_converter.ToModel)
+                .Include(pj => pj.Role)
+                .Include(pj => pj.Wage)
+                    .ThenInclude(w => w.Job)
+                .Select(_converter.ToDetailedModel)
                 .ToList();
 
             return people;
