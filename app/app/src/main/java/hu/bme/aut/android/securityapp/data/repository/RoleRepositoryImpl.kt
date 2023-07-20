@@ -28,6 +28,25 @@ class RoleRepositoryImpl constructor(
         return connection
     }
 
+    override suspend fun getAllChoosableRoles(): Resource<List<Role>> {
+        val connection = try{
+            val result = api.getAllChoosableRoles()
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Succesfully get all roles!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
     override suspend fun getRoleById(roleId: Int): Resource<Role> {
         val connection = try{
             val result = api.getRoleById(roleId = roleId)

@@ -36,5 +36,15 @@ namespace SecurityApi.Services
 
             return roles;
         }
+
+        public IEnumerable<Role> GetAllChoosable()
+        {
+            var roles = _context.Roles
+                .Where(r => r.Id > 1)   // Everything except Owner
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return roles;
+        }
     }
 }

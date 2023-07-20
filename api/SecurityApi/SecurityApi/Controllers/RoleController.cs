@@ -35,6 +35,15 @@ namespace SecurityApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("choosable")]
+        public ActionResult<IEnumerable<Role>> GetAllChoosable()
+        {
+            var roles = _service.GetAllChoosable();
+
+            return Ok(roles);
+        }
+
+        [Authorize]
         [HttpGet("{roleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

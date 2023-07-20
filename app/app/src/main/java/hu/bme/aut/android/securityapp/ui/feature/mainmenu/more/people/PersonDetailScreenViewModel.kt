@@ -68,7 +68,7 @@ class PersonDetailScreenViewModel @Inject constructor(
     private fun loadAllRoles(){
         _state.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            val result = roleRepository.getAllRoles()
+            val result = roleRepository.getAllChoosableRoles()
 
             when(result){
                 is Resource.Success -> {

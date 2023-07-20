@@ -7,5 +7,7 @@ interface RoleRepository {
 
     suspend fun getAllRoles(): Resource<List<Role>>
 
+    suspend fun getAllChoosableRoles(): Resource<List<Role>>
+
     suspend fun getRoleById(roleId: Int): Resource<Role>
 }

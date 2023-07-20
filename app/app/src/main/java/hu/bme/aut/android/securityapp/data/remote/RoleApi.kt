@@ -13,6 +13,11 @@ interface RoleApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}"
     ): Response<List<Role>>
 
+    @GET("/api/role/choosable")
+    suspend fun getAllChoosableRoles(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}"
+    ): Response<List<Role>>
+
     @GET("/api/role/{roleId}")
     suspend fun getRoleById(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
