@@ -20,6 +20,7 @@ sealed class Screen(val baseRoute: String, val fullRoute: String = baseRoute){
     object Wages: Screen(baseRoute = "wages_screen")
     object WageDetail: Screen(baseRoute = "wagedetail_screen", fullRoute = "wagedetail_screen/{wageId}")
     object WageCreate: Screen(baseRoute = "wagecreate_screen")
+    object People: Screen(baseRoute = "people_screen")
 }
 
 fun Screen.withArgs(vararg args: String): String{

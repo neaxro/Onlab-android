@@ -2,6 +2,7 @@ package hu.bme.aut.android.securityapp.data.remote
 
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.job.*
+import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,6 +27,12 @@ interface JobApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("jobId") jobId: Int
     ): Response<DetailedJob>
+
+    @GET("/api/job/allonjob/{jobId}")
+    suspend fun getAllPersonOnJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int
+    ): Response<List<PersonDetail>>
 
     @POST("/api/job")
     suspend fun createJob(

@@ -15,6 +15,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PeopleScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile.ProfileScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.CreateWageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.WageDetailScreen
@@ -177,6 +178,19 @@ fun MyAppNavHost(
             CreateWageScreen(
                 navigateBack = {
                     navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.People.fullRoute
+        ){
+            PeopleScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                },
+                navigateToDetail = {
+                    // TODO: Detail Screen
                 }
             )
         }
