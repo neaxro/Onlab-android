@@ -42,12 +42,12 @@ fun MoreScreen(
     )
     val adminMenuItems = listOf(
         *(userMenuItems.toTypedArray()),
-        MoreMenu(title = "People", icon = Icons.Default.People, url = Screen.People.fullRoute, backgroundColor = Color.Yellow),
-        MoreMenu(title = "Wages", icon = Icons.Default.MonetizationOn, url = Screen.Wages.fullRoute, backgroundColor = Color.Green),
         MoreMenu(title = "Pending Shifts", icon = Icons.Default.WorkHistory, url = ""),
     )
     val ownerMenuItems = listOf(
         *(adminMenuItems.toTypedArray()),
+        MoreMenu(title = "People", icon = Icons.Default.People, url = Screen.People.fullRoute, backgroundColor = Color.Yellow),
+        MoreMenu(title = "Wages", icon = Icons.Default.MonetizationOn, url = Screen.Wages.fullRoute, backgroundColor = Color.Green),
     )
 
     val menuItems = when(userRole){

@@ -3,6 +3,7 @@ package hu.bme.aut.android.securityapp.data.remote
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.job.*
 import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -61,10 +62,18 @@ interface JobApi {
     ): Response<JobSelectToken>
 
     @PATCH("/api/job/changerole/{jobId}")
-    suspend fun changeRoleForPerson(@Path("jobId") jobId: Int, @Body changeRoleData: ChangeRoleData)
+    suspend fun changeRoleForPerson(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+        @Body changeRoleData: ChangeRoleData
+    ): Response<ResponseBody>
 
     @PATCH("/api/job/changewage/{jobId}")
-    suspend fun changeWageForPerson(@Path("jobId") jobId: Int, @Body changeWageData: ChangeWageData)
+    suspend fun changeWageForPerson(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+        @Body changeWageData: ChangeWageData
+    ): Response<ResponseBody>
 
     @DELETE("/api/job/{jobId}")
     suspend fun deleteJob(@Path("jobId") jobId: Int)

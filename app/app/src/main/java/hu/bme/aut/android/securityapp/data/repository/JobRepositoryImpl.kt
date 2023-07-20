@@ -1,6 +1,8 @@
 package hu.bme.aut.android.securityapp.data.repository
 
 import android.app.Application
+import hu.bme.aut.android.securityapp.data.model.job.ChangeRoleData
+import hu.bme.aut.android.securityapp.data.model.job.ChangeWageData
 import hu.bme.aut.android.securityapp.data.model.job.CreateJobData
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.job.Job
@@ -9,6 +11,7 @@ import hu.bme.aut.android.securityapp.data.model.job.SelectJobData
 import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
 import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import okhttp3.ResponseBody
 
 class JobRepositoryImpl (
     private val api: JobApi,
@@ -137,6 +140,50 @@ class JobRepositoryImpl (
     override suspend fun getAllPersonOnJob(jobId: Int): Resource<List<PersonDetail>> {
         val connection = try {
             val result = api.getAllPersonOnJob(jobId = jobId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
+    override suspend fun changeWageForPerson(
+        jobId: Int,
+        changeWageData: ChangeWageData
+    ): Resource<ResponseBody> {
+        val connection = try {
+            val result = api.changeWageForPerson(jobId = jobId, changeWageData = changeWageData)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
+    override suspend fun changeRoleForPerson(
+        jobId: Int,
+        changeRoleData: ChangeRoleData
+    ): Resource<ResponseBody> {
+        val connection = try {
+            val result = api.changeRoleForPerson(jobId = jobId, changeRoleData = changeRoleData)
 
             val data = if(result.isSuccessful && result.code() == 200){
                 Resource.Success(message = "Job succesfully found!", data = result.body()!!)

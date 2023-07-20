@@ -36,7 +36,7 @@ fun PersonDetailedScreen(
     viewModel: PersonDetailScreenViewModel = hiltViewModel()
 ){
     val context = LocalContext.current
-    
+
     val person = viewModel.person.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
     val roles = viewModel.roles.collectAsState().value
@@ -93,7 +93,12 @@ fun PersonDetailedScreen(
 
             OutlinedButton(
                 onClick = {
-                    // TODO: Save
+                    val newWage = wages.firstOrNull{ it.name == selectedWage }
+                    val newRole = roles.firstOrNull{ it.title == selectedRole }
+
+                    if(newWage != null && newRole != null){
+                        viewModel.saveChanges(newWage = newWage, newRole = newRole)
+                    }
                 },
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

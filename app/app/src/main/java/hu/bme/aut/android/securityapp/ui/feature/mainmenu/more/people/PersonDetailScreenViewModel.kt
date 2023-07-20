@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
+import hu.bme.aut.android.securityapp.data.model.job.ChangeRoleData
+import hu.bme.aut.android.securityapp.data.model.job.ChangeWageData
 import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
 import hu.bme.aut.android.securityapp.data.model.role.Role
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
@@ -89,6 +91,52 @@ class PersonDetailScreenViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = ScreenState.Success()
                     _person.value = result.data!!
+                }
+                is Resource.Error -> {
+                    _state.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
+    fun saveChanges(newWage: Wage, newRole: Role){
+        _state.value = ScreenState.Loading()
+
+        val changeWage = ChangeWageData(
+            personId = _person.value.basicInfo.id,
+            wageId = newWage.id
+        )
+        val changeRole = ChangeRoleData(
+            personId = _person.value.basicInfo.id,
+            roleId = newRole.id
+        )
+
+        saveWageChange(changeWageData = changeWage)
+        saveRoleChange(changeRoleData = changeRole)
+    }
+
+    private fun saveWageChange(changeWageData: ChangeWageData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = jobRepository.changeWageForPerson(jobId = LoggedPerson.CURRENT_JOB_ID, changeWageData = changeWageData)
+
+            when(result){
+                is Resource.Success -> {
+                    _state.value = ScreenState.Success()
+                }
+                is Resource.Error -> {
+                    _state.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
+    private fun saveRoleChange(changeRoleData: ChangeRoleData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = jobRepository.changeRoleForPerson(jobId = LoggedPerson.CURRENT_JOB_ID, changeRoleData = changeRoleData)
+
+            when(result){
+                is Resource.Success -> {
+                    _state.value = ScreenState.Success()
                 }
                 is Resource.Error -> {
                     _state.value = ScreenState.Error(message = result.message!!)
