@@ -25,12 +25,15 @@ import androidx.compose.ui.unit.dp
 fun MyDropDownMenu(
     isReadOnly: Boolean = false,
     list: List<String>,
-    onItemChange: (Int) -> Unit,
+    item: String? = null,
+    onItemChange: (String) -> Unit,
     icon: ImageVector,
     label: String,
 ){
     var expanded by remember { mutableStateOf(false) }
-    var activeItem by remember { mutableStateOf(list[0]) }
+    var activeItem by remember { mutableStateOf("") }
+
+    activeItem = item ?: if(list.isEmpty()) "" else list[0]
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -72,7 +75,7 @@ fun MyDropDownMenu(
                             Text(text = it)
                         },
                         onClick = {
-                            onItemChange(list.indexOf(it))
+                            onItemChange(it)
                             activeItem = it
                             expanded = false
                         }

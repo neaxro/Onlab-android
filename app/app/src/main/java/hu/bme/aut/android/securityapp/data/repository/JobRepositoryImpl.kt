@@ -34,6 +34,28 @@ class JobRepositoryImpl (
         return jobs
     }
 
+    override suspend fun getDetailedPersonDataInJob(
+        jobId: Int,
+        personId: Int
+    ): Resource<PersonDetail> {
+        val personData = try{
+            val result = api.getDetailedPersonDataInJob(jobId = jobId, personId = personId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Successful! Code: ${result.code()}", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error(message = "Network error occured: ${e.message}")
+        }
+
+        return personData
+    }
+
     override suspend fun createJob(createJobData: CreateJobData): Resource<Job> {
         val createdJob = try{
             val result = api.createJob(createJobData = createJobData)

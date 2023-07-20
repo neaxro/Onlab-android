@@ -10,6 +10,8 @@ import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 interface JobRepository {
     suspend fun getAllJobForPerson(personId: Int): Resource<List<DetailedJob>>
 
+    suspend fun getDetailedPersonDataInJob(jobId: Int, personId: Int): Resource<PersonDetail>
+
     suspend fun createJob(createJobData: CreateJobData): Resource<Job>
 
     suspend fun connectPersonToJob(personId: Int, pin: String): Resource<DetailedJob>

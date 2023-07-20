@@ -34,6 +34,13 @@ interface JobApi {
         @Path("jobId") jobId: Int
     ): Response<List<PersonDetail>>
 
+    @GET("/api/job/detailedperson/{jobId}/{personId}")
+    suspend fun getDetailedPersonDataInJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+        @Path("personId") personId: Int,
+    ): Response<PersonDetail>
+
     @POST("/api/job")
     suspend fun createJob(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",

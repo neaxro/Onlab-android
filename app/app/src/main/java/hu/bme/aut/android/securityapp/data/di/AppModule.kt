@@ -11,19 +11,22 @@ import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
 import hu.bme.aut.android.securityapp.data.remote.PersonApi
 import hu.bme.aut.android.securityapp.data.remote.RegisterApi
+import hu.bme.aut.android.securityapp.data.remote.RoleApi
 import hu.bme.aut.android.securityapp.data.remote.WageApi
-import hu.bme.aut.android.securityapp.data.repository.DashboardRepositoryImpl
-import hu.bme.aut.android.securityapp.data.repository.JobRepositoryImpl
-import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
-import hu.bme.aut.android.securityapp.data.repository.PersonRepositoryImpl
-import hu.bme.aut.android.securityapp.data.repository.RegisterRepositoryImpl
-import hu.bme.aut.android.securityapp.data.repository.WageRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
+import hu.bme.aut.android.securityapp.data.repository.DashboardRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.JobRepository
+import hu.bme.aut.android.securityapp.data.repository.JobRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.LoginRepository
+import hu.bme.aut.android.securityapp.data.repository.LoginRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.PersonRepository
+import hu.bme.aut.android.securityapp.data.repository.PersonRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepository
+import hu.bme.aut.android.securityapp.data.repository.RegisterRepositoryImpl
+import hu.bme.aut.android.securityapp.data.repository.RoleRepository
+import hu.bme.aut.android.securityapp.data.repository.RoleRepositoryImpl
 import hu.bme.aut.android.securityapp.data.repository.WageRepository
+import hu.bme.aut.android.securityapp.data.repository.WageRepositoryImpl
 import hu.bme.aut.android.securityapp.network.HeaderInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -101,6 +104,16 @@ object AppModule {
             .create(PersonApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideRoleApi(): RoleApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.SERVER_ADDRESS)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(RoleApi::class.java)
+    }
+
     // REPOSITORY-s
     @Provides
     @Singleton
@@ -154,5 +167,14 @@ object AppModule {
         app: Application
     ): PersonRepository {
         return PersonRepositoryImpl(api, app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoleRepository(
+        api: RoleApi,
+        app: Application
+    ): RoleRepository {
+        return RoleRepositoryImpl(api, app)
     }
 }

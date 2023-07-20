@@ -16,6 +16,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashbo
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PeopleScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PersonDetailedScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile.ProfileScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.CreateWageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.WageDetailScreen
@@ -189,8 +190,21 @@ fun MyAppNavHost(
                 navigateBack = {
                     navController.popBackStack()
                 },
-                navigateToDetail = {
-                    // TODO: Detail Screen
+                navigateToDetail = { personId ->
+                    navController.navigate(Screen.PeopleDetail.withArgs(personId.toString()))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.PeopleDetail.fullRoute,
+            arguments = listOf(
+                navArgument("personId"){ type = NavType.IntType }
+            )
+        ){
+            PersonDetailedScreen(
+                navigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
