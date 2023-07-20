@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,11 +32,12 @@ import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 @Composable
 fun PeopleOnJobCard(
     person: PersonDetail,
+    onClick: (PersonDetail) -> Unit,
     modifier: Modifier = Modifier
 ){
     Card(
         onClick = {
-            // TODO
+            onClick(person)
         },
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp, pressedElevation = 2.dp, hoveredElevation = 8.dp),
         colors = CardDefaults.cardColors(containerColor = LimeMain),
@@ -43,10 +47,23 @@ fun PeopleOnJobCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(bottom = 10.dp)
         ) {
-            Image(
-                bitmap = person.basicInfo.getProfileBitmap(),
-                contentDescription = "Profile picture",
-            )
+            if(person.basicInfo.profilePicture == null){
+                Image(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "Person",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(100.dp)
+                )
+            }
+            else {
+                Image(
+                    bitmap = person.basicInfo.getProfileBitmap(),
+                    contentDescription = "Profile picture",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
 
             Text(
                 text = person.basicInfo.nickname,
@@ -105,6 +122,7 @@ fun PeopleOnJobCardPreview(){
 
     PeopleOnJobCard(
         person = p,
+        onClick = {},
         modifier = Modifier
             .width(300.dp)
     )

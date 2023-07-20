@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 fun MySearchBar(
     onSearch: (String) -> Unit,
 ){
-    var text by remember { mutableStateOf("Axel") }
+    var text by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
