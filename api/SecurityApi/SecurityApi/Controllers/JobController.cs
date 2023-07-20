@@ -93,6 +93,20 @@ namespace SecurityApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("detailedperson/{jobId}/{personId}")]
+        public async Task<ActionResult<PersonDetailed>> GetDetailedPersonInJob(int jobId, int personId)
+        {
+            try
+            {
+                var result = await _service.GetPersonDetailsInJob(jobId, personId);
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpGet("connection/{connectionId}")]
         public async Task<ActionResult<PersonJob>> GetConnection(int connectionId)
         {

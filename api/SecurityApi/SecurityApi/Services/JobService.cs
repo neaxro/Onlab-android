@@ -37,7 +37,6 @@ namespace SecurityApi.Services
 
         public IEnumerable<PersonDetailed> AllPersonInJob(int jobId)
         {
-            // PersonDetailed kellene
             var people = _context.PeopleJobs
                 .Where(pj => pj.JobId == jobId)
                 .Include(pj => pj.People)
@@ -375,6 +374,26 @@ namespace SecurityApi.Services
             }
 
             return _converter.ToDetailedModel(job);
+        }
+
+        public async Task<PersonDetailed> GetPersonDetailsInJob(int jobId, int personId)
+        {
+            var person = _context.PeopleJobs
+                .Where(pj => pj.JobId == jobId)
+                .Where(pj => pj.PeopleId == personId)
+                .Include(pj => pj.People)
+                .Include(pj => pj.Role)
+                .Include(pj => pj.Wage)
+                    .ThenInclude(w => w.Job)
+                .Select(_converter.ToDetailedModel)
+                .First();
+
+            if (person == null)
+            {
+                throw new Exception(String.Format("Person with PersonID({0}) does not exist in job with JobID({1})!", personId, jobId));
+            }
+
+            return person;
         }
 
         public async Task<String> SelectJob(SelectJob selectJob)
