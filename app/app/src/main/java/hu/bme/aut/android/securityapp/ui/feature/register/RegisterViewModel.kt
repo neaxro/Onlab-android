@@ -29,8 +29,6 @@ class RegisterViewModel @Inject constructor(
     val errors = _errors.asStateFlow()
 
     fun register(onSuccess: () -> Unit, onError: (String) -> Unit){
-        //val registerData = PersonDefault(email.value, fullName.value, nickname.value, password.value, username.value)
-
 
         viewModelScope.launch(Dispatchers.IO) {
             val result: Resource<PersonDefault> = repository.registerUser(_person.value)
