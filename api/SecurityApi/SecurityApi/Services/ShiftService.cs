@@ -448,5 +448,21 @@ namespace SecurityApi.Services
 
             return inProgress;
         }
+
+        public async Task<Shift> GetInProgressForPersonInJob(int jobId, int personId)
+        {
+            var inProgress = await _context.Shifts
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .FirstOrDefaultAsync(s => s.JobId == jobId && s.PeopleId == personId && (s.EndTime == null || s.Status.Id == DatabaseConstants.PROCESSING_STATUS_ID));
+
+            if (inProgress == null)
+                return null;
+
+            return _converter.ToModel(inProgress);
+        }
     }
 }

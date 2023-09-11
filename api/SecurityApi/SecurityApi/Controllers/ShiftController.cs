@@ -115,6 +115,21 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Owner")]
+        [HttpGet("inprogress/{jobId}/forperson/{personId}")]
+        public async Task<ActionResult<Shift>> GetInProgressForPersonInJob(int jobId, int personId)
+        {
+            try
+            {
+                var result = await _service.GetInProgressForPersonInJob(jobId, personId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
