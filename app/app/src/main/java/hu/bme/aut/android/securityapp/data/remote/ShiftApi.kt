@@ -12,7 +12,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ShiftApi {
-    @GET("/api/shift/inprogress/{jobId}}/forperson/{personId}}")
+    @GET("/api/shift/inprogress/{jobId}/forperson/{personId}")
     suspend fun getCurrentForPerson(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("jobId") jobId: Int,
