@@ -24,7 +24,8 @@ import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.shift.getEarnedMoney
 import hu.bme.aut.android.securityapp.data.model.shift.getElapsedTimeString
-import hu.bme.aut.android.securityapp.data.model.shift.getStartTimeString
+import hu.bme.aut.android.securityapp.data.model.shift.getStartTimeDate
+import hu.bme.aut.android.securityapp.data.model.shift.getStartTimeTime
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 
@@ -51,7 +52,12 @@ fun ManageShiftCard(
 
             DataRow(
                 title = "Started at:",
-                value = shiftInformation?.getStartTimeString() ?: "-"
+                value = shiftInformation?.getStartTimeDate() ?: "-"
+            )
+
+            DataRow(
+                title = "",
+                value = shiftInformation?.getStartTimeTime() ?: "-"
             )
 
             DataRow(
@@ -127,7 +133,7 @@ fun ManageShiftCardPreview(){
 
     var wage by remember { mutableStateOf<Wage>(wages[0]) }
     var isActive by remember { mutableStateOf<Boolean>(true) }
-    var currentShift by remember { mutableStateOf<Shift?>(null) }
+    var currentShift by remember { mutableStateOf<Shift?>(shift) }
 
     Column {
         ManageShiftCard(

@@ -34,6 +34,25 @@ fun Shift.getStartTimeString(): String{
     )
 }
 
+fun Shift.getStartTimeDate(): String{
+    val startTime = getStartTime()
+
+    return String.format("%04d.%02d.%02d",
+        startTime.year,
+        startTime.month.value,
+        startTime.dayOfMonth
+    )
+}
+
+fun Shift.getStartTimeTime(): String{
+    val startTime = getStartTime()
+
+    return String.format("%02d:%02d",
+        startTime.hour,
+        startTime.minute
+    )
+}
+
 fun Shift.getEndTime(): LocalDateTime?{
     return if(endTime != null){
         LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"))
