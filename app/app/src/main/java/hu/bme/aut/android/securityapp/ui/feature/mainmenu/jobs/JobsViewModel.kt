@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,7 +7,10 @@ import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.repository.JobRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,21 +19,30 @@ class JobsViewModel @Inject constructor(
     val repository: JobRepository,
 ): ViewModel() {
 
-    var jobs: MutableList<DetailedJob> = mutableStateListOf()
+    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val state = _state.asStateFlow()
 
-    fun loadAllJobs(onError: (String) -> Unit){
+    private val _jobs = MutableStateFlow<List<DetailedJob>>(listOf())
+    val jobs = _jobs.asStateFlow()
+
+    //var jobs: MutableList<DetailedJob> = mutableStateListOf()
+
+    init {
+        loadAllJobs()
+    }
+
+    private fun loadAllJobs(){
         viewModelScope.launch(Dispatchers.IO) {
+            _state.value = ScreenState.Loading()
             val result = repository.getAllJobForPerson(LoggedPerson.ID)
 
             when(result){
                 is Resource.Success -> {
-                    jobs.removeAll(jobs)
-                    jobs.addAll(result.data!!)
+                    _state.value = ScreenState.Finished()
+                    _jobs.value = result.data!!
                 }
                 is Resource.Error -> {
-                    viewModelScope.launch(Dispatchers.Main) {
-                        onError(result.message!!)
-                    }
+                    _state.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }

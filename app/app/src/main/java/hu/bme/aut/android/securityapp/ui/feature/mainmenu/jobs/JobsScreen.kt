@@ -13,22 +13,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.AddLink
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,11 +41,8 @@ fun JobsScreen(
     val context = LocalContext.current
 
     val scrollState = rememberLazyStaggeredGridState()
-    val jobList = remember { viewModel.jobs }
 
-    viewModel.loadAllJobs(){ errorMessage ->
-        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-    }
+    val jobs = viewModel.jobs.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -61,17 +50,6 @@ fun JobsScreen(
             MyTopAppBar(
                 title = "Jobs",
                 actions = {
-                    IconButton(onClick = {
-                        viewModel.loadAllJobs(){ errorMessage ->
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Refresh,
-                            contentDescription = "Refresh"
-                        )
-                    }
-
                     IconButton(onClick = {
                         navigateToCreateJob()
                     }) {
@@ -106,7 +84,7 @@ fun JobsScreen(
             verticalItemSpacing = 5.dp,
             state = scrollState
         ) {
-            items(jobList) { item ->
+            items(jobs) { item ->
                 JobCard(
                     job = item,
                     onDetaileClicked = {
