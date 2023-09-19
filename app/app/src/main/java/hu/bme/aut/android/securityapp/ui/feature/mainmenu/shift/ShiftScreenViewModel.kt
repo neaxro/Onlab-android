@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
+import hu.bme.aut.android.securityapp.data.model.shift.CreateShiftData
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.data.repository.ShiftRepository
@@ -90,6 +91,60 @@ class ShiftScreenViewModel @Inject constructor(
         Log.d("SHIFT_STATE", if (_shiftState.value.isActive) "Aktiv" else "Nincs")
     }
 
+    private fun startShift(){
+        val shiftData = CreateShiftData(
+            jobId = LoggedPerson.CURRENT_JOB_ID,
+            personId = LoggedPerson.ID,
+            wageId = _wage.value.id,
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value = ScreenState.Loading()
+            val result = shiftRepository.createShift(shiftData = shiftData)
+
+            when(result){
+                is Resource.Success -> {
+                    _state.value = ScreenState.Success()
+                    _shiftState.update {
+                        it.copy(
+                            isActive = result.data != null,
+                            shift = result.data
+                        )
+                    }
+                }
+
+                is Resource.Error -> {
+                    _state.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
+    private fun stopShift(){
+        val shiftId = _shiftState.value.shift?.id ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value = ScreenState.Loading()
+            val result = shiftRepository.endShift(shiftId = shiftId)
+
+            when(result){
+                is Resource.Success -> {
+                    _state.value = ScreenState.Success()
+                    _shiftState.update {
+                        it.copy(
+                            isActive = false,
+                            shift = null
+                        )
+                    }
+                }
+
+                is Resource.Error -> {
+                    _state.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
     fun evoke(event: ShiftEvent){
         when(event){
             is ShiftEvent.ChangeWage -> {
@@ -97,11 +152,12 @@ class ShiftScreenViewModel @Inject constructor(
             }
 
             ShiftEvent.StartShift -> {
-
+                Log.d("SHIFT_START", _wage.value.toString())
+                startShift()
             }
 
             ShiftEvent.StopShift -> {
-
+                stopShift()
             }
 
             ShiftEvent.RefreshData -> {

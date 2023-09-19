@@ -25,7 +25,7 @@ interface ShiftApi {
         @Path("shiftId") shiftId: Int
     ): Response<Shift?>
 
-    @POST("/api/shift/{shiftId}")
+    @POST("/api/shift")
     suspend fun createShift(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Body shiftData: CreateShiftData

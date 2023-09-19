@@ -5,7 +5,6 @@ import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import java.time.Duration
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 data class Shift(
     val id: Int = 0,
@@ -18,8 +17,10 @@ data class Shift(
     val wage: Wage = Wage(),
 )
 
+private val dateTimePattern: String = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+
 fun Shift.getStartTime(): LocalDateTime{
-    return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"))
+    return LocalDateTime.parse(startTime)
 }
 
 fun Shift.getStartTimeString(): String{
@@ -55,7 +56,7 @@ fun Shift.getStartTimeTime(): String{
 
 fun Shift.getEndTime(): LocalDateTime?{
     return if(endTime != null){
-        LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"))
+        LocalDateTime.parse(endTime)
     }
     else{
         null

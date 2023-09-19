@@ -65,9 +65,12 @@ namespace SecurityApi.Services
 
             var inProcessState = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.PROCESSING_STATUS_ID);
 
+            string formatted = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.ffffff");
+            DateTime now = DateTime.Parse(formatted);
+
             var shift = new Model.Shift()
             {
-                StartTime = DateTime.Now,
+                StartTime = now,
                 People = peopleJob.People,
                 Job = peopleJob.Job,
                 Wage = itsWage,
@@ -121,7 +124,10 @@ namespace SecurityApi.Services
 
             var pendingStatus = await _context.States.FirstOrDefaultAsync(s => s.Id == DatabaseConstants.PENDING_STATUS_ID);
 
-            shift.EndTime = DateTime.Now;
+            string formatted = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.ffffff");
+            DateTime now = DateTime.Parse(formatted);
+
+            shift.EndTime = now;
             shift.Status = pendingStatus;
             shift.EarnedMoney = CalculateEarnedMoney(shift);
 
