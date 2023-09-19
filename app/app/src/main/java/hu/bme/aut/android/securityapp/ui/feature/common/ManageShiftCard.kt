@@ -36,7 +36,8 @@ fun ManageShiftCard(
     wage: Wage,
     onClick: (Boolean) -> Unit,
     onWageChange: (Wage) -> Unit,
-    isReadOnly: Boolean,
+    enabled: Boolean,
+    buttonEnabled: Boolean,
     modifier: Modifier = Modifier,
 ){
     Card(
@@ -85,7 +86,7 @@ fun ManageShiftCard(
                 },
                 icon = Icons.Outlined.Wallet,
                 label = "Wage",
-                isReadOnly = isReadOnly,
+                isReadOnly = enabled,
                 item = shiftInformation?.wage?.name ?: wage.name
             )
 
@@ -94,10 +95,11 @@ fun ManageShiftCard(
             MyToggleButton(
                 textA = "Start Shift",
                 textB = "Stop Shift",
-                activeA = !isReadOnly,
+                activeA = !enabled,
                 onPress = { state ->
                     onClick(state)
-                }
+                },
+                enabled = buttonEnabled
             )
         }
     }
@@ -148,7 +150,8 @@ fun ManageShiftCardPreview(){
             onWageChange = {
                 wage = it
             },
-            isReadOnly = isActive
+            enabled = isActive,
+            buttonEnabled = true
         )
     }
 }

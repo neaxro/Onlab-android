@@ -71,7 +71,8 @@ fun ShiftScreen(
                 onWageChange = { newWage ->
                     viewModel.evoke(ShiftEvent.ChangeWage(wage = newWage))
                 },
-                isReadOnly = shiftState.isActive || LoggedPerson.CURRENT_JOB_ID == 0,
+                enabled = shiftState.isActive || LoggedPerson.CURRENT_JOB_ID == 0,
+                buttonEnabled = LoggedPerson.CURRENT_JOB_ID > 0,
                 modifier = Modifier
                     .padding(10.dp)
             )
