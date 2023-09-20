@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.shift.getEarnedMoney
 import hu.bme.aut.android.securityapp.data.model.shift.getElapsedTimeString
-import hu.bme.aut.android.securityapp.data.model.shift.getStartTimeDate
-import hu.bme.aut.android.securityapp.data.model.shift.getStartTimeTime
+import hu.bme.aut.android.securityapp.data.model.shift.getStartDate
+import hu.bme.aut.android.securityapp.data.model.shift.getStartTime
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 
@@ -53,12 +53,12 @@ fun ManageShiftCard(
 
             DataRow(
                 title = "Started at:",
-                value = shiftInformation?.getStartTimeDate() ?: "-"
+                value = shiftInformation?.getStartDate() ?: "-"
             )
 
             DataRow(
                 title = "",
-                value = shiftInformation?.getStartTimeTime() ?: "-"
+                value = shiftInformation?.getStartTime() ?: "-"
             )
 
             DataRow(

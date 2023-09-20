@@ -19,24 +19,12 @@ data class Shift(
 
 private val dateTimePattern: String = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
 
-fun Shift.getStartTime(): LocalDateTime{
+fun Shift.getStart(): LocalDateTime{
     return LocalDateTime.parse(startTime)
 }
 
-fun Shift.getStartTimeString(): String{
-    val startTime = getStartTime()
-
-    return String.format("%04d.%02d.%02d\t%02d:%02d",
-        startTime.year,
-        startTime.month.value,
-        startTime.dayOfMonth,
-        startTime.hour,
-        startTime.minute
-    )
-}
-
-fun Shift.getStartTimeDate(): String{
-    val startTime = getStartTime()
+fun Shift.getStartDate(): String{
+    val startTime = getStart()
 
     return String.format("%04d.%02d.%02d",
         startTime.year,
@@ -45,8 +33,8 @@ fun Shift.getStartTimeDate(): String{
     )
 }
 
-fun Shift.getStartTimeTime(): String{
-    val startTime = getStartTime()
+fun Shift.getStartTime(): String{
+    val startTime = getStart()
 
     return String.format("%02d:%02d",
         startTime.hour,
@@ -54,17 +42,32 @@ fun Shift.getStartTimeTime(): String{
     )
 }
 
-fun Shift.getEndTime(): LocalDateTime?{
-    return if(endTime != null){
-        LocalDateTime.parse(endTime)
-    }
-    else{
-        null
-    }
+fun Shift.getEnd(): LocalDateTime?{
+    endTime ?: return null
+    return LocalDateTime.parse(endTime)
+}
+
+fun Shift.getEndDate(): String{
+    val endTime = getEnd() ?: return ""
+
+    return String.format("%04d.%02d.%02d",
+        endTime.year,
+        endTime.month.value,
+        endTime.dayOfMonth
+    )
+}
+
+fun Shift.getEndTime(): String{
+    val endTime = getEnd() ?: return ""
+
+    return String.format("%02d:%02d",
+        endTime.hour,
+        endTime.minute
+    )
 }
 
 fun Shift.getElapsedTimeString(): String{
-    val duration = Duration.between(this.getStartTime(), LocalDateTime.now())
+    val duration = Duration.between(this.getStart(), LocalDateTime.now())
 
     val hours = duration.toHours()
     val minutes = (duration.toMinutes() % 60)
@@ -73,8 +76,17 @@ fun Shift.getElapsedTimeString(): String{
     return String.format("%02d:%02d:%02d", hours, minutes, seconds)
 }
 
+fun Shift.getTotalHours(): Double{
+    this.endTime ?: return 0.0
+
+    val duration = Duration.between(this.getStart(), this.getEnd())
+    val hours = duration.toMinutes() / 60 + (duration.toMinutes() % 60) / 100.0
+
+    return hours
+}
+
 fun Shift.getEarnedMoney(): Double{
-    val duration = Duration.between(this.getStartTime(), LocalDateTime.now())
+    val duration = Duration.between(this.getStart(), LocalDateTime.now())
     val totalHours = duration.toHours().toDouble() + (duration.toMinutes().toDouble() % 60) / 60
 
     return this.wage.price * totalHours
