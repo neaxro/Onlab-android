@@ -1,23 +1,30 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
+import hu.bme.aut.android.securityapp.ui.feature.common.ShiftCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PendingShiftsScreen(
     navigateBack: () -> Unit,
+    viewModel: PendingShiftsViewModel = hiltViewModel()
 ){
+    val shifts = viewModel.shifts.collectAsState().value
+    val listState = rememberLazyListState()
+
     Scaffold(
         topBar = {
             MyTopAppBar(
@@ -30,14 +37,19 @@ fun PendingShiftsScreen(
     ) {
         val paddingTop = it.calculateTopPadding()
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+        LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = paddingTop)
-        ) {
-            Text(text = "Pending Shifts")
+        ){
+            items(shifts){ pendingShift ->
+                ShiftCard(
+                    shift = pendingShift,
+                    modifier = Modifier
+                        .padding(5.dp)
+                )
+            }
         }
     }
 }
