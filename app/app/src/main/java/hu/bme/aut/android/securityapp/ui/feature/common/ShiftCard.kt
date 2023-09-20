@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,14 +38,19 @@ import hu.bme.aut.android.securityapp.data.model.shift.getTotalHours
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShiftCard(
     shift: Shift,
+    onClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp, pressedElevation = 2.dp, hoveredElevation = 8.dp),
         colors = CardDefaults.cardColors(containerColor = LimeMain),
+        onClick = {
+            onClick(shift.id)
+        },
         modifier = modifier
     ) {
         Column {
@@ -180,6 +186,7 @@ fun ShiftCardPreview(){
     Column {
         ShiftCard(
             shift = shift,
+            onClick = {},
             modifier = Modifier.padding(5.dp)
         )
 
@@ -187,6 +194,7 @@ fun ShiftCardPreview(){
             shift = shift.copy(
                 wage = Wage(name = "Kutyás hosszú", price = 3450.0)
             ),
+            onClick = {},
             modifier = Modifier.padding(5.dp)
         )
     }

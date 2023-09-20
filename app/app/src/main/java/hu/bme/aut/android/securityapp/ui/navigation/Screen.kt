@@ -23,6 +23,7 @@ sealed class Screen(val baseRoute: String, val fullRoute: String = baseRoute){
     object People: Screen(baseRoute = "people_screen")
     object PeopleDetail: Screen(baseRoute = "peopledetail_screen", fullRoute = "peopledetail_screen/{personId}")
     object PendingShifts: Screen(baseRoute = "pendingshifts_screen")
+    object DetailShifts: Screen(baseRoute = "detailshift_screen", fullRoute = "detailshift_screen/{shiftId}")
 }
 
 fun Screen.withArgs(vararg args: String): String{

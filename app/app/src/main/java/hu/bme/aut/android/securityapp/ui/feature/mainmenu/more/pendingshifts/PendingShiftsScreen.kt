@@ -20,6 +20,7 @@ import hu.bme.aut.android.securityapp.ui.feature.common.ShiftCard
 @Composable
 fun PendingShiftsScreen(
     navigateBack: () -> Unit,
+    navigateToDetailShift: (Int) -> Unit,
     viewModel: PendingShiftsViewModel = hiltViewModel()
 ){
     val shifts = viewModel.shifts.collectAsState().value
@@ -46,6 +47,9 @@ fun PendingShiftsScreen(
             items(shifts){ pendingShift ->
                 ShiftCard(
                     shift = pendingShift,
+                    onClick = {
+                        navigateToDetailShift(pendingShift.id)
+                    },
                     modifier = Modifier
                         .padding(5.dp)
                 )
@@ -58,6 +62,7 @@ fun PendingShiftsScreen(
 @Composable
 fun PendingShiftsScreenPreview(){
     PendingShiftsScreen(
-        navigateBack = {}
+        navigateBack = {},
+        navigateToDetailShift = {}
     )
 }

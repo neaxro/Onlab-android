@@ -15,6 +15,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.DetailShiftScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.PendingShiftsScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PeopleScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PersonDetailedScreen
@@ -214,6 +215,22 @@ fun MyAppNavHost(
             route = Screen.PendingShifts.baseRoute
         ){
             PendingShiftsScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                },
+                navigateToDetailShift = { shiftId ->
+                    navController.navigate(Screen.DetailShifts.withArgs(shiftId.toString()))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.DetailShifts.fullRoute,
+            arguments = listOf(
+                navArgument("shiftId"){ type = NavType.IntType }
+            )
+        ){
+            DetailShiftScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }
