@@ -276,6 +276,7 @@ namespace SecurityApi.Services
                     .ThenInclude(j => j.People)
                 .Include(s => s.Status)
                 .Select(_converter.ToModel)
+                .OrderBy(s => s.EndTime)
                 .ToList();
 
             return shifts;
