@@ -12,4 +12,6 @@ interface ShiftRepository {
     suspend fun createShift(shiftData: CreateShiftData): Resource<Shift>
 
     suspend fun endShift(shiftId: Int): Resource<Shift>
+
+    suspend fun getAllPendingInJob(jobId: Int): Resource<List<Shift>>
 }

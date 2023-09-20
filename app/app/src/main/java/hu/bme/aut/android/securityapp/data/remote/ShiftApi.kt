@@ -36,4 +36,10 @@ interface ShiftApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("shiftId") shiftId: Int
     ): Response<Shift>
+
+    @GET("/api/shift/pending/{jobId}")
+    suspend fun getAllPendingInJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int
+    ): Response<List<Shift>>
 }

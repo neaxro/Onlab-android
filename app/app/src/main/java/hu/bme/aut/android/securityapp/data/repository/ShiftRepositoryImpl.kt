@@ -85,4 +85,23 @@ class ShiftRepositoryImpl constructor(
 
         return connection
     }
+
+    override suspend fun getAllPendingInJob(jobId: Int): Resource<List<Shift>> {
+        val connection = try{
+            val result = api.getAllPendingInJob(jobId = jobId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Succesfully queried all pending shifts in job (ID: $jobId)!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
 }
