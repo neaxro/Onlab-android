@@ -19,12 +19,13 @@ data class Shift(
 
 private val dateTimePattern: String = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
 
-fun Shift.getStart(): LocalDateTime{
+fun Shift.getStart(): LocalDateTime?{
+    if(startTime.isEmpty()) return null
     return LocalDateTime.parse(startTime)
 }
 
 fun Shift.getStartDate(): String{
-    val startTime = getStart()
+    val startTime = getStart() ?: return ""
 
     return String.format("%04d.%02d.%02d",
         startTime.year,
@@ -34,7 +35,7 @@ fun Shift.getStartDate(): String{
 }
 
 fun Shift.getStartTime(): String{
-    val startTime = getStart()
+    val startTime = getStart() ?: return ""
 
     return String.format("%02d:%02d",
         startTime.hour,
@@ -44,6 +45,7 @@ fun Shift.getStartTime(): String{
 
 fun Shift.getEnd(): LocalDateTime?{
     endTime ?: return null
+    if(endTime.isEmpty()) return null
     return LocalDateTime.parse(endTime)
 }
 
