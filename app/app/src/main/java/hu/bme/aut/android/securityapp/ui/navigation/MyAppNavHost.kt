@@ -15,6 +15,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.PendingShiftsScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PeopleScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PersonDetailedScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile.ProfileScreen
@@ -203,6 +204,16 @@ fun MyAppNavHost(
             )
         ){
             PersonDetailedScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.PendingShifts.baseRoute
+        ){
+            PendingShiftsScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }
