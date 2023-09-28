@@ -145,31 +145,6 @@ fun ShiftCard(
     }
 }
 
-@Composable
-fun BackgroundedText(
-    text: String,
-    color: Color,
-    fontWeight: FontWeight = FontWeight.Medium,
-    backgroundColor: Color,
-    cornerShape: RoundedCornerShape,
-    modifier: Modifier = Modifier
-){
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .clip(cornerShape)
-            .background(color = backgroundColor)
-            .padding(5.dp)
-    ) {
-        Text(
-            text = text,
-            color = color,
-            fontWeight = fontWeight
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun ShiftCardPreview(){
