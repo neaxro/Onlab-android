@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.feature.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.Person
-import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 import java.time.LocalTime
 
 @Composable
@@ -91,25 +87,13 @@ fun WelcomeBoard(
                 )
             }
 
-            if (person.profilePicture != null) {
-                Image(
-                    bitmap = person.getProfileBitmap(),
-                    contentDescription = "Profile picture",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .clip(RoundedCornerShape(30.dp))
-                )
-            }
-            else{
-                Image(
-                    imageVector = Icons.Rounded.Person,
-                    contentDescription = "Profile picture",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .clip(RoundedCornerShape(30.dp))
-                        .padding(end = 10.dp)
-                )
-            }
+            MyProfilePictureImage(
+                person = person,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(30.dp))
+            )
         }
     }
 }
