@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,28 +49,29 @@ fun ManageShiftCard(
         ) {
 
             DoubleDataRow(
-                title = "Started at:",
-                value = shiftInformation?.getStartDate() ?: "-"
+                title = { Text(text = "Started at:") },
+                value = {
+                    Column {
+                        Text(text = shiftInformation?.getStartDate() ?: "-")
+                        Text(text = shiftInformation?.getStartTime() ?: "-")
+                    }
+                },
+                verticalAlignment = Alignment.Top
             )
 
             DoubleDataRow(
-                title = "",
-                value = shiftInformation?.getStartTime() ?: "-"
+                title = { Text(text = "Earned money:") },
+                value = { Text(text = shiftInformation?.getElapsedTimeString() ?: "-") },
             )
 
             DoubleDataRow(
-                title = "Elapsed time:",
-                value = shiftInformation?.getElapsedTimeString() ?: "-"
+                title = { Text(text = "Elapsed time:") },
+                value = { Text(text = String.format("%.0f Ft", shiftInformation?.getEarnedMoney() ?: 0.0)) },
             )
 
             DoubleDataRow(
-                title = "Earned money:",
-                value = String.format("%.0f Ft", shiftInformation?.getEarnedMoney() ?: 0.0)
-            )
-
-            DoubleDataRow(
-                title = "Wage",
-                value = String.format("%.0f Ft/hour", shiftInformation?.wage?.price ?: wage.price)
+                title = { Text(text = "Wage:") },
+                value = { Text(text = String.format("%.0f Ft/hour", shiftInformation?.wage?.price ?: wage.price)) },
             )
 
             Spacer(modifier = Modifier.padding(top = 20.dp))

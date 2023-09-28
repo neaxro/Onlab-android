@@ -75,24 +75,55 @@ fun PendingShiftDetailCard(
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
-            DoubleDataRow(title = "Start date of the shift", value = shift.getStartDate())
-            DoubleDataRow(title = "Start time of the shift", value = shift.getStartTime())
+            DoubleDataRow(
+                title = { Text(text = "Start of the shift:") },
+                value = {
+                    Column {
+                        Text(text = shift.getStartDate())
+                        Text(text = shift.getStartTime())
+                    }
+                },
+                verticalAlignment = Alignment.Top
+            )
+
             Spacer(modifier = Modifier.padding(top = 5.dp))
-            DoubleDataRow(title = "End date of the shift", value = shift.getEndDate())
-            DoubleDataRow(title = "End time of the shift", value = shift.getEndTime())
+
+            DoubleDataRow(
+                title = { Text(text = "End of the shift:") },
+                value = {
+                    Column {
+                        Text(text = shift.getEndDate())
+                        Text(text = shift.getEndTime())
+                    }
+                },
+                verticalAlignment = Alignment.Top
+            )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
-            DoubleDataRow(title = "Wage name", value = shift.wage.name)
-            DoubleDataRow(title = "Wage", value = String.format("%.0f Ft/h", shift.wage.price))
+            DoubleDataRow(
+                title = { Text(text = "Wage name:") },
+                value = { Text(text = shift.wage.name) },
+            )
+
+            DoubleDataRow(
+                title = { Text(text = "Wage:") },
+                value = { Text(text = String.format("%.0f Ft/h", shift.wage.price)) },
+            )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
-            DoubleDataRow(title = "Total hours", value = String.format("%.1f Ft/h", shift.getTotalHours()))
+            DoubleDataRow(
+                title = { Text(text = "Total hours:") },
+                value = { Text(text = String.format("%.1f Ft/h", shift.getTotalHours())) },
+            )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
-            DoubleDataRow(title = "Total money", value = String.format("%.1f Ft", shift.earnedMoney))
+            DoubleDataRow(
+                title = { Text(text = "Total money:") },
+                value = { Text(text = String.format("%.1f Ft", shift.earnedMoney)) },
+            )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
