@@ -233,7 +233,7 @@ namespace SecurityApi.Services
             return shifts;
         }
 
-        public IEnumerable<Shift> GetAllForPersonInJob(int jobId, int personId)
+        public IEnumerable<Shift> GetAllShiftsForPersonInJob(int jobId, int personId)
         {
             var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);
             if(job == null)
@@ -470,6 +470,62 @@ namespace SecurityApi.Services
                 return null;
 
             return _converter.ToModel(inProgress);
+        }
+
+        public IEnumerable<Shift> GetAcceptedShiftsForPersonInJob(int jobId, int personId)
+        {
+            var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);
+            if (job == null)
+            {
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            var person = _context.People.FirstOrDefault(p => p.Id == personId);
+            if (person == null)
+            {
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
+            }
+
+            var shifts = _context.Shifts
+                .Where(s => s.JobId == jobId && s.PeopleId == personId)
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .Where(s => s.Status.Id == DatabaseConstants.ACCEPTED_STATUS_ID)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return shifts;
+        }
+
+        public IEnumerable<Shift> GetDeniedShiftsForPersonInJob(int jobId, int personId)
+        {
+            var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);
+            if (job == null)
+            {
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            var person = _context.People.FirstOrDefault(p => p.Id == personId);
+            if (person == null)
+            {
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
+            }
+
+            var shifts = _context.Shifts
+                .Where(s => s.JobId == jobId && s.PeopleId == personId)
+                .Include(s => s.People)
+                .Include(s => s.Wage)
+                .Include(s => s.Job)
+                    .ThenInclude(j => j.People)
+                .Include(s => s.Status)
+                .Where(s => s.Status.Id == DatabaseConstants.DENY_STATUS_ID)
+                .Select(_converter.ToModel)
+                .ToList();
+
+            return shifts;
         }
     }
 }

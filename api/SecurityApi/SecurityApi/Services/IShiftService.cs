@@ -8,7 +8,9 @@ namespace SecurityApi.Services
         Task<Shift> Get(int shiftId);
         IEnumerable<Shift> GetAllForJob(int jobId);
         IEnumerable<Shift> GetAllForPerson(int personId);
-        IEnumerable<Shift> GetAllForPersonInJob(int jobId, int personId);
+        IEnumerable<Shift> GetAllShiftsForPersonInJob(int jobId, int personId);
+        IEnumerable<Shift> GetAcceptedShiftsForPersonInJob(int jobId, int personId);
+        IEnumerable<Shift> GetDeniedShiftsForPersonInJob(int jobId, int personId);
         IEnumerable<Shift> GetAllInProgress(int jobId);
         Task<Shift> GetInProgressForPersonInJob(int jobId, int personId);
         Task<IEnumerable<Shift>> GetAllPendingInJob(int jobId);

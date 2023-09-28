@@ -67,13 +67,43 @@ namespace SecurityApi.Controllers
 
         [Authorize]
         [HttpGet("all/{jobId}/{personId}")]
-        public ActionResult<IEnumerable<Shift>> GetAllForPeronInJob(int jobId, int personId)
+        public ActionResult<IEnumerable<Shift>> GetAllShiftsForPersonInJob(int jobId, int personId)
         {
             try
             {
-                var shifts = _service.GetAllForPersonInJob(jobId, personId);
+                var shifts = _service.GetAllShiftsForPersonInJob(jobId, personId);
                 return Ok(shifts);
             } catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("accepted/{jobId}/{personId}")]
+        public ActionResult<IEnumerable<Shift>> GetAcceptedShiftsForPersonInJob(int jobId, int personId)
+        {
+            try
+            {
+                var shifts = _service.GetAcceptedShiftsForPersonInJob(jobId, personId);
+                return Ok(shifts);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("denied/{jobId}/{personId}")]
+        public ActionResult<IEnumerable<Shift>> GetDeniedShiftsForPersonInJob(int jobId, int personId)
+        {
+            try
+            {
+                var shifts = _service.GetDeniedShiftsForPersonInJob(jobId, personId);
+                return Ok(shifts);
+            }
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
