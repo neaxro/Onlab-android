@@ -34,7 +34,9 @@ import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 @Composable
 fun PendingShiftDetailCard(
     shift: Shift,
-    modifier: Modifier = Modifier
+    acceptShift: () -> Unit,
+    denyShift: () -> Unit,
+    modifier: Modifier = Modifier,
 ){
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp, pressedElevation = 2.dp, hoveredElevation = 8.dp),
@@ -133,14 +135,18 @@ fun PendingShiftDetailCard(
                     .fillMaxWidth()
             ) {
                 OutlinedButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        denyShift()
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text(text = "Decline")
+                    Text(text = "Deny")
                 }
 
                 OutlinedButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        acceptShift()
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
                 ) {
                     Text(text = "Accept")
@@ -166,5 +172,7 @@ fun PendingShiftDetailCardPreview(){
 
     PendingShiftDetailCard(
         shift = shift,
+        acceptShift = {},
+        denyShift = {},
     )
 }
