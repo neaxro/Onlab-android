@@ -42,4 +42,16 @@ interface ShiftApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("jobId") jobId: Int
     ): Response<List<Shift>>
+
+    @PATCH("/api/shift/accept/{shiftId}")
+    suspend fun acceptShift(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("shiftId") shiftId: Int
+    ): Response<Unit>
+
+    @PATCH("/api/shift/deny/{shiftId}")
+    suspend fun denyShift(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("shiftId") shiftId: Int
+    ): Response<Unit>
 }

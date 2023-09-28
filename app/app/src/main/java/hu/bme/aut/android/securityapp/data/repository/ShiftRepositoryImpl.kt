@@ -104,4 +104,42 @@ class ShiftRepositoryImpl constructor(
 
         return connection
     }
+
+    override suspend fun acceptShift(shiftId: Int): Resource<Unit> {
+        val connection = try{
+            val result = api.acceptShift(shiftId = shiftId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Succesfully accepted pending shift in job (ShiftID: $shiftId)!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
+    override suspend fun denyShift(shiftId: Int): Resource<Unit> {
+        val connection = try{
+            val result = api.denyShift(shiftId = shiftId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Succesfully declined pending shift in job (ShiftID: $shiftId)!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
 }
