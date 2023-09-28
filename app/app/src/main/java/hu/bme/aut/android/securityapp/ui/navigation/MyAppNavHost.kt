@@ -20,6 +20,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.Pen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PeopleScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PersonDetailedScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile.ProfileScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.statistics.StatisticsScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.CreateWageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.WageDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages.WagesScreen
@@ -231,6 +232,16 @@ fun MyAppNavHost(
             )
         ){
             DetailShiftScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Statistics.fullRoute,
+        ){
+            StatisticsScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }

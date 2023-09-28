@@ -38,7 +38,7 @@ fun MoreScreen(
     )
     val userMenuItems = listOf(
         *(anonymousMenuItems.toTypedArray()),
-        MoreMenu(title = "My Statistics", icon = Icons.Default.QueryStats, url = ""),
+        MoreMenu(title = "My Statistics", icon = Icons.Default.QueryStats, url = Screen.Statistics.fullRoute, backgroundColor = Color.Yellow),
     )
     val adminMenuItems = listOf(
         *(userMenuItems.toTypedArray()),
