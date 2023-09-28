@@ -12,7 +12,7 @@ data class Person(
     val username: String = "",
     val nickname: String = "",
     val email: String = "",
-    val profilePicture: String? = ""
+    val profilePicture: String? = null
     )
 
 fun Person.getProfileBitmap(): ImageBitmap{
