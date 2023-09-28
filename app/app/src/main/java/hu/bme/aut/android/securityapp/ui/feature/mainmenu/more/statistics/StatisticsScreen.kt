@@ -1,18 +1,22 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.statistics
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun StatisticsScreen(
     navigateBack: () -> Unit,
@@ -29,15 +33,20 @@ fun StatisticsScreen(
     ) {
         val paddingTop = it.calculateTopPadding()
 
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = paddingTop)
         ){
-            Text(
-                text = "Statistics",
-                modifier = Modifier.align(Alignment.Center)
-            )
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+
+            ) {
+                FilterChip(selected = true, onClick = { /*TODO*/ }, label = { Text(text = "Acceped") })
+                FilterChip(selected = false, onClick = { /*TODO*/ }, label = { Text(text = "Denied") })
+            }
         }
     }
 }
