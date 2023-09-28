@@ -1,17 +1,18 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
-import hu.bme.aut.android.securityapp.ui.feature.common.ShiftCard
+import hu.bme.aut.android.securityapp.ui.feature.common.PendingShiftDetailCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,14 +34,14 @@ fun DetailShiftScreen(
     ) {
         val paddingTop = it.calculateTopPadding()
 
-        Column(
+        Box(
             modifier = Modifier.padding(top = paddingTop)
         ) {
-            ShiftCard(
+            PendingShiftDetailCard(
                 shift = shift,
-                onClick = {},
                 modifier = Modifier
-                    .padding(5.dp)
+                    .align(Alignment.TopCenter)
+                    .padding(10.dp)
             )
         }
     }
