@@ -25,6 +25,7 @@ fun PendingShiftsScreen(
 ){
     val shifts = viewModel.shifts.collectAsState().value
     val listState = rememberLazyListState()
+    viewModel.refresh()
 
     Scaffold(
         topBar = {

@@ -29,6 +29,10 @@ class PendingShiftsViewModel @Inject constructor(
         loadPendingShifts()
     }
 
+    fun refresh(){
+        loadPendingShifts()
+    }
+
     private fun loadPendingShifts(){
         _state.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {

@@ -54,8 +54,14 @@ fun DetailShiftScreen(
 
             ShiftDetailAcceptAlertDialog(
                 state = alertDialogState,
-                accept = { viewModel.evoke(ShiftDetailAction.Accept) },
-                deny = { viewModel.evoke(ShiftDetailAction.Deny) },
+                accept = {
+                    viewModel.evoke(ShiftDetailAction.Accept)
+                    navigateBack()
+                },
+                deny = {
+                    viewModel.evoke(ShiftDetailAction.Deny)
+                    navigateBack()
+                },
                 dismiss = { viewModel.evoke(ShiftDetailAction.Dismiss) }
             )
         }
