@@ -142,4 +142,23 @@ class ShiftRepositoryImpl constructor(
 
         return connection
     }
+
+    override suspend fun getAllJudgedShifts(jobId: Int, personId: Int): Resource<List<Shift>> {
+        val connection = try{
+            val result = api.getAllJudgedShifts(jobId = jobId, personId = personId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Succesfully quired all judged shifts!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
 }

@@ -18,4 +18,6 @@ interface ShiftRepository {
     suspend fun acceptShift(shiftId: Int): Resource<Unit>
 
     suspend fun denyShift(shiftId: Int): Resource<Unit>
+
+    suspend fun getAllJudgedShifts(jobId: Int, personId: Int): Resource<List<Shift>>
 }

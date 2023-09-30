@@ -54,4 +54,11 @@ interface ShiftApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("shiftId") shiftId: Int
     ): Response<Unit>
+
+    @GET("/api/shift/all/{jobId}/{personId}")
+    suspend fun getAllJudgedShifts(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+        @Path("personId") personId: Int,
+    ): Response<List<Shift>>
 }
