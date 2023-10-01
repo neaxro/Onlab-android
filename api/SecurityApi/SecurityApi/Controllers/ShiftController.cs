@@ -145,7 +145,7 @@ namespace SecurityApi.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin,Owner")]
+        [Authorize(Roles = "Admin,Owner,User")]
         [HttpGet("inprogress/{jobId}/forperson/{personId}")]
         public async Task<ActionResult<Shift>> GetInProgressForPersonInJob(int jobId, int personId)
         {

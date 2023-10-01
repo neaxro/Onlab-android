@@ -64,7 +64,7 @@ class ShiftScreenViewModel @Inject constructor(
         _state.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = shiftRepository.getCurrentForPerson(LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID)
+            var result = shiftRepository.getCurrentForPerson(jobId = LoggedPerson.CURRENT_JOB_ID, personId = LoggedPerson.ID)
 
             when(result){
                 is Resource.Success -> {
