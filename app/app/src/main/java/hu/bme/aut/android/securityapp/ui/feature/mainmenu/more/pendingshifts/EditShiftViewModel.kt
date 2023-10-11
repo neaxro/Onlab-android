@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
+import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.shift.UpdateShiftData
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
+import hu.bme.aut.android.securityapp.data.repository.JobRepository
 import hu.bme.aut.android.securityapp.data.repository.ShiftRepository
 import hu.bme.aut.android.securityapp.data.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
@@ -25,6 +27,7 @@ import javax.inject.Inject
 class EditShiftViewModel @Inject constructor(
     private val shiftRepository: ShiftRepository,
     private val wageRepository: WageRepository,
+    private val jobRepository: JobRepository,
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
@@ -37,10 +40,14 @@ class EditShiftViewModel @Inject constructor(
     private val _wages = MutableStateFlow<List<Wage>>(listOf())
     val wages = _wages.asStateFlow()
 
+    private val _person = MutableStateFlow<PersonDetail>(PersonDetail())
+    val person = _person.asStateFlow()
+
     init {
         val shiftId = checkNotNull<Int>(savedStateHandle["shiftId"])
         getShift(shiftId = shiftId)
         loadAllWages()
+        //getPerson(jobId = shift.value.job.id, personId = shift.value.person.id)
     }
 
     private fun getShift(shiftId: Int){
@@ -72,6 +79,23 @@ class EditShiftViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = wages.message!!)
+                }
+            }
+        }
+    }
+
+    private fun getPerson(jobId: Int, personId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            _screenState.value = ScreenState.Loading()
+            val person = jobRepository.getDetailedPersonDataInJob(jobId = jobId, personId = personId)
+
+            when(person){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+                    _person.value = person.data!!
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = person.message!!)
                 }
             }
         }

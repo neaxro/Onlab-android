@@ -49,6 +49,7 @@ fun EditShiftScreen(
 
     val shift = viewModel.shift.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
+    val person = viewModel.person.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -115,6 +116,22 @@ fun EditShiftScreen(
                         }
                     }
                 )
+
+                DoubleDataRow(
+                    title = { Text(text = "Default Wage Name:") },
+                    value = {
+                        Text(text = person.wage.name)
+                    }
+                )
+
+                DoubleDataRow(
+                    title = { Text(text = "Default Wage Price:") },
+                    value = {
+                        Text(text = String.format("%.0f Ft/hour", person.wage.price))
+                    }
+                )
+
+                Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                 DoubleDataRow(
                     title = { Text(text = "Wage:") },
