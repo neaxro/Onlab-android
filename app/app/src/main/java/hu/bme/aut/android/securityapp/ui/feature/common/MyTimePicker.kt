@@ -43,20 +43,32 @@ fun MyTimePicker(
         )
 
         OutlinedButton(onClick = {
-            val selectedTime = LocalDateTime.of(
-                date.year,
-                date.monthValue,
-                date.dayOfMonth,
-                timePickerState.hour,
-                timePickerState.minute,
-                date.second,
-                date.nano
-            )
+            val selectedTime = date.copy(hour = timePickerState.hour, minute = timePickerState.minute)
             onConfirm(selectedTime)
         }) {
             Text(text = "Confirm")
         }
     }
+}
+
+fun LocalDateTime.copy(
+    year: Int = this.year,
+    month: Int = this.monthValue,
+    day: Int = this.dayOfMonth,
+    hour: Int = this.hour,
+    minute: Int = this.minute,
+    second: Int = this.second,
+    nano: Int = this.nano,
+): LocalDateTime{
+    return LocalDateTime.of(
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second,
+        nano
+    )
 }
 
 @Preview
