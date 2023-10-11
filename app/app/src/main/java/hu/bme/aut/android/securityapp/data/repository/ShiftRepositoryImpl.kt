@@ -3,6 +3,7 @@ package hu.bme.aut.android.securityapp.data.repository
 import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.shift.CreateShiftData
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
+import hu.bme.aut.android.securityapp.data.model.shift.UpdateShiftData
 import hu.bme.aut.android.securityapp.data.remote.ShiftApi
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 
@@ -149,6 +150,28 @@ class ShiftRepositoryImpl constructor(
 
             val data = if(result.isSuccessful && result.code() == 200){
                 Resource.Success(message = "Succesfully quired all judged shifts!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
+    override suspend fun updateShift(
+        shiftId: Int,
+        updateShiftData: UpdateShiftData
+    ): Resource<Shift> {
+        val connection = try{
+            val result = api.updateShift(shiftId = shiftId, updateShiftData = updateShiftData)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Succesfully updated shift with shift ID: $shiftId!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
