@@ -19,6 +19,7 @@ import hu.bme.aut.android.securityapp.ui.feature.common.ShiftDetailAcceptAlertDi
 @Composable
 fun DetailShiftScreen(
     navigateBack: () -> Unit,
+    editShift: (Int) -> Unit,
     viewModel: DetailShiftViewModel = hiltViewModel()
 ){
     val shift = viewModel.shift.collectAsState().value
@@ -46,6 +47,9 @@ fun DetailShiftScreen(
                 denyShift = {
                     viewModel.evoke(ShiftDetailAction.DenyIntent)
                 },
+                editShift = {
+                    editShift(shift.id)
+                },
                 shift = shift,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -72,6 +76,7 @@ fun DetailShiftScreen(
 @Composable
 fun DetailShiftScreenPreview(){
     DetailShiftScreen(
-        navigateBack = {}
+        navigateBack = {},
+        editShift = {}
     )
 }
