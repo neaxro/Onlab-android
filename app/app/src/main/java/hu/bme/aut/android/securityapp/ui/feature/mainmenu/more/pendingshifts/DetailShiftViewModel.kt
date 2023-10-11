@@ -89,19 +89,26 @@ class DetailShiftViewModel @Inject constructor(
                 _alertDialogState.value = ShiftDetailAlertDialogState.None
                 acceptShift()
             }
+
             ShiftDetailAction.Deny -> {
                 _alertDialogState.value = ShiftDetailAlertDialogState.None
                 denyShift()
             }
+
             ShiftDetailAction.AcceptIntent -> {
                 _alertDialogState.value = ShiftDetailAlertDialogState.AcceptIntent
             }
+
             ShiftDetailAction.DenyIntent -> {
                 _alertDialogState.value = ShiftDetailAlertDialogState.DenyIntent
             }
 
             ShiftDetailAction.Dismiss -> {
                 _alertDialogState.value = ShiftDetailAlertDialogState.None
+            }
+
+            ShiftDetailAction.Refresh -> {
+                getShift(shiftId = _shift.value.id)
             }
         }
     }
@@ -113,6 +120,7 @@ sealed class ShiftDetailAction{
     object AcceptIntent : ShiftDetailAction()
     object DenyIntent : ShiftDetailAction()
     object Dismiss : ShiftDetailAction()
+    object Refresh : ShiftDetailAction()
 }
 
 sealed class ShiftDetailAlertDialogState{
