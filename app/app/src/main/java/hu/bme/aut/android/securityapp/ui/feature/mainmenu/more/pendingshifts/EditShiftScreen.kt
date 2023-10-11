@@ -68,6 +68,7 @@ fun EditShiftScreen(
         ) {
 
             Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
             ) {
@@ -130,9 +131,13 @@ fun EditShiftScreen(
                     }
                 )
 
-                OutlinedButton(onClick = { viewModel.evoke(EditShiftAction.SaveChanges) }) {
+                Spacer(modifier = Modifier.padding(vertical = 20.dp))
+
+                OutlinedButton(
+                    onClick = { viewModel.evoke(EditShiftAction.SaveChanges) }
+                ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(imageVector = Icons.Default.Save, contentDescription = "Save Changes")
                         Spacer(modifier = Modifier.padding(horizontal = 5.dp))

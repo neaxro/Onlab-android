@@ -1,12 +1,12 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
+import hu.bme.aut.android.securityapp.data.model.shift.UpdateShiftData
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.data.repository.ShiftRepository
 import hu.bme.aut.android.securityapp.data.repository.WageRepository
@@ -62,6 +62,7 @@ class EditShiftViewModel @Inject constructor(
 
     private fun loadAllWages(){
         viewModelScope.launch(Dispatchers.IO) {
+            _screenState.value = ScreenState.Loading()
             val wages = wageRepository.getWages(LoggedPerson.CURRENT_JOB_ID)
 
             when(wages){
@@ -128,7 +129,27 @@ class EditShiftViewModel @Inject constructor(
     }
 
     private fun saveChanges(){
-        Log.d("EditShift_SaveChanges", shift.value.toString())
+        val updateShiftData = UpdateShiftData(
+            startTime = _shift.value.startTime,
+            endTime = _shift.value.endTime!!,
+            statusId = _shift.value.status.id,
+            wageId = _shift.value.wage.id,
+        )
+
+        _screenState.value = ScreenState.Loading()
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = shiftRepository.updateShift(shiftId = _shift.value.id, updateShiftData = updateShiftData)
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+                    _shift.value = result.data!!
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
     }
 }
 
