@@ -42,7 +42,7 @@ fun MoreScreen(
     )
     val adminMenuItems = listOf(
         *(userMenuItems.toTypedArray()),
-        MoreMenu(title = "Pending Shifts", icon = Icons.Default.WorkHistory, url = Screen.PendingShifts.fullRoute, backgroundColor = Color.Yellow),
+        MoreMenu(title = "Pending Shifts", icon = Icons.Default.WorkHistory, url = Screen.PendingShifts.fullRoute, backgroundColor = Color.Green),
     )
     val ownerMenuItems = listOf(
         *(adminMenuItems.toTypedArray()),
