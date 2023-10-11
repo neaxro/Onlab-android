@@ -2,15 +2,21 @@ package hu.bme.aut.android.securityapp.ui.feature.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +42,7 @@ fun PendingShiftDetailCard(
     shift: Shift,
     acceptShift: () -> Unit,
     denyShift: () -> Unit,
+    editShift: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     Card(
@@ -49,6 +56,7 @@ fun PendingShiftDetailCard(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
 
@@ -63,7 +71,7 @@ fun PendingShiftDetailCard(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .height(IntrinsicSize.Max),
                 ) {
                     Text(
                         text = shift.person.nickname,
@@ -72,6 +80,16 @@ fun PendingShiftDetailCard(
                     )
 
                     Text(text = shift.person.fullName)
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    modifier = Modifier
+                        .height(IntrinsicSize.Max),
+                ) {
+                    FilledIconButton(onClick = { editShift() }) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Shift")
+                    }
                 }
             }
 
@@ -174,5 +192,6 @@ fun PendingShiftDetailCardPreview(){
         shift = shift,
         acceptShift = {},
         denyShift = {},
+        editShift = {}
     )
 }
