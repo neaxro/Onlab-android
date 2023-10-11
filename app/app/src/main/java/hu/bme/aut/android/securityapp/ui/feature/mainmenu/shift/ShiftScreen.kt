@@ -3,7 +3,6 @@ package hu.bme.aut.android.securityapp.ui.feature.mainmenu.menus
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Refresh
@@ -24,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
-import hu.bme.aut.android.securityapp.ui.feature.common.EnableGpsCard
 import hu.bme.aut.android.securityapp.ui.feature.common.ManageShiftCard
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.shift.ShiftEvent
@@ -92,7 +90,7 @@ fun ShiftScreen(
                     .padding(10.dp)
             )
 
-            EnableGpsCard(
+            /*EnableGpsCard(
                 checked = checked,
                 checkedChanged = {
                     checked = !checked
@@ -100,7 +98,7 @@ fun ShiftScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
-            )
+            )*/
         }
     }
 }
