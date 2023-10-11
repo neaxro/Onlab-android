@@ -54,6 +54,7 @@ fun MyDatePicker(
 
         OutlinedButton(onClick = {
             val selectedDate = convertLongToDateTime(datePickerDialogState.selectedDateMillis!!)
+                .copy(hour = date.hour, minute = date.minute, second = date.second, nano = date.nano)
             onConfirm(selectedDate)
         }) {
             Text(text = "Confirm")
