@@ -16,6 +16,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashbo
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.DetailShiftScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.EditShiftScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.PendingShiftsScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PeopleScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.people.PersonDetailedScreen
@@ -213,7 +214,7 @@ fun MyAppNavHost(
         }
 
         composable(
-            route = Screen.PendingShifts.baseRoute
+            route = Screen.PendingShifts.fullRoute
         ){
             PendingShiftsScreen(
                 navigateBack = {
@@ -234,6 +235,9 @@ fun MyAppNavHost(
             DetailShiftScreen(
                 navigateBack = {
                     navController.popBackStack()
+                },
+                editShift = { shiftId ->
+                    navController.navigate(Screen.EditShift.withArgs(shiftId.toString()))
                 }
             )
         }
@@ -242,6 +246,19 @@ fun MyAppNavHost(
             route = Screen.Statistics.fullRoute,
         ){
             StatisticsScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.EditShift.fullRoute,
+            arguments = listOf(
+                navArgument("shiftId"){ type = NavType.IntType }
+            )
+        ){
+            EditShiftScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }
