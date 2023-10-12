@@ -39,15 +39,15 @@ fun MyAppNavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
-    ){
+    ) {
 
         composable(
             route = Screen.Login.fullRoute
-        ){
+        ) {
             LoginScreen(
                 onSuccessLogin = {
-                    navController.navigate(Screen.MainMenu.fullRoute){
-                        popUpTo(Screen.Login.fullRoute){
+                    navController.navigate(Screen.MainMenu.fullRoute) {
+                        popUpTo(Screen.Login.fullRoute) {
                             inclusive = true
                         }
                     }
@@ -60,7 +60,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.Register.fullRoute
-        ){
+        ) {
             RegisterScreen(
                 navigateToLogin = {
                     navController.navigate(Screen.Login.fullRoute)
@@ -70,13 +70,13 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.MainMenu.fullRoute
-        ){
+        ) {
             MainMenuScreen(navController = navController)
         }
 
         composable(
             route = Screen.ConnectToJob.fullRoute
-        ){
+        ) {
             ConnectToJobScreen(
                 onNavigateBack = {
                     navController.popBackStack()
@@ -86,7 +86,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.CreateJob.fullRoute
-        ){
+        ) {
             CreateJobScreen(
                 navigateToMainMenu = {
                     navController.popBackStack()
@@ -97,9 +97,9 @@ fun MyAppNavHost(
         composable(
             route = Screen.JobDetail.fullRoute,
             arguments = listOf(
-                navArgument("jobId"){type = NavType.IntType}
+                navArgument("jobId") { type = NavType.IntType }
             )
-        ){
+        ) {
             JobDetailScreen(
                 jobId = it.arguments?.getInt("jobId")!!,
                 onNavigateBack = {
@@ -110,7 +110,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.CreateDashboardMessage.fullRoute
-        ){
+        ) {
             CreateDashboardMessageScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -121,9 +121,9 @@ fun MyAppNavHost(
         composable(
             route = Screen.DashboardDetails.fullRoute,
             arguments = listOf(
-                navArgument("messageId"){type = NavType.IntType}
+                navArgument("messageId") { type = NavType.IntType }
             ),
-        ){
+        ) {
             DashboardDetailScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -133,14 +133,14 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.Profile.fullRoute,
-        ){
+        ) {
             ProfileScreen(
                 navigateBack = {
                     navController.popBackStack()
                 },
                 onLogOut = {
-                    navController.navigate(Screen.Login.fullRoute){
-                        popUpTo(Screen.MainMenu.fullRoute){
+                    navController.navigate(Screen.Login.fullRoute) {
+                        popUpTo(Screen.MainMenu.fullRoute) {
                             inclusive = true
                         }
                     }
@@ -150,7 +150,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.Wages.fullRoute,
-        ){
+        ) {
             WagesScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -167,9 +167,9 @@ fun MyAppNavHost(
         composable(
             route = Screen.WageDetail.fullRoute,
             arguments = listOf(
-                navArgument("wageId"){ type = NavType.IntType }
+                navArgument("wageId") { type = NavType.IntType }
             )
-        ){
+        ) {
             WageDetailScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -179,7 +179,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.WageCreate.fullRoute
-        ){
+        ) {
             CreateWageScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -189,7 +189,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.People.fullRoute
-        ){
+        ) {
             PeopleScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -203,9 +203,9 @@ fun MyAppNavHost(
         composable(
             route = Screen.PeopleDetail.fullRoute,
             arguments = listOf(
-                navArgument("personId"){ type = NavType.IntType }
+                navArgument("personId") { type = NavType.IntType }
             )
-        ){
+        ) {
             PersonDetailedScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -215,7 +215,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.PendingShifts.fullRoute
-        ){
+        ) {
             PendingShiftsScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -229,9 +229,9 @@ fun MyAppNavHost(
         composable(
             route = Screen.DetailShifts.fullRoute,
             arguments = listOf(
-                navArgument("shiftId"){ type = NavType.IntType }
+                navArgument("shiftId") { type = NavType.IntType }
             )
-        ){
+        ) {
             DetailShiftScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -244,7 +244,7 @@ fun MyAppNavHost(
 
         composable(
             route = Screen.Statistics.fullRoute,
-        ){
+        ) {
             StatisticsScreen(
                 navigateBack = {
                     navController.popBackStack()
@@ -255,9 +255,9 @@ fun MyAppNavHost(
         composable(
             route = Screen.EditShift.fullRoute,
             arguments = listOf(
-                navArgument("shiftId"){ type = NavType.IntType }
+                navArgument("shiftId") { type = NavType.IntType }
             )
-        ){
+        ) {
             EditShiftScreen(
                 navigateBack = {
                     navController.popBackStack()

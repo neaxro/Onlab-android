@@ -16,58 +16,65 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JobsViewModel @Inject constructor(
-    val repository: JobRepository,
+    private val jobRepository: JobRepository,
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _state.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
 
     private val _jobs = MutableStateFlow<List<DetailedJob>>(listOf())
     val jobs = _jobs.asStateFlow()
-
-    //var jobs: MutableList<DetailedJob> = mutableStateListOf()
 
     init {
         loadAllJobs()
     }
 
     private fun loadAllJobs(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = ScreenState.Loading()
-            val result = repository.getAllJobForPerson(LoggedPerson.ID)
+            val result = jobRepository.getAllJobForPerson(LoggedPerson.ID)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Finished()
+                    _screenState.value = ScreenState.Success()
                     _jobs.value = result.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
-    fun selectJob(jobId: Int, onSuccess: (String) -> Unit, onError: (String) -> Unit){
+    fun evoke(action: JobsAction){
+        when(action){
+            is JobsAction.SelectJob -> {
+                selectJob(jobId = action.jobId)
+            }
+        }
+    }
+
+    private fun selectJob(jobId: Int) {
+        if(LoggedPerson.CURRENT_JOB_ID == jobId) return
+
         LoggedPerson.CURRENT_JOB_ID = jobId
 
         viewModelScope.launch(Dispatchers.IO) {
-            val token = repository.selectJob(LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID)
+            val result = jobRepository.selectJob(jobId = LoggedPerson.CURRENT_JOB_ID, personId = LoggedPerson.ID)
 
-            when(token){
+            when(result){
                 is Resource.Success -> {
-                    LoggedPerson.TOKEN = token.data!!.token
-
-                    viewModelScope.launch(Dispatchers.Main) {
-                        onSuccess("Successfully selected!")
-                    }
+                    _screenState.value = ScreenState.Success()
+                    LoggedPerson.TOKEN = result.data!!.token
                 }
                 is Resource.Error -> {
-                    viewModelScope.launch(Dispatchers.Main) {
-                        onError(token.message!!)
-                    }
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
+}
+
+sealed class JobsAction{
+    class SelectJob(val jobId: Int) : JobsAction()
 }

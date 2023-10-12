@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.JobCard
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsAction
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -84,23 +85,14 @@ fun JobsScreen(
             verticalItemSpacing = 5.dp,
             state = scrollState
         ) {
-            items(jobs) { item ->
+            items(jobs) { job ->
                 JobCard(
-                    job = item,
+                    job = job,
                     onDetaileClicked = {
-                        navigateToDetailJob(item.id)
+                        navigateToDetailJob(job.id)
                     },
                     onClicked = {
-                        Log.d("JOB_PERSON", "[SCREEN] JobId: ${LoggedPerson.CURRENT_JOB_ID} \tPersonId: ${LoggedPerson.ID}")
-                        viewModel.selectJob(
-                            item.id,
-                            onSuccess = { successMessage ->
-                                //Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
-                            },
-                            onError = { errorMessage ->
-                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                            }
-                        )
+                        viewModel.evoke(JobsAction.SelectJob(jobId = job.id))
                     },
                     modifier = Modifier.padding(top = 5.dp)
                 )
