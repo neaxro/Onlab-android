@@ -1,70 +1,111 @@
 package hu.bme.aut.android.securityapp.ui.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
+import hu.bme.aut.android.securityapp.constants.validatePassword
+import hu.bme.aut.android.securityapp.constants.validateUsername
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
-import hu.bme.aut.android.securityapp.data.model.people.LoginResponse
 import hu.bme.aut.android.securityapp.data.repository.JobRepository
 import hu.bme.aut.android.securityapp.data.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: LoginRepository,
-    private val jobRepository: JobRepository
+    private val loginRepository: LoginRepository,
 ): ViewModel() {
-    var username = mutableStateOf("nemesa")
-    var password = mutableStateOf("Asdasd11")
 
-    var numberOfJobs = mutableStateOf(0)
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
 
-    fun loginUser(onSuccess: (Int) -> Unit, onError: (String) -> Unit){
-        if(username.value.isEmpty() || password.value.isEmpty()) return
+    private val _loginData = MutableStateFlow<LoginData>(LoginData(username = "nemesa", password = "Asdasd11"))
+    val loginData = _loginData.asStateFlow()
 
-        val loginData = LoginData(username.value.trim(), password.value.trim())
+    private val _errors = MutableStateFlow<LoginFieldErrors>(LoginFieldErrors())
+    val errors = _errors.asStateFlow()
+
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.NotLoggedIn)
+    val loginState = _loginState.asStateFlow()
+
+    private fun login(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            val loginResult: Resource<LoginResponse> = repository.loginPerson(loginData)
+            val result = loginRepository.loginPerson(loginData = _loginData.value)
 
-            when(loginResult){
-                is Resource.Success<LoginResponse> -> {
-                    LoggedPerson.ID = loginResult.data!!.id
-                    LoggedPerson.TOKEN = loginResult.data.token
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+                    _loginState.value = LoginState.LoggedIn
 
-                    // TODO: Save data into shared preferences
-
-                    // Check for number of jobs the Person is participated
-                    checkPersonJobs(LoggedPerson.ID, jobRepository){
-                        numberOfJobs.value = it
-                        onSuccess(it)
-                        //login.value = "Success! ID: ${LoggedPerson.ID} #Jobs: ${numberOfJobs.value}"
-                    }
+                    LoggedPerson.ID = result.data!!.id
+                    LoggedPerson.TOKEN = result.data.token
                 }
-                is Resource.Error<LoginResponse> -> {
-                    withContext(Dispatchers.Main){
-                        onError(loginResult.message!!)
-                    }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                    _loginState.value = LoginState.NotLoggedIn
                 }
             }
         }
     }
 
-    private fun checkPersonJobs(personId: Int, jobRepository: JobRepository, onResponse: (Int)->Unit){
-        viewModelScope.launch {
-            val jobs = jobRepository.getAllJobForPerson(personId)
+    fun evoke(action: LoginAction){
+        when(action){
+            is LoginAction.Login -> {
+                login()
+            }
 
-            when(jobs){
-                is Resource.Success -> {
-                    onResponse(jobs.data!!.size)
+            is LoginAction.UpdateUsername -> {
+                _loginData.update {
+                    it.copy(
+                        username = action.username.trim()
+                    )
                 }
-                else -> {}
+
+                _errors.update {
+                    it.copy(
+                        userName = validateUsername(action.username.trim()) != DataFieldErrors.NoError
+                    )
+                }
+            }
+
+            is LoginAction.UpdatePassword -> {
+                _loginData.update {
+                    it.copy(
+                        password = action.password.trim()
+                    )
+                }
+
+                _errors.update {
+                    it.copy(
+                        password = validatePassword(action.password.trim()) != DataFieldErrors.NoError
+                    )
+                }
             }
         }
     }
 }
+
+sealed class LoginAction{
+    object Login : LoginAction()
+    class UpdateUsername(val username: String) : LoginAction()
+    class UpdatePassword(val password: String) : LoginAction()
+}
+
+sealed class LoginState{
+    object LoggedIn : LoginState()
+    object NotLoggedIn : LoginState()
+}
+
+data class LoginFieldErrors(
+    val userName: Boolean = true,
+    val password: Boolean = false,
+)

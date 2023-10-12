@@ -1,24 +1,21 @@
 package hu.bme.aut.android.securityapp
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import hu.bme.aut.android.securityapp.data.model.people.LoginData
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 import hu.bme.aut.android.securityapp.ui.screen.MyAppNavHost
 import hu.bme.aut.android.securityapp.ui.theme.SecurityAppTheme
-import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @AndroidEntryPoint
 class MainActivity() : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var startDest = Screen.MainMenu.fullRoute
+        val startDest = Screen.Login.fullRoute
 
+        /*
         val loginViewModel: LoginViewModel by viewModels<LoginViewModel>()
         val loginData = getLoginData()
 
@@ -34,6 +31,7 @@ class MainActivity() : ComponentActivity() {
                 onError = { startDest = Screen.Login.fullRoute }
             )
         }
+        */
 
         setContent {
             SecurityAppTheme {
@@ -42,6 +40,7 @@ class MainActivity() : ComponentActivity() {
         }
     }
 
+    /*
     private fun getLoginData(): LoginData? {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return null
         val username = sharedPref.getString("USERNAME", null)
@@ -51,4 +50,5 @@ class MainActivity() : ComponentActivity() {
 
         return LoginData(username, password)
     }
+    */
 }

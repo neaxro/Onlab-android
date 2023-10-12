@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -18,6 +17,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.ui.viewmodel.LoginAction
+import hu.bme.aut.android.securityapp.ui.viewmodel.LoginState
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,11 +30,16 @@ fun LoginScreen(
 ){
     val context = LocalContext.current
 
-    var username by remember { viewModel.username }
-    val usernameError = remember { mutableStateOf(false) }
+    val loginData = viewModel.loginData.collectAsState().value
+    val errors = viewModel.errors.collectAsState().value
 
-    var password by remember { viewModel.password }
-    val passwordError = remember { mutableStateOf(false) }
+    LaunchedEffect(viewModel.loginState){
+        viewModel.loginState.collect{ newState ->
+            if(newState is LoginState.LoggedIn){
+                onSuccessLogin()
+            }
+        }
+    }
 
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -51,23 +57,21 @@ fun LoginScreen(
         Spacer(modifier = Modifier.padding(30.dp))
 
         OutlinedTextField(
-            value = username,
+            value = loginData.username,
             onValueChange = {
-                usernameError.value = false
-                username = it
+                viewModel.evoke(LoginAction.UpdateUsername(username = it))
             },
             label = {Text(text = "Username")},
             singleLine = true,
-            isError = usernameError.value
+            isError = errors.userName
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         OutlinedTextField(
-            value = password,
+            value = loginData.password,
             onValueChange = {
-                passwordError.value = false
-                password = it
+                viewModel.evoke(LoginAction.UpdatePassword(password = it))
             },
             label = {Text(text = "Password")},
             singleLine = true,
@@ -90,7 +94,7 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Password,
             ),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            isError = passwordError.value
+            isError = errors.password
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -99,22 +103,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth(0.8f),
             onClick = {
-                if(username.isEmpty()){
-                    usernameError.value = true
-                }
-                else if(password.isEmpty()){
-                    passwordError.value = true
-                }
-
-                viewModel.loginUser(
-                    onSuccess = { numberOfJobs ->
-                    // If login is successful navigate to the proper screen
-                    onSuccessLogin()
-                },
-                    onError = {errorMessage ->
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                    }
-                )
+                viewModel.evoke(LoginAction.Login)
             },
         ) {
             Text(text = "Sign in")
