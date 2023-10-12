@@ -1,7 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.feature.connecttojob
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +19,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,8 +44,16 @@ fun ConnectToJobScreen(
     onNavigateBack: () -> Unit,
 ){
     val context = LocalContext.current
-    val digits = remember {
-        viewModel.digits
+
+    val digits = viewModel.digits.collectAsState().value
+    val errors = viewModel.errors.collectAsState().value
+
+    LaunchedEffect(viewModel.connectionState){
+        viewModel.connectionState.collect{ newState ->
+            if(newState is ConnectionState.Connected){
+                onNavigateBack()
+            }
+        }
     }
 
     Scaffold(
@@ -65,32 +73,25 @@ fun ConnectToJobScreen(
             contentAlignment = Alignment.Center,
         ){
             BasicTextField(
-                value = digits.value,
+                value = digits,
                 onValueChange = {
-                    if(it.length <= viewModel.numberOfDigits) {
-                        digits.value = it.trim()
-                    }
+                    viewModel.evoke(ConnectToJobAction.UpdateDigits(digits = it.trim()))
                 },
                 modifier = Modifier,
                 decorationBox = {
                     DecoratorBox(
                         numberOfDigits = viewModel.numberOfDigits,
-                        digits = digits.value,
+                        isError = errors !is DataFieldErrors.NoError,
+                        digits = digits,
                     )
                 },
 
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, autoCorrect = false, KeyboardType.Text, imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {
-                    if(digits.value.length == viewModel.numberOfDigits){
-
-                        // Connect person to job
-                        viewModel.connectPersonToJob(onSuccess = onNavigateBack){ errorMessage ->
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                        }
-                        Log.d("CONNECTJOB_KEYBOARDACTION", "Digits: $digits")
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        viewModel.evoke(ConnectToJobAction.ConnectToJob)
                     }
-                    Log.d("CONNECTJOB_KEYBOARDACTION", "Digits: $digits")
-                })
+                )
             )
         }
     }
@@ -100,6 +101,7 @@ fun ConnectToJobScreen(
 fun DecoratorBox(
     numberOfDigits: Int,
     digits: String,
+    isError: Boolean,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -141,7 +143,7 @@ fun DecoratorBox(
                         .background(Color.White)
                         .border(
                             2.dp,
-                            if (digitValue.isEmpty()) Color.Gray else Color.Black,
+                            if(digitValue.isEmpty()) Color.Gray else if(isError) Color.Red else Color.Black,
                             RoundedCornerShape(5.dp)
                         )
                         .padding(10.dp)
