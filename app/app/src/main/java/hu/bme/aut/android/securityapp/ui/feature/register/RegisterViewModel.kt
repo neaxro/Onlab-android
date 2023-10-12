@@ -3,6 +3,12 @@ package hu.bme.aut.android.securityapp.ui.feature.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.bme.aut.android.securityapp.constants.DataFieldErrors
+import hu.bme.aut.android.securityapp.constants.validateEmail
+import hu.bme.aut.android.securityapp.constants.validateFullname
+import hu.bme.aut.android.securityapp.constants.validateNickname
+import hu.bme.aut.android.securityapp.constants.validatePassword
+import hu.bme.aut.android.securityapp.constants.validateUsername
 import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
@@ -25,7 +31,7 @@ class RegisterViewModel @Inject constructor(
     private val _rePassword = MutableStateFlow<String>("")
     val rePassword = _rePassword.asStateFlow()
 
-    private val _errors = MutableStateFlow<FieldErrors>(FieldErrors())
+    private val _errors = MutableStateFlow<RegisterFieldErrors>(RegisterFieldErrors())
     val errors = _errors.asStateFlow()
 
     fun register(onSuccess: () -> Unit, onError: (String) -> Unit){
@@ -104,52 +110,19 @@ class RegisterViewModel @Inject constructor(
         val nickNameCheck = validateNickname(_person.value.nickname)
         val emailAddressCheck = validateEmail(_person.value.email)
         val passwordCheck = validatePassword(_person.value.password)
-        val passwordMach = if(_person.value.password == _rePassword.value) RegisterValueError.NoError else RegisterValueError.PasswordMissmachError("Passwords do not mach!")
+        val passwordMach = if(_person.value.password == _rePassword.value) DataFieldErrors.NoError else DataFieldErrors.PasswordMissmachError("Passwords do not mach!")
 
         _errors.update {
             it.copy(
-                fullName = fullNameCheck != RegisterValueError.NoError,
-                userName = userNameCheck != RegisterValueError.NoError,
-                nickName = nickNameCheck != RegisterValueError.NoError,
-                emailAddress = emailAddressCheck != RegisterValueError.NoError,
-                password = passwordCheck != RegisterValueError.NoError,
-                passwordMissmach = passwordMach != RegisterValueError.NoError
+                fullName = fullNameCheck != DataFieldErrors.NoError,
+                userName = userNameCheck != DataFieldErrors.NoError,
+                nickName = nickNameCheck != DataFieldErrors.NoError,
+                emailAddress = emailAddressCheck != DataFieldErrors.NoError,
+                password = passwordCheck != DataFieldErrors.NoError,
+                passwordMissmach = passwordMach != DataFieldErrors.NoError
             )
         }
     }
-}
-
-private fun validateFullname(fullname: String): RegisterValueError{
-    if(fullname.isEmpty()) return RegisterValueError.FullNameError("Fullname is empty!")
-    if(fullname.length > 30) return RegisterValueError.FullNameError("Fullname is too long!")
-
-    return RegisterValueError.NoError
-}
-
-private fun validateUsername(username: String): RegisterValueError{
-    if(!username.matches(Regex("\\S+"))) return RegisterValueError.UserNameError("Username must not contain whitespaces!")
-
-    return RegisterValueError.NoError
-}
-
-private fun validateNickname(nickname: String): RegisterValueError{
-    if(!nickname.matches(Regex("\\S+"))) return RegisterValueError.NickNameError("Nickname must not contain whitespaces!")
-    if(!nickname.matches(Regex("^[a-zA-Z]+\$"))) return RegisterValueError.NickNameError("Nickname must contains only letters!")
-
-    return RegisterValueError.NoError
-}
-
-private fun validateEmail(email: String): RegisterValueError{
-    if(!email.matches(Regex("^[\\w-]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))) return RegisterValueError.EmailAddressError("Invalid email address format!")
-
-    return RegisterValueError.NoError
-}
-
-private fun validatePassword(password: String): RegisterValueError{
-    if(password.length < 8) return RegisterValueError.PasswordError("Password is too short!")
-    if(password.length > 30) return RegisterValueError.PasswordError("Password is too long!")
-
-    return RegisterValueError.NoError
 }
 
 sealed class RegisterEvent{
@@ -161,17 +134,7 @@ sealed class RegisterEvent{
     class ChangeRePassword(val rePassword: String) : RegisterEvent()
 }
 
-sealed class RegisterValueError(val message: String){
-    object NoError: RegisterValueError("")
-    class FullNameError(val msg: String): RegisterValueError(message = msg)
-    class UserNameError(val msg: String): RegisterValueError(message = msg)
-    class NickNameError(val msg: String): RegisterValueError(message = msg)
-    class EmailAddressError(val msg: String): RegisterValueError(message = msg)
-    class PasswordError(val msg: String): RegisterValueError(message = msg)
-    class PasswordMissmachError(val msg: String): RegisterValueError(message = msg)
-}
-
-data class FieldErrors(
+data class RegisterFieldErrors(
     val fullName: Boolean = true,
     val userName: Boolean = false,
     val nickName: Boolean = false,
@@ -180,7 +143,7 @@ data class FieldErrors(
     val passwordMissmach: Boolean = false,
 )
 
-fun FieldErrors.isError(): Boolean{
+fun RegisterFieldErrors.isError(): Boolean{
     val isError = this.fullName
             || this.userName
             || this.nickName
