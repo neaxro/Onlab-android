@@ -7,11 +7,11 @@ import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import okhttp3.ResponseBody
 
 interface DashboardRepository {
-    suspend fun getAllDashboards(jobId: Int, personId: Int): Resource<List<Dashboard>>
+    suspend fun getAllDashboardsForPerson(jobId: Int, personId: Int): Resource<List<Dashboard>>
 
     suspend fun getDashboard(dashboardId: Int): Resource<Dashboard>
 
-    suspend fun getAllForJob(jobId: Int): Resource<List<Dashboard>>
+    suspend fun getAllDashboardsForJob(jobId: Int): Resource<List<Dashboard>>
 
     suspend fun createDashboard(dashboard: CreateDashboardData): Resource<Dashboard>
 

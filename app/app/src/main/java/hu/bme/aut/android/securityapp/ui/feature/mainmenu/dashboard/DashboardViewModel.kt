@@ -1,8 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,72 +9,87 @@ import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.data.repository.PersonRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import hu.bme.aut.android.securityapp.domain.wrappers.Roles
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel@Inject constructor(
-    private val repository: DashboardRepository,
+    private val dashboardRepository: DashboardRepository,
     private val personRepository: PersonRepository,
 ): ViewModel() {
 
-    var person = mutableStateOf<Person>(Person(0, "", "", "", "", null))
-    var dashboardMessages: MutableList<Dashboard> = mutableStateListOf()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
 
-    fun loadAllDashboards(onError: (String) -> Unit){
-        Log.d("JOB_PERSON", "[VM] JobId: ${LoggedPerson.CURRENT_JOB_ID} \tPersonId: ${LoggedPerson.ID}")
+    private val _person = MutableStateFlow<Person>(Person())
+    val person = _person.asStateFlow()
+
+    private val _messages = MutableStateFlow<List<Dashboard>>(listOf())
+    val messages = _messages.asStateFlow()
+
+    init {
+        loadPersonData()
+
+        val personRole = LoggedPerson.getRole()
+        if(personRole is Roles.Admin || personRole is Roles.Owner){
+            loadAllForAdmin()
+        }
+        else{
+            loadDashboardsForUser()
+        }
+    }
+
+    private fun loadDashboardsForUser(){
         viewModelScope.launch(Dispatchers.IO) {
-
-            val result = repository.getAllDashboards(LoggedPerson.CURRENT_JOB_ID, LoggedPerson.ID)
+            _screenState.value = ScreenState.Loading()
+            val result = dashboardRepository.getAllDashboardsForPerson(jobId = LoggedPerson.CURRENT_JOB_ID, personId = LoggedPerson.ID)
 
             when(result){
                 is Resource.Success -> {
-                    dashboardMessages.removeAll(dashboardMessages)
-                    dashboardMessages.addAll(result.data!!)
+                    _screenState.value = ScreenState.Success()
+                    _messages.value = result.data!!
                 }
                 is Resource.Error -> {
-                    viewModelScope.launch(Dispatchers.Main){
-                        if(LoggedPerson.CURRENT_JOB_ID > 0){
-                            onError(result.message!!)
-                        }
-                    }
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
-    fun loadAllForAdmin(onError: (String) -> Unit){
+    private fun loadAllForAdmin(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-
-            val result = repository.getAllForJob(LoggedPerson.CURRENT_JOB_ID)
+            val result = dashboardRepository.getAllDashboardsForJob(jobId = LoggedPerson.CURRENT_JOB_ID)
 
             when(result){
                 is Resource.Success -> {
-                    dashboardMessages.removeAll(dashboardMessages)
-                    dashboardMessages.addAll(result.data!!)
+                    _screenState.value = ScreenState.Success()
+                    _messages.value = result.data!!
                 }
                 is Resource.Error -> {
-                    viewModelScope.launch(Dispatchers.Main){
-                        if(LoggedPerson.CURRENT_JOB_ID > 0){
-                            onError(result.message!!)
-                        }
-                    }
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
-    fun loadPersonData(){
+    private fun loadPersonData(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            val result = personRepository.getPerson(LoggedPerson.ID)
+            val result = personRepository.getPerson(personId = LoggedPerson.ID)
 
             when(result){
                 is Resource.Success -> {
-                    person.value = result.data!!
+                    _screenState.value = ScreenState.Success()
+                    _person.value = result.data!!
                 }
                 is Resource.Error -> {
-                    person.value = person.value.copy(fullName = "Not Found")
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }

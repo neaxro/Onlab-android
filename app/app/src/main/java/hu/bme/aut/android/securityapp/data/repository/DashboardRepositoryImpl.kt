@@ -13,7 +13,7 @@ class DashboardRepositoryImpl (
     private val app: Application
 ): DashboardRepository {
 
-    override suspend fun getAllDashboards( jobId: Int, personId: Int): Resource<List<Dashboard>> {
+    override suspend fun getAllDashboardsForPerson(jobId: Int, personId: Int): Resource<List<Dashboard>> {
         val connection = try {
             val result = api.getAllDashboardsForPerson(jobId = jobId, personId = personId)
 
@@ -51,9 +51,9 @@ class DashboardRepositoryImpl (
         return connection
     }
 
-    override suspend fun getAllForJob(jobId: Int): Resource<List<Dashboard>> {
+    override suspend fun getAllDashboardsForJob(jobId: Int): Resource<List<Dashboard>> {
         val connection = try {
-            val result = api.getAllForJob(jobId = jobId)
+            val result = api.getAllDashboardsForJob(jobId = jobId)
 
             val data = if(result.isSuccessful && result.code() == 200){
                 Resource.Success(message = "Job succesfully found!", data = result.body()!!)
@@ -72,7 +72,7 @@ class DashboardRepositoryImpl (
 
     override suspend fun createDashboard(dashboard: CreateDashboardData): Resource<Dashboard> {
         val connection = try {
-            val result = api.insertDashboard(dashboard = dashboard)
+            val result = api.createDashboard(dashboard = dashboard)
 
             val data = if(result.isSuccessful && result.code() == 201){
                 Resource.Success(message = "Dashboard succesfully created!", data = result.body()!!)

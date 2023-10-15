@@ -1,10 +1,8 @@
 package hu.bme.aut.android.securityapp.feature.mainmenu.menus
 
-import android.widget.Toast
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,9 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,25 +39,8 @@ fun DashboardScreen(
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
 
-    val person by remember { viewModel.person }
-    val messages = remember { viewModel.dashboardMessages }
-
-    LaunchedEffect(true){
-
-        if(LoggedPerson.getRole() is Roles.Owner || LoggedPerson.getRole() is Roles.Admin){
-            viewModel.loadAllForAdmin { errorMessage ->
-                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-            }
-        }
-        else {
-            viewModel.loadAllDashboards { errorMessage ->
-                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        viewModel.loadPersonData()
-    }
-
+    val person = viewModel.person.collectAsState().value
+    val messages = viewModel.messages.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -85,12 +64,20 @@ fun DashboardScreen(
             }
         }
     ) {
-        Box(
+        val paddingTop = it.calculateTopPadding()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(top = it.calculateTopPadding())
+                .fillMaxSize()
+                .padding(top = paddingTop)
         ) {
+            WelcomeBoard(
+                person,
+                modifier = Modifier
+            )
+
             if(messages.isEmpty()){
-                Text(text = "There are no messages!", modifier = Modifier.align(Alignment.Center))
+                Text(text = "There are no messages!", modifier = Modifier)
             }
             else{
                 LazyColumn(
@@ -98,10 +85,6 @@ fun DashboardScreen(
                     contentPadding = PaddingValues(10.dp)
                 ) {
                     items(messages){message ->
-                        if(messages.indexOf(message) == 0){
-                            Spacer(modifier = Modifier.height(120.dp))
-                        }
-
                         DashboardCard(
                             message,
                             onDetails = { messageId ->
@@ -112,13 +95,6 @@ fun DashboardScreen(
                     }
                 }
             }
-
-            WelcomeBoard(
-                person,
-                modifier = Modifier
-                    //.padding(10.dp)
-                    .align(Alignment.TopCenter)
-            )
         }
     }
 }

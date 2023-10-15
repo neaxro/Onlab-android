@@ -24,7 +24,7 @@ interface DashboardApi {
     ): Response<List<Dashboard>>
 
     @GET("/api/dashboard/allforjob/{jobId}")
-    suspend fun getAllForJob(
+    suspend fun getAllDashboardsForJob(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Path("jobId") jobId: Int,
     ): Response<List<Dashboard>>
@@ -36,7 +36,7 @@ interface DashboardApi {
     ): Response<Dashboard>
 
     @POST("/api/dashboard")
-    suspend fun insertDashboard(
+    suspend fun createDashboard(
         @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
         @Body dashboard: CreateDashboardData
     ): Response<Dashboard>
