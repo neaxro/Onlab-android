@@ -2,23 +2,21 @@ package hu.bme.aut.android.securityapp.ui.feature.mainmenu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Dashboard
-import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.material.icons.rounded.Shield
-import androidx.compose.material.icons.rounded.Work
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import hu.bme.aut.android.securityapp.ui.feature.common.MyBottomNavigationBar
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 data class NavigationItem(
+    val id: Int = 0,
     val name: String,
     val screen: Screen,
     val icon: ImageVector,
@@ -28,16 +26,12 @@ data class NavigationItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainMenuScreen(
+    viewModel: MainMenuViewModel = hiltViewModel(),
     navController: NavController
 ){
     val mainMenuNavController = rememberNavController()
 
-    val bottomNavigationItems = listOf(
-        NavigationItem(name = "Jobs", screen = Screen.Jobs, icon = Icons.Rounded.Work, badgeCount = 0),
-        NavigationItem(name = "Dashboard", screen = Screen.Dashboard, icon = Icons.Rounded.Dashboard, badgeCount = 0),
-        NavigationItem(name = "Shift", screen = Screen.Shift, icon = Icons.Rounded.Shield, badgeCount = 0),
-        NavigationItem(name = "More", screen = Screen.Statistics, icon = Icons.Rounded.MoreHoriz, badgeCount = 0),
-    )
+    val bottomNavigationItems = viewModel.bottomNavigationItems.collectAsState().value
 
     Scaffold(
         bottomBar = {
@@ -68,5 +62,7 @@ fun MainMenuScreen(
 @Preview(showBackground = true)
 @Composable
 fun ShowBottomNavBar(){
-    MainMenuScreen(rememberNavController())
+    MainMenuScreen(
+        navController =  rememberNavController()
+    )
 }

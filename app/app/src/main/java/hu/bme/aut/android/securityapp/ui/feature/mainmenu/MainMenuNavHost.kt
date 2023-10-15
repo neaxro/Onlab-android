@@ -26,7 +26,7 @@ fun MainMenuNavHost(
         modifier = modifier
             .fillMaxSize(),
         navController = mainMenuNavController,
-        startDestination = startDestination
+        startDestination = startDestination,
     ){
 
         composable(
