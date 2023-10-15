@@ -1,7 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.feature.createJob
 
 //import androidx.compose.material3.*
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
@@ -9,9 +8,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,8 +26,15 @@ fun CreateJobScreen(
 ){
     val context = LocalContext.current
 
-    var jobname by remember { viewModel.jobname }
-    var description by remember { viewModel.description }
+    val jobData = viewModel.createJobData.collectAsState().value
+
+    LaunchedEffect(viewModel.creationState){
+        viewModel.creationState.collect{ newState ->
+            if (newState is CreationState.Created){
+                navigateToMainMenu()
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -51,20 +56,20 @@ fun CreateJobScreen(
             verticalArrangement = Arrangement.Center,
         ) {
             OutlinedTextField(
-                value = jobname,
-                onValueChange = {
-                    jobname = it
+                value = jobData.title,
+                onValueChange = { newJobName ->
+                    viewModel.evoke(CreateJobAction.UpdateJobName(jobName = newJobName))
                 },
-                label = { Text(text = "Name of the job")},
+                label = { Text(text = "Job's name")},
                 singleLine = true,
             )
 
             Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
-                value = description,
-                onValueChange = {
-                    description = it
+                value = jobData.description,
+                onValueChange = { newDescription ->
+                    viewModel.evoke(CreateJobAction.UpdateDescription(description = newDescription))
                 },
                 label = { Text(text = "Description")},
                 maxLines = 3,
@@ -76,14 +81,7 @@ fun CreateJobScreen(
             OutlinedButton(
 
                 onClick = {
-                    viewModel.createJob(
-                        onSuccess = {
-                            Toast.makeText(context, "Successfully created!", Toast.LENGTH_LONG).show()
-                            navigateToMainMenu()
-                        },
-                        onError = {errorMessage ->
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                        })
+                    viewModel.evoke(CreateJobAction.CreateJob)
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.6f),
