@@ -41,7 +41,7 @@ class MainMenuViewModel @Inject constructor(
     val bottomNavigationItems = _bottomNavigationItems.asStateFlow()
 
     init {
-        getJobsCount()
+        //getJobsCount()
     }
 
     fun evoke(action: MainMenuAction){
