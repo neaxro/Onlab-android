@@ -9,15 +9,13 @@ import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Work
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import hu.bme.aut.android.securityapp.ui.feature.common.MyBottomNavigationBar
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 data class NavigationItem(
@@ -43,7 +41,7 @@ fun MainMenuScreen(
 
     Scaffold(
         bottomBar = {
-           BottomNavigationBar(
+           MyBottomNavigationBar(
                items = bottomNavigationItems,
                mainMenuNavController = mainMenuNavController,
                modifier = Modifier,
@@ -62,51 +60,6 @@ fun MainMenuScreen(
             MainMenuNavHost(
                 navController = navController,
                 mainMenuNavController = mainMenuNavController
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomNavigationBar(
-    items: List<NavigationItem>,
-    mainMenuNavController: NavController,
-    modifier: Modifier,
-    onItemClicked: (NavigationItem) -> Unit
-){
-    val backStackEntry = mainMenuNavController.currentBackStackEntryAsState()
-
-    NavigationBar(
-        modifier = modifier,
-        containerColor = Color.White,
-        tonalElevation = 5.dp
-    ) {
-        items.forEach { item ->
-            val selected = item.screen.baseRoute == backStackEntry.value?.destination?.route
-
-            NavigationBarItem(
-                selected = selected,
-                onClick = {
-                    onItemClicked(item)
-                },
-                icon = {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        if(item.badgeCount > 0){
-                            BadgedBox(
-                                badge = {
-                                    Text(text = item.badgeCount.toString())
-                                }
-                            ) {
-                                Icon(imageVector = item.icon, contentDescription = item.name)
-                            }
-                        }
-                        else{
-                            Icon(imageVector = item.icon, contentDescription = item.name)
-                        }
-                    }
-                },
-                label = { Text(text = item.name) },
             )
         }
     }
