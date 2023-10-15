@@ -6,8 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.model.people.Person
+import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.data.repository.PersonRepository
+import hu.bme.aut.android.securityapp.data.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
@@ -21,6 +23,7 @@ import javax.inject.Inject
 class DashboardViewModel@Inject constructor(
     private val dashboardRepository: DashboardRepository,
     private val personRepository: PersonRepository,
+    private val wageRepository: WageRepository,
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -32,8 +35,12 @@ class DashboardViewModel@Inject constructor(
     private val _messages = MutableStateFlow<List<Dashboard>>(listOf())
     val messages = _messages.asStateFlow()
 
+    private val _categories = MutableStateFlow<List<Wage>>(listOf())
+    val categories = _categories.asStateFlow()
+
     init {
         loadPersonData()
+        loadAllCategories()
 
         val personRole = LoggedPerson.getRole()
         if(personRole is Roles.Admin || personRole is Roles.Owner){
@@ -87,6 +94,23 @@ class DashboardViewModel@Inject constructor(
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
                     _person.value = result.data!!
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
+    private fun loadAllCategories(){
+        _screenState.value = ScreenState.Loading()
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = wageRepository.getCategories(jobId = LoggedPerson.CURRENT_JOB_ID)
+
+            when(result){
+                is Resource.Success -> {
+                    _categories.value = result.data!!
+                    _screenState.value = ScreenState.Success()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)

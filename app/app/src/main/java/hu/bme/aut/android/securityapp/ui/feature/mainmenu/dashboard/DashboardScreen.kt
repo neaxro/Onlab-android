@@ -41,6 +41,7 @@ fun DashboardScreen(
 
     val person = viewModel.person.collectAsState().value
     val messages = viewModel.messages.collectAsState().value
+    val wages = viewModel.categories.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -90,6 +91,7 @@ fun DashboardScreen(
                             onDetails = { messageId ->
                                 navigateToDetails(messageId)
                             },
+                            categories = wages,
                             modifier = Modifier.padding(bottom = 10.dp)
                         )
                     }

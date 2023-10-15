@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
-import hu.bme.aut.android.securityapp.data.model.dashboard.asCreateDashboardData
+import hu.bme.aut.android.securityapp.data.model.dashboard.CreateDashboardData
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.data.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
-import hu.bme.aut.android.securityapp.ui.model.DashboardUi
-import hu.bme.aut.android.securityapp.ui.model.asDashboard
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,12 +19,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateDashboardMessageViewModel @Inject constructor(
-    private val repository: DashboardRepository,
+    private val dashboardRepository: DashboardRepository,
     private val wageRepository: WageRepository,
 ): ViewModel() {
 
-    private val _screenState = MutableStateFlow<CreateDashboardState>(CreateDashboardState())
-    val state = _screenState.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
+
+    private val _message = MutableStateFlow<CreateDashboardData>(CreateDashboardData(jobId = LoggedPerson.CURRENT_JOB_ID, creatorId = LoggedPerson.ID))
+    val message = _message.asStateFlow()
+
+    private val _selectedWage = MutableStateFlow<Wage>(Wage())
+    val selectedWage = _selectedWage.asStateFlow()
 
     private val _wages = MutableStateFlow<List<Wage>>(listOf())
     val wages = _wages.asStateFlow()
@@ -34,80 +39,76 @@ class CreateDashboardMessageViewModel @Inject constructor(
         loadWages()
     }
 
-    fun onEvoke(event: CreateDashboardEvent){
-        when(event) {
-            is CreateDashboardEvent.ChangeTitle -> {
-                _screenState.update {
+    fun evoke(action: CreateDashboardAction){
+        when(action) {
+            is CreateDashboardAction.ChangeTitle -> {
+                _message.update {
                     it.copy(
-                        message = it.message?.copy(title = event.title)
+                        title = action.title
                     )
                 }
             }
-            is CreateDashboardEvent.ChangeMessageBody -> {
-                _screenState.update {
+            is CreateDashboardAction.ChangeMessageBody -> {
+                _message.update {
                     it.copy(
-                        message = it.message?.copy(message = event.body)
+                        message = action.message
                     )
                 }
             }
-            is CreateDashboardEvent.ChangeWage -> {
-                _screenState.update {
+            is CreateDashboardAction.ChangeWage -> {
+                _selectedWage.value = action.wage
+                _message.update {
                     it.copy(
-                        message = it.message?.copy(wage = event.wage)
+                        groupId = action.wage.id
                     )
                 }
             }
-
-            CreateDashboardEvent.SaveDashboard -> {
-                saveDashboard()
+            CreateDashboardAction.SaveDashboard -> {
+                createDashboard()
             }
         }
 
     }
 
-    private fun saveDashboard(){
+    private fun createDashboard(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _screenState.update {
-                it.copy(isLoading = true)
-            }
-            val dashboard = _screenState.value.message!!.asDashboard().asCreateDashboardData()
-            repository.createDashboard(dashboard = dashboard)
+            val result = dashboardRepository.createDashboard(dashboard = _message.value)
 
-            _screenState.update {
-                it.copy(isLoading = false)
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
             }
         }
     }
 
     private fun loadWages(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _screenState.update { it.copy(isLoading = true) }
-            val result = wageRepository.getCategories(LoggedPerson.CURRENT_JOB_ID)
+            val result = wageRepository.getCategories(jobId = LoggedPerson.CURRENT_JOB_ID)
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.update { it.copy(isLoading = false) }
+                    _screenState.value = ScreenState.Success()
                     _wages.value = result.data!!
 
-                    onEvoke(CreateDashboardEvent.ChangeWage(_wages.value[0]))
+                    evoke(CreateDashboardAction.ChangeWage(_wages.value[0]))
                 }
                 is Resource.Error -> {
-                    _screenState.update { it.copy(error = result.message!!) }
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 }
 
-data class CreateDashboardState(
-    val message: DashboardUi? = DashboardUi(),
-    val isLoading: Boolean = false,
-    val error: String = "",
-)
-
-sealed class CreateDashboardEvent{
-    object SaveDashboard: CreateDashboardEvent()
-    data class ChangeTitle(val title: String): CreateDashboardEvent()
-    data class ChangeMessageBody(val body: String): CreateDashboardEvent()
-    data class ChangeWage(val wage: Wage): CreateDashboardEvent()
+sealed class CreateDashboardAction{
+    object SaveDashboard: CreateDashboardAction()
+    data class ChangeTitle(val title: String): CreateDashboardAction()
+    data class ChangeMessageBody(val message: String): CreateDashboardAction()
+    data class ChangeWage(val wage: Wage): CreateDashboardAction()
 }

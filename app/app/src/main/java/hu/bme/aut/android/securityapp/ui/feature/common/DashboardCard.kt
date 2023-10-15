@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.model.dashboard.getCreationDate
 import hu.bme.aut.android.securityapp.data.model.dashboard.getCreationTime
+import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 import java.util.Base64
 
@@ -48,6 +49,7 @@ import java.util.Base64
 @Composable
 fun DashboardCard(
     dashboard: Dashboard,
+    categories: List<Wage>,
     onDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -104,36 +106,59 @@ fun DashboardCard(
                 }
             }
 
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ){
+            Row {
                 Text(
                     text = dashboard.title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                )
-
-                Text(
-                    text = dashboard.getCreationDate(),
-                    fontWeight = FontWeight.Light
+                    modifier = Modifier.padding(bottom = 5.dp)
                 )
             }
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = dashboard.creatorName,
-                    fontWeight = FontWeight.Light
-                )
-                Text(
-                    text = dashboard.getCreationTime(),
-                    fontWeight = FontWeight.Light
-                )
-            }
+            DoubleDataRow(
+                title = {
+                    Text(
+                        text = "Creation date",
+                        fontWeight = FontWeight.Light,
+                    )
+                },
+                value = {
+                    Text(
+                        text = String.format("%s,\t%s", dashboard.getCreationDate(), dashboard.getCreationTime()),
+                        fontWeight = FontWeight.Light
+                    )
+                }
+            )
+
+            DoubleDataRow(
+                title = {
+                    Text(
+                        text = "Creator",
+                        fontWeight = FontWeight.Medium,
+                    )
+                },
+                value = {
+                    Text(
+                        text = dashboard.creatorName,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            )
+
+            DoubleDataRow(
+                title = {
+                    Text(
+                        text = "Role",
+                        fontWeight = FontWeight.Normal,
+                    )
+                },
+                value = {
+                    Text(
+                        text = categories.firstOrNull { it.id == dashboard.groupId }?.name ?: "NaN",
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+            )
         }
 
         // Message Body
@@ -174,5 +199,9 @@ fun PreviewScreenDasboard() {
         1,
         "Sima"
     )
-    DashboardCard(das, {})
+    DashboardCard(
+        das,
+        categories = listOf(),
+        {},
+    )
 }

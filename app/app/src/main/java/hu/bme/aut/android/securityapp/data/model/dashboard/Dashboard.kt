@@ -29,7 +29,7 @@ fun Dashboard.asCreateDashboardData(): CreateDashboardData{
     return CreateDashboardData(
         title = title,
         message = message,
-        jobid = LoggedPerson.CURRENT_JOB_ID,
+        jobId = LoggedPerson.CURRENT_JOB_ID,
         creatorId = LoggedPerson.ID,
         groupId = groupId
     )
