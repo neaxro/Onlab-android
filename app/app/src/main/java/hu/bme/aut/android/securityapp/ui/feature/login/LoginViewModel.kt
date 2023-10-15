@@ -8,7 +8,6 @@ import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.constants.validatePassword
 import hu.bme.aut.android.securityapp.constants.validateUsername
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
-import hu.bme.aut.android.securityapp.data.repository.JobRepository
 import hu.bme.aut.android.securityapp.data.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
@@ -90,6 +89,8 @@ class LoginViewModel @Inject constructor(
                     )
                 }
             }
+
+            else -> {}
         }
     }
 }
