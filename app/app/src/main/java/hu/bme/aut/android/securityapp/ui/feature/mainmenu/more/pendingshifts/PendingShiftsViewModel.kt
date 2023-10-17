@@ -19,8 +19,8 @@ class PendingShiftsViewModel @Inject constructor(
     private val shiftRepository: ShiftRepository
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _state.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val state = _screenState.asStateFlow()
 
     private val _shifts = MutableStateFlow<List<Shift>>(listOf())
     val shifts = _shifts.asStateFlow()
@@ -29,24 +29,32 @@ class PendingShiftsViewModel @Inject constructor(
         loadPendingShifts()
     }
 
-    fun refresh(){
-        loadPendingShifts()
+    fun evoke(action: PendingShiftsAction){
+        when(action){
+            PendingShiftsAction.Refresh -> {
+                loadPendingShifts()
+            }
+        }
     }
 
     private fun loadPendingShifts(){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = shiftRepository.getAllPendingInJob(jobId = LoggedPerson.CURRENT_JOB_ID)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _shifts.value = result.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
+}
+
+sealed class PendingShiftsAction{
+    object Refresh : PendingShiftsAction()
 }
