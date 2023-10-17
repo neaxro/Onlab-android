@@ -97,7 +97,7 @@ fun PersonDetailedScreen(
                     val newRole = roles.firstOrNull{ it.title == selectedRole }
 
                     if(newWage != null && newRole != null){
-                        viewModel.saveChanges(newWage = newWage, newRole = newRole)
+                        viewModel.evoke(PersonDetailAction.SaveChanges(newWage = newWage, newRole = newRole))
                     }
                 },
             ) {

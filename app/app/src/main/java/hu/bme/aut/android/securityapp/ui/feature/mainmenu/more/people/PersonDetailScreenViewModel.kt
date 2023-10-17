@@ -29,8 +29,8 @@ class PersonDetailScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _state.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
 
     private val _wages = MutableStateFlow<List<Wage>>(listOf())
     val wages = _wages.asStateFlow()
@@ -48,59 +48,67 @@ class PersonDetailScreenViewModel @Inject constructor(
         loadAllWages()
     }
 
+    fun evoke(action: PersonDetailAction){
+        when(action){
+            is PersonDetailAction.SaveChanges -> {
+                saveChanges(newWage = action.newWage, newRole = action.newRole)
+            }
+        }
+    }
+
     private fun loadAllWages(){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = wageRepository.getWages(jobId = LoggedPerson.CURRENT_JOB_ID)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _wages.value = result.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
     private fun loadAllRoles(){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = roleRepository.getAllChoosableRoles()
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _roles.value = result.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
     private fun loadPerson(personId: Int){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = jobRepository.getDetailedPersonDataInJob(jobId = LoggedPerson.CURRENT_JOB_ID, personId = personId)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _person.value = result.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
-    fun saveChanges(newWage: Wage, newRole: Role){
-        _state.value = ScreenState.Loading()
+    private fun saveChanges(newWage: Wage, newRole: Role){
+        _screenState.value = ScreenState.Loading()
 
         val changeWage = ChangeWageData(
             personId = _person.value.basicInfo.id,
@@ -121,10 +129,10 @@ class PersonDetailScreenViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
@@ -136,12 +144,16 @@ class PersonDetailScreenViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
+}
+
+sealed class PersonDetailAction{
+    class SaveChanges(val newWage: Wage, val newRole: Role) : PersonDetailAction()
 }
