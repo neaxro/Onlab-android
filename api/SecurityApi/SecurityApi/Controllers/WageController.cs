@@ -71,7 +71,7 @@ namespace SecurityApi.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Owner")]
+        [Authorize]
         [HttpGet("categories/{jobId}")]
         public async Task<ActionResult<IEnumerable<MessageCategory>>> GetMessageCategories(int jobId)
         {

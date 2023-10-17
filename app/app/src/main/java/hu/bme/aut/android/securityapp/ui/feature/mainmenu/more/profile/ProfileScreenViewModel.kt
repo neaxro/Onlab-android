@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,6 +7,7 @@ import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.repository.PersonRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,62 +17,85 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileScreenViewModel @Inject constructor(
-    private val repository: PersonRepository,
-    savedStateHandle: SavedStateHandle,
+    private val personRepository: PersonRepository,
 ): ViewModel() {
 
-    private var _userData = MutableStateFlow(PersonDefault())
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
+
+    private var _userData = MutableStateFlow<PersonDefault>(PersonDefault())
     val userData = _userData.asStateFlow()
 
     init {
-        loadData(LoggedPerson.ID)
+        loadData()
     }
 
-    fun changeUserData(userData: PersonDefault){
-        _userData.value = userData
+    fun evoke(action: ProfileAction){
+        when(action){
+            ProfileAction.LogOut -> {
+                logOut()
+            }
+            is ProfileAction.SetUserData -> {
+                _userData.value = action.userData
+            }
+            ProfileAction.UpdatePerson -> {
+                updatePerson()
+            }
+        }
     }
 
-    private fun loadData(personId: Int){
+    private fun loadData(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            val person = repository.getPerson(LoggedPerson.ID)
-            when(person){
+            val result = personRepository.getPerson(LoggedPerson.ID)
+
+            when(result){
                 is Resource.Success -> {
-                    val data = person.data!!
-                    _userData.update {
-                        it.copy(
-                            fullName = data.fullName,
-                            username = data.username,
-                            nickname = data.nickname,
-                            email = data.email,
-                        )
+                    _screenState.value = ScreenState.Success()
+
+                    with(result.data!!){
+                        _userData.update { userData ->
+                            userData.copy(
+                                fullName = fullName,
+                                username = username,
+                                nickname = nickname,
+                                email = email,
+                            )
+                        }
                     }
                 }
                 is Resource.Error -> {
-                    // TODO: error kezelese
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
-    fun updatePerson(){
+    private fun updatePerson(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updatePerson(
-                personId = LoggedPerson.ID,
-                person = _userData.value
-            )
+            val result = personRepository.updatePerson(personId = LoggedPerson.ID, person = _userData.value)
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+                    _userData.value = result.data!!
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
         }
     }
 
-    fun logOut(
-        onFinished: () -> Unit
-    ){
-        val canLogOut = true
-
+    private fun logOut(){
         LoggedPerson.ID = 0
         LoggedPerson.CURRENT_JOB_ID = 0
-
-        if(canLogOut) {
-            onFinished()
-        }
     }
+}
+
+sealed class ProfileAction{
+    object LogOut : ProfileAction()
+    object UpdatePerson : ProfileAction()
+    class SetUserData(val userData: PersonDefault) : ProfileAction()
 }

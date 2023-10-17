@@ -54,9 +54,8 @@ fun ProfileScreen(
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit profile")
                     }
                     IconButton(onClick = {
-                        viewModel.logOut(){
-                            onLogOut()
-                        }
+                        viewModel.evoke(ProfileAction.LogOut)
+                        onLogOut()
                     }) {
                         Icon(imageVector = Icons.Default.Logout, contentDescription = "Log out")
                     }
@@ -74,8 +73,8 @@ fun ProfileScreen(
         ){
             PersonEditor(
                 person.value,
-                onPersonChange = {
-                     viewModel.changeUserData(it)
+                onPersonChange = { newUserData ->
+                    viewModel.evoke(ProfileAction.SetUserData(userData = newUserData))
                 },
                 newPassword = false,
                 readOnly = isReadOnly,
@@ -85,7 +84,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 OutlinedButton(
                     onClick = {
-                        viewModel.updatePerson()
+                        viewModel.evoke(ProfileAction.UpdatePerson)
                     }
                 ) {
                     Row {
