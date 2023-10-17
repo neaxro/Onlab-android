@@ -205,6 +205,8 @@ namespace SecurityApi.Controllers
 
         [Authorize(Roles = "Owner")]
         [HttpDelete("{jobId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<DetailJob>> Delete(int jobId)
         {
             try
@@ -214,6 +216,22 @@ namespace SecurityApi.Controllers
             } catch (Exception ex)
             {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Owner")]
+        [HttpPatch("{jobId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Job>> Update(int jobId, UpdateJob updateJob)
+        {
+            try
+            {
+                var result = await _service.UpdateJob(jobId, updateJob);
+                return Ok(result);
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

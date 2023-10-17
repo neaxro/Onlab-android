@@ -15,6 +15,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks.Dataflow;
 using Job = SecurityApi.Dtos.JobDtos.Job;
 using Person = SecurityApi.Dtos.PersonDtos.Person;
 
@@ -410,6 +411,26 @@ namespace SecurityApi.Services
             string token = CreateToken(connection);
 
             return token;
+        }
+
+        public async Task<Job> UpdateJob(int jobId, UpdateJob updateJob)
+        {
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == jobId);
+            if(job == null)
+            {
+                throw new Exception(String.Format("Job with id {0} does not exist!", jobId));
+            }
+
+            using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+
+            job.Title = updateJob.Title;
+            job.Description = updateJob.Description;
+
+            await _context.SaveChangesAsync();
+
+            await tran.CommitAsync();
+
+            return _converter.ToModel(job);
         }
 
         private string CreateToken(Model.PeopleJob connection)

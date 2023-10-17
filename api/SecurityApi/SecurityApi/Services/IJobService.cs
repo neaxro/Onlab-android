@@ -24,5 +24,6 @@ namespace SecurityApi.Services
         Task<PersonJob> ChangePersonRole(int jobId, ChangeRole change);
         Task<PersonJob> ChangePersonWage(int jobId, ChangeWage change);
         Task<PersonJob> GetConnection(int connectionId);
+        Task<Job> UpdateJob(int jobId, UpdateJob updateJob);
     }
 }
