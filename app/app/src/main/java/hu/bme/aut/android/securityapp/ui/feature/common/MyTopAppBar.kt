@@ -15,11 +15,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,9 +36,25 @@ fun MyTopAppBar(
     title: String,
     onNavigate: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-    screenState: ScreenState,
+    screenState: State<ScreenState> = mutableStateOf(ScreenState.Finished()),
     modifier: Modifier = Modifier
 ){
+    var showLoadingBar by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(screenState.value){
+        if(screenState.value is ScreenState.Loading){
+            showLoadingBar = true
+            coroutineScope.launch {
+                delay(1000)
+                showLoadingBar = false
+            }
+        }
+        else{
+            showLoadingBar = false
+        }
+    }
+
     Surface(
         shadowElevation = 10.dp,
         tonalElevation = 5.dp
@@ -58,7 +83,7 @@ fun MyTopAppBar(
                 modifier = modifier
             )
 
-            if(screenState is ScreenState.Loading) {
+            if(showLoadingBar) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -69,7 +94,11 @@ fun MyTopAppBar(
 
 @Composable
 @Preview
-fun MyTopAppBarPreview(){
+fun MyTopAppBarPreview() {
+    val state = remember {
+        mutableStateOf(ScreenState.Loading())
+    }
+
     MyTopAppBar(
         title = "Detail View Model Nagyon Hosszu",
         onNavigate = {},
@@ -78,6 +107,6 @@ fun MyTopAppBarPreview(){
                 Icon(imageVector = Icons.Default.Refresh, contentDescription = "asd")
             }
         },
-        screenState = ScreenState.Loading()
+        screenState = state
     )
 }

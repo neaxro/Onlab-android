@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardEditor
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.model.DashboardUi
@@ -78,7 +77,6 @@ fun DashboardDetailScreen(
                         )
                     }
                 },
-                screenState = ScreenState.Finished()
             )
         }
     ) { paddingValue ->

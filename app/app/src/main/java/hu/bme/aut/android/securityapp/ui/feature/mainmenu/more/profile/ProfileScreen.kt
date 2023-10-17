@@ -39,7 +39,6 @@ fun ProfileScreen(
 ){
     var isReadOnly by rememberSaveable { mutableStateOf(true) }
 
-    val screenState = viewModel.screenState.collectAsState().value
     val person = viewModel.userData.collectAsState()
 
     Scaffold(
@@ -62,7 +61,7 @@ fun ProfileScreen(
                         Icon(imageVector = Icons.Default.Logout, contentDescription = "Log out")
                     }
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

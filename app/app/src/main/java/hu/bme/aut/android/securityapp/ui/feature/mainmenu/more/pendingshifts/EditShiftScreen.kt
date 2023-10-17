@@ -47,7 +47,6 @@ fun EditShiftScreen(
 ){
     var whatToShow by remember { mutableStateOf<ShowDialog>(ShowDialog.Nothing) }
 
-    val screenState = viewModel.screenState.collectAsState().value
     val shift = viewModel.shift.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
     val person = viewModel.person.collectAsState().value
@@ -57,7 +56,7 @@ fun EditShiftScreen(
             MyTopAppBar(
                 title = "Edit Shift",
                 onNavigate = { navigateBack() },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

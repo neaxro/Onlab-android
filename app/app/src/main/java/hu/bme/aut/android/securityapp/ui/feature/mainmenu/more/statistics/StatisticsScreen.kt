@@ -26,8 +26,6 @@ fun StatisticsScreen(
     navigateBack: () -> Unit,
     viewModel: StatisticsScreenViewModel = hiltViewModel()
 ){
-    val screenState = viewModel.screenState.collectAsState().value
-
     Scaffold(
         topBar = {
             MyTopAppBar(
@@ -35,7 +33,7 @@ fun StatisticsScreen(
                 onNavigate = {
                     navigateBack()
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

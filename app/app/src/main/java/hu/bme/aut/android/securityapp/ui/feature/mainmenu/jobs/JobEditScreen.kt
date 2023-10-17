@@ -32,7 +32,6 @@ fun JobEditScreen(
 ){
     val context = LocalContext.current
 
-    val screenState = viewModel.screenState.collectAsState().value
     val job = viewModel.updateJobData.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
 
@@ -41,7 +40,7 @@ fun JobEditScreen(
             MyTopAppBar(
                 title = "Edit Job",
                 onNavigate = { navigateBack() },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

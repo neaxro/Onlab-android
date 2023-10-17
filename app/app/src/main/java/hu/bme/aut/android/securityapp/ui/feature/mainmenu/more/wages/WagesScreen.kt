@@ -33,7 +33,6 @@ fun WagesScreen(
 ){
     val listState = rememberLazyListState()
 
-    val screenState = viewModel.screenState.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
 
     Scaffold(
@@ -50,7 +49,7 @@ fun WagesScreen(
                         Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
                     }
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         },
         floatingActionButton = {

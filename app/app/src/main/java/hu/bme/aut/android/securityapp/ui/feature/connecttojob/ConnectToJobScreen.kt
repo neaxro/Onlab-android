@@ -45,7 +45,6 @@ fun ConnectToJobScreen(
 ){
     val context = LocalContext.current
 
-    val screenState = viewModel.screenState.collectAsState().value
     val digits = viewModel.digits.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
 
@@ -62,7 +61,7 @@ fun ConnectToJobScreen(
             MyTopAppBar(
                 title = "Connect to job",
                 onNavigate = onNavigateBack,
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

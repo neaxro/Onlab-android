@@ -55,7 +55,6 @@ fun JobDetailScreen(
 ) {
     val context = LocalContext.current
 
-    val screenState = viewModel.screenState.collectAsState().value
     val job = viewModel.job.collectAsState().value
 
     val scrollState = rememberScrollState()
@@ -73,7 +72,7 @@ fun JobDetailScreen(
                         }
                     }
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         },
         content = {

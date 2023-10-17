@@ -26,7 +26,6 @@ fun CreateJobScreen(
 ){
     val context = LocalContext.current
 
-    val screenState = viewModel.screenState.collectAsState().value
     val jobData = viewModel.createJobData.collectAsState().value
 
     LaunchedEffect(viewModel.creationState){
@@ -44,7 +43,7 @@ fun CreateJobScreen(
                 onNavigate = {
                     navigateToMainMenu()
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

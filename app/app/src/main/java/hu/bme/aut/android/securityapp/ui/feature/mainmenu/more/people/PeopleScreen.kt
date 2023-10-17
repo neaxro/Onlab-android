@@ -17,7 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.MySearchBar
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.PeopleOnJobCard
@@ -46,7 +44,6 @@ fun PeopleScreen(
     val coroutineScope = rememberCoroutineScope()
     var searchbarVisible by remember { mutableStateOf(false) }
 
-    val screenState = viewModel.screenState.collectAsState().value
     val people = viewModel.people.collectAsState().value
 
     Scaffold(
@@ -78,7 +75,7 @@ fun PeopleScreen(
                         )
                     }
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {
@@ -105,10 +102,6 @@ fun PeopleScreen(
                         }
                     }
                 )
-            }
-
-            if(screenState is ScreenState.Error){
-                Text(text = screenState.message)
             }
 
             LazyVerticalGrid(

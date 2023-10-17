@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
-import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.MoreMenuItem
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.model.MoreMenu
@@ -62,7 +61,6 @@ fun MoreScreen(
         topBar = {
             MyTopAppBar(
                 title = "More",
-                screenState = ScreenState.Finished()
             )
         }
     ) {

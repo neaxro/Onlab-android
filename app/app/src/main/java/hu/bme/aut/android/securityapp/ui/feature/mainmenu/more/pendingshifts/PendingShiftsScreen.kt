@@ -27,7 +27,6 @@ fun PendingShiftsScreen(
     navigateToDetailShift: (Int) -> Unit,
     viewModel: PendingShiftsViewModel = hiltViewModel()
 ){
-    val screenState = viewModel.screenState.collectAsState().value
     val shifts = viewModel.shifts.collectAsState().value
     val listState = rememberLazyListState()
 
@@ -43,7 +42,7 @@ fun PendingShiftsScreen(
                         Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
                     }
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

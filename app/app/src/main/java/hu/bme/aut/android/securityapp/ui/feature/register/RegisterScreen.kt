@@ -33,7 +33,6 @@ fun RegisterScreen(
 ){
     val context = LocalContext.current
 
-    val screenState = viewModel.screenState.collectAsState().value
     val person = viewModel.person.collectAsState().value
     val rePassword = viewModel.rePassword.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
@@ -42,7 +41,7 @@ fun RegisterScreen(
         topBar = {
             MyTopAppBar(
                 title = "Register",
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

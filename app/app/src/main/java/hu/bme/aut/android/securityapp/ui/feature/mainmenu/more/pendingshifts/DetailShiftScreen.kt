@@ -26,7 +26,6 @@ fun DetailShiftScreen(
     editShift: (Int) -> Unit,
     viewModel: DetailShiftViewModel = hiltViewModel()
 ){
-    val screenState = viewModel.screenState.collectAsState().value
     val shift = viewModel.shift.collectAsState().value
     val alertDialogState = viewModel.alertDialogState.collectAsState().value
 
@@ -42,7 +41,7 @@ fun DetailShiftScreen(
                         Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
                     }
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {

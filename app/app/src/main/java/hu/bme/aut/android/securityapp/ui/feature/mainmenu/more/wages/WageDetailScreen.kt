@@ -40,7 +40,6 @@ fun WageDetailScreen(
     val context = LocalContext.current
 
     val wage = viewModel.wage.collectAsState().value
-    val screenState = viewModel.screenState.collectAsState().value
 
     var isError by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
@@ -64,7 +63,7 @@ fun WageDetailScreen(
                         Icon(imageVector = Icons.Default.Delete, "Delete")
                     }
                 },
-                screenState = screenState
+                screenState = viewModel.screenState.collectAsState()
             )
         }
     ) {
