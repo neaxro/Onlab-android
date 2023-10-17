@@ -16,11 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PeopleScreenViewModel @Inject constructor(
-    private val repository: JobRepository
+    private val jobRepository: JobRepository
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _state.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
 
     private val _people = MutableStateFlow<List<PersonDetail>>(listOf<PersonDetail>())
     val people = _people.asStateFlow()
@@ -29,20 +29,32 @@ class PeopleScreenViewModel @Inject constructor(
         loadPeople()
     }
 
-    fun loadPeople(){
+    fun evoke(action: PeopleAction){
+        when(action){
+            PeopleAction.Refresh -> {
+                loadPeople()
+            }
+        }
+    }
+
+    private fun loadPeople(){
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = ScreenState.Loading()
-            val people = repository.getAllPersonOnJob(LoggedPerson.CURRENT_JOB_ID)
+            _screenState.value = ScreenState.Loading()
+            val people = jobRepository.getAllPersonOnJob(LoggedPerson.CURRENT_JOB_ID)
 
             when(people){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _people.value = people.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = people.message!!)
+                    _screenState.value = ScreenState.Error(message = people.message!!)
                 }
             }
         }
     }
+}
+
+sealed class PeopleAction{
+    object Refresh : PeopleAction()
 }

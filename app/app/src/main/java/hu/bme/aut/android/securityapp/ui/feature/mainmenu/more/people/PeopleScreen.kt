@@ -46,7 +46,7 @@ fun PeopleScreen(
     val coroutineScope = rememberCoroutineScope()
     var searchbarVisible by remember { mutableStateOf(false) }
 
-    val screenState = viewModel.state.collectAsState().value
+    val screenState = viewModel.screenState.collectAsState().value
     val people = viewModel.people.collectAsState().value
 
     Scaffold(
@@ -69,7 +69,7 @@ fun PeopleScreen(
                     }
                     IconButton(
                         onClick = {
-                            viewModel.loadPeople()
+                            viewModel.evoke(PeopleAction.Refresh)
                         }
                     ) {
                         Icon(
