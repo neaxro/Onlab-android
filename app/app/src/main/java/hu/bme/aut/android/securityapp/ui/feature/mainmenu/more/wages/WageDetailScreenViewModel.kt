@@ -18,12 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WageDetailScreenViewModel @Inject constructor(
-    private val repository: WageRepository,
+    private val wageRepository: WageRepository,
     private val stateHandle: SavedStateHandle,
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _state.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
 
     private val _wage = MutableStateFlow<Wage>(Wage())
     val wage = _wage.asStateFlow()
@@ -33,72 +33,72 @@ class WageDetailScreenViewModel @Inject constructor(
         getWage(wageId = wageId)
     }
 
-    fun onEvoke(event: WageDetailAction){
-        when(event){
-
+    fun evoke(action: WageDetailAction){
+        when(action){
             is WageDetailAction.UpdateName -> {
                 _wage.update {
-                    it.copy(name = event.name)
+                    it.copy(name = action.name)
                 }
             }
-
             is WageDetailAction.UpdatePrice -> {
                 _wage.update {
-                    it.copy(price = event.price)
+                    it.copy(price = action.price)
                 }
+            }
+            WageDetailAction.DeleteWage -> {
+                deleteWage()
+            }
+            WageDetailAction.SaveWage -> {
+                saveWage()
             }
         }
     }
 
-    fun saveWage(){
+    private fun saveWage(){
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = ScreenState.Loading()
-            val result = repository.updateWage(wageId = _wage.value.id, wageData = _wage.value.asUpdate())
+            _screenState.value = ScreenState.Loading()
+            val result = wageRepository.updateWage(wageId = _wage.value.id, wageData = _wage.value.asUpdate())
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(result.message!!)
+                    _screenState.value = ScreenState.Error(result.message!!)
                 }
             }
         }
     }
 
-    fun deleteWage(){
+    private fun deleteWage(){
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = ScreenState.Loading()
-            val result = repository.deleteWage(wageId = _wage.value.id)
+            _screenState.value = ScreenState.Loading()
+            val result = wageRepository.deleteWage(wageId = _wage.value.id)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Finished()
+                    _screenState.value = ScreenState.Finished()
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(result.message!!)
+                    _screenState.value = ScreenState.Error(result.message!!)
                 }
             }
         }
-    }
-
-    fun createWage(){
-
     }
 
     private fun getWage(wageId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            _state.value = ScreenState.Loading()
-            val wage = repository.getWage(wageId)
+            _screenState.value = ScreenState.Loading()
+            val wage = wageRepository.getWage(wageId)
 
             when(wage){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Finished()
+                    _screenState.value = ScreenState.Finished()
                     _wage.value = wage.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = wage.message!!)
+                    _screenState.value = ScreenState.Error(message = wage.message!!)
                 }
             }
         }
@@ -108,4 +108,6 @@ class WageDetailScreenViewModel @Inject constructor(
 sealed class WageDetailAction{
     class UpdateName(val name: String) : WageDetailAction()
     class UpdatePrice(val price: Double) : WageDetailAction()
+    object DeleteWage : WageDetailAction()
+    object SaveWage : WageDetailAction()
 }

@@ -1,7 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WageEditor
 
@@ -41,7 +38,7 @@ fun WageDetailScreen(
     navigateBack: () -> Unit = {},
 ){
     val context = LocalContext.current
-    val state = viewModel.state.collectAsState().value
+
     val wage = viewModel.wage.collectAsState().value
 
     var isError by remember { mutableStateOf(false) }
@@ -61,7 +58,7 @@ fun WageDetailScreen(
                         Icon(imageVector = Icons.Default.Edit, "Edit")
                     }
                     IconButton(onClick = {
-                        viewModel.deleteWage()
+                        viewModel.evoke(WageDetailAction.DeleteWage)
                     }) {
                         Icon(imageVector = Icons.Default.Delete, "Delete")
                     }
@@ -83,11 +80,11 @@ fun WageDetailScreen(
                 WageEditor(
                     name = wage.name,
                     onNameChange = { newName ->
-                        viewModel.onEvoke(WageDetailAction.UpdateName(name = newName))
+                        viewModel.evoke(WageDetailAction.UpdateName(name = newName))
                     },
                     price = wage.price.toString(),
                     onPriceChange = { newPrice ->
-                        viewModel.onEvoke(WageDetailAction.UpdatePrice(price = newPrice.toDouble()))
+                        viewModel.evoke(WageDetailAction.UpdatePrice(price = newPrice.toDouble()))
                     },
                     isError = {
                         isError = it
@@ -98,7 +95,7 @@ fun WageDetailScreen(
                 if(isEditing) {
                     OutlinedButton(
                         onClick = {
-                            viewModel.saveWage()
+                            viewModel.evoke(WageDetailAction.SaveWage)
                         },
                         enabled = !isError
                     ) {
@@ -112,15 +109,6 @@ fun WageDetailScreen(
                     }
                 }
             }
-
-            if(state is ScreenState.Success){
-                Toast.makeText(context, "Succesfull update!", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        if(state is ScreenState.Error){
-            Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
-            Log.d("WAGE_ERROR", state.message)
         }
     }
 }
