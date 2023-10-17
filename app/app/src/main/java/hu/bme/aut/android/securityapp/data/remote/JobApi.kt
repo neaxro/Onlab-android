@@ -13,8 +13,6 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-// TODO: Visszatérési típusokkal folytatni
-
 interface JobApi {
 
     @GET("/api/job/availablefor/{personId}")
@@ -76,5 +74,14 @@ interface JobApi {
     ): Response<ResponseBody>
 
     @DELETE("/api/job/{jobId}")
-    suspend fun deleteJob(@Path("jobId") jobId: Int)
+    suspend fun deleteJob(
+        @Path("jobId") jobId: Int
+    )
+
+    @PATCH("/api/job/{jobId}")
+    suspend fun updateJob(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+        @Body updateJobData: UpdateJobData
+    ): Response<Job>
 }

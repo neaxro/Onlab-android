@@ -6,6 +6,7 @@ import hu.bme.aut.android.securityapp.data.model.job.CreateJobData
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.job.Job
 import hu.bme.aut.android.securityapp.data.model.job.JobSelectToken
+import hu.bme.aut.android.securityapp.data.model.job.UpdateJobData
 import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import okhttp3.ResponseBody
@@ -28,4 +29,6 @@ interface JobRepository {
     suspend fun changeWageForPerson(jobId: Int, changeWageData: ChangeWageData): Resource<ResponseBody>
 
     suspend fun changeRoleForPerson(jobId: Int, changeRoleData: ChangeRoleData): Resource<ResponseBody>
+
+    suspend fun updateJob(jobId: Int, updateJobData: UpdateJobData): Resource<Job>
 }

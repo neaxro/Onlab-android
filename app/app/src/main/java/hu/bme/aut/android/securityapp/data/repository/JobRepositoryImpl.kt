@@ -8,6 +8,7 @@ import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.job.Job
 import hu.bme.aut.android.securityapp.data.model.job.JobSelectToken
 import hu.bme.aut.android.securityapp.data.model.job.SelectJobData
+import hu.bme.aut.android.securityapp.data.model.job.UpdateJobData
 import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
 import hu.bme.aut.android.securityapp.data.remote.JobApi
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
@@ -187,6 +188,25 @@ class JobRepositoryImpl (
 
             val data = if(result.isSuccessful && result.code() == 200){
                 Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
+    override suspend fun updateJob(jobId: Int, updateJobData: UpdateJobData): Resource<Job> {
+        val connection = try {
+            val result = api.updateJob(jobId = jobId, updateJobData = updateJobData)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Job succesfully updated!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
