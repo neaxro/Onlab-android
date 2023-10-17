@@ -25,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.ManageShiftCard
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
-import hu.bme.aut.android.securityapp.ui.feature.mainmenu.shift.ShiftEvent
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.shift.ShiftAction
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.shift.ShiftScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +51,7 @@ fun ShiftScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            viewModel.evoke(ShiftEvent.RefreshData)
+                            viewModel.evoke(ShiftAction.RefreshData)
                         }
                     ) {
                         Icon(imageVector = Icons.Rounded.Refresh, contentDescription = "Reload")
@@ -75,14 +75,14 @@ fun ShiftScreen(
                 wage = currentWage,
                 onClick = { isStart ->
                     if(isStart) {
-                        viewModel.evoke(ShiftEvent.StartShift)
+                        viewModel.evoke(ShiftAction.StartShift)
                     }
                     else{
-                        viewModel.evoke(ShiftEvent.StopShift)
+                        viewModel.evoke(ShiftAction.StopShift)
                     }
                 },
                 onWageChange = { newWage ->
-                    viewModel.evoke(ShiftEvent.ChangeWage(wage = newWage))
+                    viewModel.evoke(ShiftAction.ChangeWage(wage = newWage))
                 },
                 enabled = shiftState.isActive || LoggedPerson.CURRENT_JOB_ID == 0,
                 buttonEnabled = LoggedPerson.CURRENT_JOB_ID > 0,

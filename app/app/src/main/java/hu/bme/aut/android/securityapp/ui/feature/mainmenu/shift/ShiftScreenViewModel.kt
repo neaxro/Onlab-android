@@ -25,8 +25,8 @@ class ShiftScreenViewModel @Inject constructor(
     private val wageRepository: WageRepository,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _state.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val state = _screenState.asStateFlow()
 
     private val _shiftState = MutableStateFlow<ShiftState>(ShiftState())
     val shiftState = _shiftState.asStateFlow()
@@ -43,32 +43,32 @@ class ShiftScreenViewModel @Inject constructor(
     }
 
     private fun loadAllWages(){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = wageRepository.getWages(jobId = LoggedPerson.CURRENT_JOB_ID)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _wages.value = result.data!!
                     _wage.value = _wages.value.first()
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
     private fun loadCurrentShiftState(){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
             var result = shiftRepository.getCurrentForPerson(jobId = LoggedPerson.CURRENT_JOB_ID, personId = LoggedPerson.ID)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _shiftState.update {
                         it.copy(
                             isActive = true,
@@ -78,7 +78,7 @@ class ShiftScreenViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                     _shiftState.update {
                         it.copy(
                             isActive = false,
@@ -99,12 +99,12 @@ class ShiftScreenViewModel @Inject constructor(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = ScreenState.Loading()
+            _screenState.value = ScreenState.Loading()
             val result = shiftRepository.createShift(shiftData = shiftData)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _shiftState.update {
                         it.copy(
                             isActive = result.data != null,
@@ -114,7 +114,7 @@ class ShiftScreenViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
@@ -124,12 +124,12 @@ class ShiftScreenViewModel @Inject constructor(
         val shiftId = _shiftState.value.shift?.id ?: return
 
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = ScreenState.Loading()
+            _screenState.value = ScreenState.Loading()
             val result = shiftRepository.endShift(shiftId = shiftId)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _shiftState.update {
                         it.copy(
                             isActive = false,
@@ -139,39 +139,39 @@ class ShiftScreenViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
-    fun evoke(event: ShiftEvent){
-        when(event){
-            is ShiftEvent.ChangeWage -> {
-                _wage.value = event.wage
+    fun evoke(action: ShiftAction){
+        when(action){
+            is ShiftAction.ChangeWage -> {
+                _wage.value = action.wage
             }
 
-            ShiftEvent.StartShift -> {
+            ShiftAction.StartShift -> {
                 Log.d("SHIFT_START", _wage.value.toString())
                 startShift()
             }
 
-            ShiftEvent.StopShift -> {
+            ShiftAction.StopShift -> {
                 stopShift()
             }
 
-            ShiftEvent.RefreshData -> {
+            ShiftAction.RefreshData -> {
                 loadCurrentShiftState()
             }
         }
     }
 }
 
-sealed class ShiftEvent{
-    class ChangeWage(val wage: Wage) : ShiftEvent()
-    object StartShift : ShiftEvent()
-    object StopShift : ShiftEvent()
-    object RefreshData : ShiftEvent()
+sealed class ShiftAction{
+    class ChangeWage(val wage: Wage) : ShiftAction()
+    object StartShift : ShiftAction()
+    object StopShift : ShiftAction()
+    object RefreshData : ShiftAction()
 }
 
 data class ShiftState(
