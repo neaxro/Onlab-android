@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
-import hu.bme.aut.android.securityapp.constants.validatePassword
-import hu.bme.aut.android.securityapp.constants.validateUsername
+import hu.bme.aut.android.securityapp.constants.validateUserPassword
+import hu.bme.aut.android.securityapp.constants.validateUserUsername
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
 import hu.bme.aut.android.securityapp.data.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
@@ -71,7 +71,7 @@ class LoginViewModel @Inject constructor(
 
                 _errors.update {
                     it.copy(
-                        userName = validateUsername(action.username.trim()) != DataFieldErrors.NoError
+                        userName = validateUserUsername(action.username.trim()) != DataFieldErrors.NoError
                     )
                 }
             }
@@ -85,7 +85,7 @@ class LoginViewModel @Inject constructor(
 
                 _errors.update {
                     it.copy(
-                        password = validatePassword(action.password.trim()) != DataFieldErrors.NoError
+                        password = validateUserPassword(action.password.trim()) != DataFieldErrors.NoError
                     )
                 }
             }

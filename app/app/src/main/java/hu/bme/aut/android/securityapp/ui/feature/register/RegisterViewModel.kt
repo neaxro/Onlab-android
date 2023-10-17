@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
-import hu.bme.aut.android.securityapp.constants.validateEmail
-import hu.bme.aut.android.securityapp.constants.validateFullname
-import hu.bme.aut.android.securityapp.constants.validateNickname
-import hu.bme.aut.android.securityapp.constants.validatePassword
-import hu.bme.aut.android.securityapp.constants.validateUsername
+import hu.bme.aut.android.securityapp.constants.validateUserEmail
+import hu.bme.aut.android.securityapp.constants.validateUserFullName
+import hu.bme.aut.android.securityapp.constants.validateUserNickname
+import hu.bme.aut.android.securityapp.constants.validateUserPassword
+import hu.bme.aut.android.securityapp.constants.validateUserUsername
 import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
@@ -105,11 +105,11 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun checkAllValues(){
-        val fullNameCheck = validateFullname(_person.value.fullName)
-        val userNameCheck = validateUsername(_person.value.username)
-        val nickNameCheck = validateNickname(_person.value.nickname)
-        val emailAddressCheck = validateEmail(_person.value.email)
-        val passwordCheck = validatePassword(_person.value.password)
+        val fullNameCheck = validateUserFullName(_person.value.fullName)
+        val userNameCheck = validateUserUsername(_person.value.username)
+        val nickNameCheck = validateUserNickname(_person.value.nickname)
+        val emailAddressCheck = validateUserEmail(_person.value.email)
+        val passwordCheck = validateUserPassword(_person.value.password)
         val passwordMach = if(_person.value.password == _rePassword.value) DataFieldErrors.NoError else DataFieldErrors.PasswordMissmachError("Passwords do not mach!")
 
         _errors.update {
