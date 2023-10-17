@@ -7,19 +7,19 @@ import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.data.repository.WageRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WagesViewModel @Inject constructor(
-    val repository: WageRepository
+    private val wageRepository: WageRepository
 ): ViewModel() {
 
-    private var _screenState = MutableStateFlow<WagesScreenStates>(WagesScreenStates.Loading)
+    private var _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     var screenState = _screenState.asStateFlow()
 
     private var _wages = MutableStateFlow<List<Wage>>(listOf())
@@ -29,29 +29,32 @@ class WagesViewModel @Inject constructor(
         loadAllWages()
     }
 
-    fun loadAllWages(){
-        viewModelScope.launch(Dispatchers.IO) {
-            val wages = repository.getWages(LoggedPerson.CURRENT_JOB_ID)
+    fun evoke(action: WagesAction){
+        when(action){
+            WagesAction.Refresh -> {
+                loadAllWages()
+            }
+        }
+    }
 
-            when(wages){
+    private fun loadAllWages(){
+        _screenState.value = ScreenState.Loading()
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = wageRepository.getWages(LoggedPerson.CURRENT_JOB_ID)
+
+            when(result){
                 is Resource.Success -> {
-                    _wages.value = wages.data!!
-                    _screenState.update {
-                        WagesScreenStates.Success
-                    }
+                    _screenState.value = ScreenState.Success()
+                    _wages.value = result.data!!
                 }
                 is Resource.Error -> {
-                    _screenState.update {
-                        WagesScreenStates.Error(message = wages.message!!)
-                    }
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 }
 
-sealed class WagesScreenStates{
-    object Loading : WagesScreenStates()
-    object Success : WagesScreenStates()
-    class Error(val message: String) : WagesScreenStates()
+sealed class WagesAction{
+    object Refresh : WagesAction()
 }
