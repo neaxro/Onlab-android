@@ -34,7 +34,7 @@ fun MoreScreen(
     navigateTo: (String) -> Unit,
 ){
     val anonymousMenuItems = listOf(
-        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.fullRoute, backgroundColor = Color.Yellow),
     )
     val userMenuItems = listOf(
         *(anonymousMenuItems.toTypedArray()),
