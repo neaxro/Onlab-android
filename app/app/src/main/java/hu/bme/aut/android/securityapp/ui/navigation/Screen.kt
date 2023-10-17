@@ -10,6 +10,7 @@ sealed class Screen(val baseRoute: String, val fullRoute: String = baseRoute){
 
     object Jobs: Screen(baseRoute = "jobs_screen")
     object JobDetail: Screen(baseRoute = "jobdetail_screen", fullRoute = "jobdetail_screen/{jobId}")
+    object JobEdit: Screen(baseRoute = "jobedit_screen", fullRoute = "jobedit_screen/{jobId}")
     object Dashboard: Screen(baseRoute = "dashboard_screen")
     object CreateDashboardMessage: Screen(baseRoute = "create_dashboard_screen")
     object DashboardDetails: Screen(baseRoute = "dashboard_details_screen", fullRoute = "dashboard_details_screen/{messageId}")

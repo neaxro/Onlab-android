@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.Description
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
@@ -47,7 +50,7 @@ import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 @Composable
 fun JobDetailScreen(
     viewModel: JobDetailViewModel = hiltViewModel(),
-    jobId: Int,
+    navigateEditJob: (Int) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -61,7 +64,14 @@ fun JobDetailScreen(
 
             MyTopAppBar(
                 title = job.title,
-                onNavigate = onNavigateBack
+                onNavigate = onNavigateBack,
+                actions = {
+                    if(job.owner.id == LoggedPerson.ID){
+                        IconButton(onClick = { navigateEditJob(job.id) }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                        }
+                    }
+                }
             )
         },
         content = {

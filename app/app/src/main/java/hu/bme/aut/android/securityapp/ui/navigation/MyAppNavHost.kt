@@ -15,6 +15,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.MainMenuScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashboardMessageScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobEditScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.DetailShiftScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.EditShiftScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.PendingShiftsScreen
@@ -101,9 +102,11 @@ fun MyAppNavHost(
             )
         ) {
             JobDetailScreen(
-                jobId = it.arguments?.getInt("jobId")!!,
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                navigateEditJob = { jobId ->
+                    navController.navigate(Screen.JobEdit.withArgs(jobId.toString()))
                 }
             )
         }
@@ -259,6 +262,19 @@ fun MyAppNavHost(
             )
         ) {
             EditShiftScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.JobEdit.fullRoute,
+            arguments = listOf(
+                navArgument("jobId"){ type = NavType.IntType }
+            )
+        ){
+            JobEditScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }
