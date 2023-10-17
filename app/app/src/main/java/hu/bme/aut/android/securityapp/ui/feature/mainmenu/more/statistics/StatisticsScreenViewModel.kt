@@ -23,7 +23,6 @@ class StatisticsScreenViewModel @Inject constructor(
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
-
     private var _allShift = listOf<Shift>()
 
     private val _shiftsToShow = MutableStateFlow<List<Shift>>(listOf())
