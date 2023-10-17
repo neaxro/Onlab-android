@@ -1,17 +1,13 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.wages
 
-import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
@@ -25,12 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WageEditor
 
@@ -41,12 +35,10 @@ fun CreateWageScreen(
     viewModel: CreateWageScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val state = viewModel.state.collectAsState().value
 
-    var name by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("1300.0") }
+    val wage = viewModel.wage.collectAsState().value
+
     var isError by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -74,13 +66,13 @@ fun CreateWageScreen(
                 Spacer(modifier = Modifier.padding(top = 20.dp))
 
                 WageEditor(
-                    name = name,
+                    name = wage.name,
                     onNameChange = { newName ->
-                        name = newName
+                        viewModel.evoke(CreateWageAction.UpdateWageName(newName = newName))
                     },
-                    price = price,
+                    price = wage.price.toString(),
                     onPriceChange = { newPrice ->
-                        price = newPrice
+                        viewModel.evoke(CreateWageAction.UpdateWagePrice(newPrice = newPrice))
                     },
                     isError = {
                         isError = it
@@ -92,7 +84,7 @@ fun CreateWageScreen(
 
                 OutlinedButton(
                     onClick = {
-                        viewModel.createWage(name = name, price = price.toDouble())
+                        viewModel.evoke(CreateWageAction.CreateWage)
                     },
                     enabled = !isError
                 ) {
@@ -102,25 +94,6 @@ fun CreateWageScreen(
                         Text(text = "Create")
                     }
                 }
-            }
-
-            if(state is ScreenState.Loading){
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-            else if(state is ScreenState.Error){
-                Text(
-                    text = state.message,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .background(Color.Gray, RoundedCornerShape(10.dp))
-                        .padding(10.dp)
-
-                )
-            }
-            else if(state is ScreenState.Success){
-                Toast.makeText(context, "Successfully created!", Toast.LENGTH_SHORT).show()
             }
         }
     }
