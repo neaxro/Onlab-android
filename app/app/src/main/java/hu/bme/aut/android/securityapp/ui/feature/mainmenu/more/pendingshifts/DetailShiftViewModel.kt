@@ -20,8 +20,8 @@ class DetailShiftViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _state.asStateFlow()
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val state = _screenState.asStateFlow()
 
     private val _alertDialogState = MutableStateFlow<ShiftDetailAlertDialogState>(ShiftDetailAlertDialogState.None)
     val alertDialogState = _alertDialogState.asStateFlow()
@@ -35,49 +35,49 @@ class DetailShiftViewModel @Inject constructor(
     }
 
     private fun getShift(shiftId: Int){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = shiftRepository.getById(shiftId = shiftId)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                     _shift.value = result.data!!
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
     private fun acceptShift(){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = shiftRepository.acceptShift(shiftId = _shift.value.id)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
     private fun denyShift(){
-        _state.value = ScreenState.Loading()
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             val result = shiftRepository.denyShift(shiftId = _shift.value.id)
 
             when(result){
                 is Resource.Success -> {
-                    _state.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success()
                 }
                 is Resource.Error -> {
-                    _state.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
