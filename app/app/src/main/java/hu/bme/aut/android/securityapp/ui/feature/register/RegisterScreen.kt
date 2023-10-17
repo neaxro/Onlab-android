@@ -1,6 +1,5 @@
 package hu.bme.aut.android.securityapp.ui.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,10 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.RegisterEditor
-import hu.bme.aut.android.securityapp.ui.feature.register.RegisterEvent
+import hu.bme.aut.android.securityapp.ui.feature.register.RegisterAction
 import hu.bme.aut.android.securityapp.ui.feature.register.RegisterViewModel
 import hu.bme.aut.android.securityapp.ui.feature.register.isError
 
@@ -35,7 +33,7 @@ fun RegisterScreen(
 ){
     val context = LocalContext.current
 
-    //val screenState = viewModel.screenState.collectAsState().value
+    val screenState = viewModel.screenState.collectAsState().value
     val person = viewModel.person.collectAsState().value
     val rePassword = viewModel.rePassword.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
@@ -44,7 +42,7 @@ fun RegisterScreen(
         topBar = {
             MyTopAppBar(
                 title = "Register",
-                screenState = ScreenState.Finished()
+                screenState = screenState
             )
         }
     ) {
@@ -58,23 +56,23 @@ fun RegisterScreen(
         ) {
             RegisterEditor(
                 fullName = person.fullName,
-                fullNameChange = { viewModel.onEvoke(RegisterEvent.ChangeFullName(fullName = it)) },
+                fullNameChange = { viewModel.evoke(RegisterAction.ChangeFullName(fullName = it)) },
                 fullNameError = errors.fullName,
                 userName = person.username,
-                userNameChange = { viewModel.onEvoke(RegisterEvent.ChangeUserName(userName = it)) },
+                userNameChange = { viewModel.evoke(RegisterAction.ChangeUserName(userName = it)) },
                 userNameError = errors.userName,
                 nickName = person.nickname,
-                nickNameChange = { viewModel.onEvoke(RegisterEvent.ChangeNickName(nickName = it)) },
+                nickNameChange = { viewModel.evoke(RegisterAction.ChangeNickName(nickName = it)) },
                 nickNameError = errors.nickName,
                 emailAddress = person.email,
-                emailAddressChange = { viewModel.onEvoke(RegisterEvent.ChangeEmailAddress(emailAddress = it)) },
+                emailAddressChange = { viewModel.evoke(RegisterAction.ChangeEmailAddress(emailAddress = it)) },
                 emailAddressError = errors.emailAddress,
                 password = person.password,
-                passwordChange = { viewModel.onEvoke(RegisterEvent.ChangePassword(password = it)) },
-                passwordError = errors.password || errors.passwordMissmach,
+                passwordChange = { viewModel.evoke(RegisterAction.ChangePassword(password = it)) },
+                passwordError = errors.password || errors.passwordMismatch,
                 rePassword = rePassword,
-                rePasswordChange = { viewModel.onEvoke(RegisterEvent.ChangeRePassword(rePassword = it)) },
-                rePasswordError = errors.password || errors.passwordMissmach
+                rePasswordChange = { viewModel.evoke(RegisterAction.ChangeRePassword(rePassword = it)) },
+                rePasswordError = errors.password || errors.passwordMismatch
             )
 
             Spacer(modifier = Modifier.padding(20.dp))
@@ -88,14 +86,7 @@ fun RegisterScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.8f),
                     onClick = {
-                        viewModel.register(
-                            onSuccess = {
-                                Toast.makeText(context, "Successful!", Toast.LENGTH_LONG).show()
-                            },
-                            onError = { errorMessage ->
-                                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                            }
-                        )
+                        viewModel.evoke(RegisterAction.Register)
                     },
                     enabled = !errors.isError()
                 ) {

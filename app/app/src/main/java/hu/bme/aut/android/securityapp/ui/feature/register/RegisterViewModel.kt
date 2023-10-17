@@ -12,18 +12,21 @@ import hu.bme.aut.android.securityapp.constants.validateUserUsername
 import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.repository.RegisterRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val repository: RegisterRepository
+    private val registerRepository: RegisterRepository
 ): ViewModel() {
+
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
+    val screenState = _screenState.asStateFlow()
 
     private val _person = MutableStateFlow<PersonDefault>(PersonDefault())
     val person = _person.asStateFlow()
@@ -34,70 +37,70 @@ class RegisterViewModel @Inject constructor(
     private val _errors = MutableStateFlow<RegisterFieldErrors>(RegisterFieldErrors())
     val errors = _errors.asStateFlow()
 
-    fun register(onSuccess: () -> Unit, onError: (String) -> Unit){
-
+    private fun register(){
+        _screenState.value = ScreenState.Loading()
         viewModelScope.launch(Dispatchers.IO) {
-            val result: Resource<PersonDefault> = repository.registerUser(_person.value)
+            val result: Resource<PersonDefault> = registerRepository.registerUser(registerData = _person.value)
 
             when(result){
                 is Resource.Success<PersonDefault> -> {
-                    withContext(Dispatchers.Main){
-                        onSuccess()
-                    }
+                    _screenState.value = ScreenState.Success()
                 }
                 is Resource.Error<PersonDefault> -> {
-                    withContext(Dispatchers.Main){
-                        onError(result.message!!)
-                    }
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
     }
 
-    fun onEvoke(event: RegisterEvent){
-        when(event){
-            is RegisterEvent.ChangeFullName -> {
+    fun evoke(action: RegisterAction){
+        when(action){
+            is RegisterAction.ChangeFullName -> {
                 _person.update {
                     it.copy(
-                        fullName = event.fullName
+                        fullName = action.fullName
                     )
                 }
             }
 
-            is RegisterEvent.ChangeUserName -> {
+            is RegisterAction.ChangeUserName -> {
                 _person.update {
                     it.copy(
-                        username = event.userName
+                        username = action.userName
                     )
                 }
             }
 
-            is RegisterEvent.ChangeNickName -> {
+            is RegisterAction.ChangeNickName -> {
                 _person.update {
                     it.copy(
-                        nickname = event.nickName
+                        nickname = action.nickName
                     )
                 }
             }
 
-            is RegisterEvent.ChangeEmailAddress -> {
+            is RegisterAction.ChangeEmailAddress -> {
                 _person.update {
                     it.copy(
-                        email = event.emailAddress
+                        email = action.emailAddress
                     )
                 }
             }
 
-            is RegisterEvent.ChangePassword -> {
+            is RegisterAction.ChangePassword -> {
                 _person.update {
                     it.copy(
-                        password = event.password
+                        password = action.password
                     )
                 }
             }
 
-            is RegisterEvent.ChangeRePassword -> {
-                _rePassword.value = event.rePassword
+            is RegisterAction.ChangeRePassword -> {
+                _rePassword.value = action.rePassword
+            }
+
+            RegisterAction.Register -> {
+                register()
             }
         }
 
@@ -119,19 +122,20 @@ class RegisterViewModel @Inject constructor(
                 nickName = nickNameCheck != DataFieldErrors.NoError,
                 emailAddress = emailAddressCheck != DataFieldErrors.NoError,
                 password = passwordCheck != DataFieldErrors.NoError,
-                passwordMissmach = passwordMach != DataFieldErrors.NoError
+                passwordMismatch = passwordMach != DataFieldErrors.NoError
             )
         }
     }
 }
 
-sealed class RegisterEvent{
-    class ChangeFullName(val fullName: String) : RegisterEvent()
-    class ChangeUserName(val userName: String) : RegisterEvent()
-    class ChangeNickName(val nickName: String) : RegisterEvent()
-    class ChangeEmailAddress(val emailAddress: String) : RegisterEvent()
-    class ChangePassword(val password: String) : RegisterEvent()
-    class ChangeRePassword(val rePassword: String) : RegisterEvent()
+sealed class RegisterAction{
+    class ChangeFullName(val fullName: String) : RegisterAction()
+    class ChangeUserName(val userName: String) : RegisterAction()
+    class ChangeNickName(val nickName: String) : RegisterAction()
+    class ChangeEmailAddress(val emailAddress: String) : RegisterAction()
+    class ChangePassword(val password: String) : RegisterAction()
+    class ChangeRePassword(val rePassword: String) : RegisterAction()
+    object Register : RegisterAction()
 }
 
 data class RegisterFieldErrors(
@@ -140,16 +144,14 @@ data class RegisterFieldErrors(
     val nickName: Boolean = false,
     val emailAddress: Boolean = false,
     val password: Boolean = false,
-    val passwordMissmach: Boolean = false,
+    val passwordMismatch: Boolean = false,
 )
 
-fun RegisterFieldErrors.isError(): Boolean{
-    val isError = this.fullName
-            || this.userName
-            || this.nickName
-            || this.emailAddress
-            || this.password
-            || this.passwordMissmach
-
-    return isError
+fun RegisterFieldErrors.isError(): Boolean {
+    return (fullName
+            || userName
+            || nickName
+            || emailAddress
+            || password
+            || passwordMismatch)
 }
