@@ -46,12 +46,9 @@ fun MyTopAppBar(
         if(screenState.value is ScreenState.Loading){
             showLoadingBar = true
             coroutineScope.launch {
-                delay(1000)
+                delay(800)
                 showLoadingBar = false
             }
-        }
-        else{
-            showLoadingBar = false
         }
     }
 
