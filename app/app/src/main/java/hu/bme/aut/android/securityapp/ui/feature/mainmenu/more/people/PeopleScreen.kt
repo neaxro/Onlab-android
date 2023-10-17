@@ -77,7 +77,8 @@ fun PeopleScreen(
                             contentDescription = "Refresh data"
                         )
                     }
-                }
+                },
+                screenState = screenState
             )
         }
     ) {

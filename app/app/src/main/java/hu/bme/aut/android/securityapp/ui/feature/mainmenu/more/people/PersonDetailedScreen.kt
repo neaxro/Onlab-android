@@ -37,6 +37,7 @@ fun PersonDetailedScreen(
 ){
     val context = LocalContext.current
 
+    val screenState = viewModel.screenState.collectAsState().value
     val person = viewModel.person.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
     val roles = viewModel.roles.collectAsState().value
@@ -54,6 +55,7 @@ fun PersonDetailedScreen(
                 onNavigate = {
                     navigateBack()
                 },
+                screenState = screenState
             )
         }
     ) {

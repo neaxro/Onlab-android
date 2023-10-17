@@ -20,7 +20,7 @@ class PendingShiftsViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _screenState.asStateFlow()
+    val screenState = _screenState.asStateFlow()
 
     private val _shifts = MutableStateFlow<List<Shift>>(listOf())
     val shifts = _shifts.asStateFlow()

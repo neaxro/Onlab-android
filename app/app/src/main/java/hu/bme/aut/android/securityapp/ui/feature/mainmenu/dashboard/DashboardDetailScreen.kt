@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardEditor
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.model.DashboardUi
@@ -42,7 +43,7 @@ fun DashboardDetailScreen(
 ){
     var isEditing by remember { mutableStateOf(false) }
 
-    val state = viewModel.screenState.collectAsState().value
+    val screenState = viewModel.screenState.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
 
     val scrollState = rememberScrollState()
@@ -76,12 +77,13 @@ fun DashboardDetailScreen(
                             contentDescription = "Edit message"
                         )
                     }
-                }
+                },
+                screenState = ScreenState.Finished()
             )
         }
     ) { paddingValue ->
         val paddingTop = paddingValue.calculateTopPadding()
-        val message = state.message ?: DashboardUi()
+        val message = screenState.message ?: DashboardUi()
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

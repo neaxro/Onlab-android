@@ -39,13 +39,17 @@ fun DashboardScreen(
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
 
+    val screenState = viewModel.screenState.collectAsState().value
     val person = viewModel.person.collectAsState().value
     val messages = viewModel.messages.collectAsState().value
     val wages = viewModel.categories.collectAsState().value
 
     Scaffold(
         topBar = {
-             MyTopAppBar(title = "Dashboard")
+             MyTopAppBar(
+                 title = "Dashboard",
+                 screenState = screenState
+             )
         },
         floatingActionButton = {
             val role = LoggedPerson.getRole()

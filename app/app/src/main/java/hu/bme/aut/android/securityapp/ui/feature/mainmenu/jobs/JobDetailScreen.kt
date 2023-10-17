@@ -55,6 +55,7 @@ fun JobDetailScreen(
 ) {
     val context = LocalContext.current
 
+    val screenState = viewModel.screenState.collectAsState().value
     val job = viewModel.job.collectAsState().value
 
     val scrollState = rememberScrollState()
@@ -71,7 +72,8 @@ fun JobDetailScreen(
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                         }
                     }
-                }
+                },
+                screenState = screenState
             )
         },
         content = {

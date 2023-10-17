@@ -43,6 +43,7 @@ fun JobsScreen(
 
     val scrollState = rememberLazyStaggeredGridState()
 
+    val screenState = viewModel.screenState.collectAsState().value
     val jobs = viewModel.jobs.collectAsState().value
 
     Scaffold(
@@ -68,7 +69,8 @@ fun JobsScreen(
                             contentDescription = "Connect for job"
                         )
                     }
-                }
+                },
+                screenState = screenState
             )
         }
     ) {

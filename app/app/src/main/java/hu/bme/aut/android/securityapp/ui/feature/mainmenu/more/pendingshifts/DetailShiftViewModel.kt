@@ -21,7 +21,7 @@ class DetailShiftViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
-    val state = _screenState.asStateFlow()
+    val screenState = _screenState.asStateFlow()
 
     private val _alertDialogState = MutableStateFlow<ShiftDetailAlertDialogState>(ShiftDetailAlertDialogState.None)
     val alertDialogState = _alertDialogState.asStateFlow()

@@ -31,9 +31,10 @@ fun WagesScreen(
     navigateToCreate: () -> Unit,
     viewModel: WagesViewModel = hiltViewModel()
 ){
-    val wages = viewModel.wages.collectAsState().value
-
     val listState = rememberLazyListState()
+
+    val screenState = viewModel.screenState.collectAsState().value
+    val wages = viewModel.wages.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -48,7 +49,8 @@ fun WagesScreen(
                     }) {
                         Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
                     }
-                }
+                },
+                screenState = screenState
             )
         },
         floatingActionButton = {

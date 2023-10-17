@@ -30,6 +30,7 @@ fun CreateDashboardMessageScreen(
     viewModel: CreateDashboardMessageViewModel = hiltViewModel(),
     navigateBack: () -> Unit
 ){
+    val screenState = viewModel.screenState.collectAsState().value
     val message = viewModel.message.collectAsState().value
     val selectedWage = viewModel.selectedWage.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
@@ -38,7 +39,8 @@ fun CreateDashboardMessageScreen(
         topBar = {
             MyTopAppBar(
                 title = "Create Message",
-                onNavigate = navigateBack
+                onNavigate = navigateBack,
+                screenState = screenState
             )
         }
     ){ paddingValues ->

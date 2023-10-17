@@ -45,6 +45,7 @@ fun ConnectToJobScreen(
 ){
     val context = LocalContext.current
 
+    val screenState = viewModel.screenState.collectAsState().value
     val digits = viewModel.digits.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
 
@@ -60,7 +61,8 @@ fun ConnectToJobScreen(
         topBar = {
             MyTopAppBar(
                 title = "Connect to job",
-                onNavigate = onNavigateBack
+                onNavigate = onNavigateBack,
+                screenState = screenState
             )
         }
     ) {
@@ -143,7 +145,7 @@ fun DecoratorBox(
                         .background(Color.White)
                         .border(
                             2.dp,
-                            if(digitValue.isEmpty()) Color.Gray else if(isError) Color.Red else Color.Black,
+                            if (digitValue.isEmpty()) Color.Gray else if (isError) Color.Red else Color.Black,
                             RoundedCornerShape(5.dp)
                         )
                         .padding(10.dp)

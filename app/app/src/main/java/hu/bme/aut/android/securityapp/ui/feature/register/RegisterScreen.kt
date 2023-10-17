@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.RegisterEditor
 import hu.bme.aut.android.securityapp.ui.feature.register.RegisterEvent
@@ -33,13 +34,18 @@ fun RegisterScreen(
     navigateToLogin: () -> Unit = {},
 ){
     val context = LocalContext.current
+
+    //val screenState = viewModel.screenState.collectAsState().value
     val person = viewModel.person.collectAsState().value
     val rePassword = viewModel.rePassword.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
 
     Scaffold (
         topBar = {
-            MyTopAppBar(title = "Register")
+            MyTopAppBar(
+                title = "Register",
+                screenState = ScreenState.Finished()
+            )
         }
     ) {
         val paddingTop = it.calculateTopPadding()

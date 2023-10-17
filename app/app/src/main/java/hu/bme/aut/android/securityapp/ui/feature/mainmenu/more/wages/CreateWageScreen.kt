@@ -36,9 +36,10 @@ fun CreateWageScreen(
 ) {
     val context = LocalContext.current
 
-    val wage = viewModel.wage.collectAsState().value
-
     var isError by remember { mutableStateOf(false) }
+
+    val wage = viewModel.wage.collectAsState().value
+    val screenState = viewModel.screenState.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -47,6 +48,7 @@ fun CreateWageScreen(
                 onNavigate = {
                     navigateBack()
                 },
+                screenState = screenState
             )
         }
     ) {

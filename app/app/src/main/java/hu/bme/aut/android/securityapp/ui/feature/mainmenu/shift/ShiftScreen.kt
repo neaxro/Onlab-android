@@ -35,7 +35,7 @@ fun ShiftScreen(
 ){
     val context = LocalContext.current
 
-    val state = viewModel.state.collectAsState().value
+    val screenState = viewModel.screenState.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
     val currentWage = viewModel.wage.collectAsState().value
     val shiftState = viewModel.shiftState.collectAsState().value
@@ -56,7 +56,8 @@ fun ShiftScreen(
                     ) {
                         Icon(imageVector = Icons.Rounded.Refresh, contentDescription = "Reload")
                     }
-                }
+                },
+                screenState = screenState
             )
         }
     ) {
