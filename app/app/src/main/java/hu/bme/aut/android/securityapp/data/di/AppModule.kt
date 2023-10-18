@@ -100,8 +100,13 @@ object AppModule {
     @Provides
     @Singleton
     fun providePersonApi(): PersonApi {
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HeaderInterceptor())
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(Constants.SERVER_ADDRESS)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(PersonApi::class.java)
