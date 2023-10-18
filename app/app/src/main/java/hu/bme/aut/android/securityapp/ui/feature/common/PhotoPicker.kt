@@ -16,10 +16,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,18 +25,14 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun PhotoPicker(
     imageSelected: (Uri?) -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
 ){
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
 
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { imageUri ->
-        if(imageUri != null){
-            selectedImageUri = imageUri
-        }
-
         imageSelected(imageUri)
     }
 
@@ -52,7 +44,8 @@ fun PhotoPicker(
                 )
             )
         },
-        enabled = enabled
+        enabled = enabled,
+        modifier = modifier
     ) {
         Row {
             Icon(imageVector = Icons.Default.Image, contentDescription = "Image")
