@@ -9,11 +9,11 @@ class HeaderInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request: Request = chain.request()
 
-        Log.d("NETWORK", "[SENDING] Headers: ${request.headers()}, URL: ${request.url()}, Body: ${request.body()}")
+        Log.d("NETWORK", "[SENDING] Headers: ${request.headers}, URL: ${request.url}, Body: ${request.body}")
 
         val response: Response = chain.proceed(request)
 
-        Log.d("NETWORK", "[RECEIVING] Headers: ${response.headers()}, URL: ${response.request().url()}, Body: ${request.body()}")
+        Log.d("NETWORK", "[RECEIVING] Headers: ${response.headers}, URL: ${response.request.url}, Body: ${request.body}")
 
         return response
     }
