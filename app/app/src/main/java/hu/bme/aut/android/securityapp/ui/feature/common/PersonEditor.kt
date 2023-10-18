@@ -1,5 +1,7 @@
 package hu.bme.aut.android.securityapp.ui.feature.common
 
+import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,12 +20,14 @@ import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 fun PersonEditor(
     person: PersonDefault = PersonDefault(),
     onPersonChange: (PersonDefault) -> Unit = {},
+    onUriChange: (Uri?) -> Unit,
     readOnly: Boolean = true,
     newPassword: Boolean = false,
     modifier: Modifier = Modifier,
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -95,6 +99,14 @@ fun PersonEditor(
                 enabled = !readOnly,
             )
         }
+
+        PhotoPicker(
+            imageSelected = { uri ->
+                onUriChange(uri)
+            },
+            enabled = !readOnly,
+            modifier = Modifier.padding(top = 10.dp)
+        )
     }
 }
 
@@ -105,5 +117,6 @@ fun PersonEditorPreview(){
         person = PersonDefault("Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com"),
         readOnly = false,
         newPassword = true,
+        onUriChange = {}
     )
 }
