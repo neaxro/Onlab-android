@@ -1,5 +1,7 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +28,9 @@ class ProfileScreenViewModel @Inject constructor(
     private var _userData = MutableStateFlow<PersonDefault>(PersonDefault())
     val userData = _userData.asStateFlow()
 
+    private var _imageUri = MutableStateFlow<Uri?>(null)
+    val imageUri = _imageUri.asStateFlow()
+
     init {
         loadData()
     }
@@ -38,8 +43,12 @@ class ProfileScreenViewModel @Inject constructor(
             is ProfileAction.SetUserData -> {
                 _userData.value = action.userData
             }
-            ProfileAction.UpdatePerson -> {
+            is ProfileAction.UpdatePerson -> {
                 updatePerson()
+                uploadProfilePicture(action.context)
+            }
+            is ProfileAction.SetUri -> {
+                _imageUri.value = action.uri
             }
         }
     }
@@ -88,6 +97,24 @@ class ProfileScreenViewModel @Inject constructor(
         }
     }
 
+    private fun uploadProfilePicture(context: Context){
+        _imageUri.value ?: return
+
+        _screenState.value = ScreenState.Loading()
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = personRepository.uploadProfilePicture(personId = LoggedPerson.ID, imageUri = _imageUri.value!!, context = context)
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
     private fun logOut(){
         LoggedPerson.ID = 0
         LoggedPerson.CURRENT_JOB_ID = 0
@@ -96,6 +123,7 @@ class ProfileScreenViewModel @Inject constructor(
 
 sealed class ProfileAction{
     object LogOut : ProfileAction()
-    object UpdatePerson : ProfileAction()
+    class UpdatePerson(val context: Context) : ProfileAction()
     class SetUserData(val userData: PersonDefault) : ProfileAction()
+    class SetUri(val uri: Uri) : ProfileAction()
 }
