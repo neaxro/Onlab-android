@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AddChart
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.QueryStats
@@ -34,15 +35,16 @@ fun MoreScreen(
     navigateTo: (String) -> Unit,
 ){
     val anonymousMenuItems = listOf(
-        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.fullRoute, backgroundColor = Color.Yellow),
+        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.fullRoute, backgroundColor = Color.Green),
     )
     val userMenuItems = listOf(
         *(anonymousMenuItems.toTypedArray()),
-        MoreMenu(title = "My Statistics", icon = Icons.Default.QueryStats, url = Screen.Statistics.fullRoute, backgroundColor = Color.Yellow),
+        MoreMenu(title = "My Statistics", icon = Icons.Default.QueryStats, url = Screen.Statistics.fullRoute, backgroundColor = Color.Green),
     )
     val adminMenuItems = listOf(
         *(userMenuItems.toTypedArray()),
         MoreMenu(title = "Pending Shifts", icon = Icons.Default.WorkHistory, url = Screen.PendingShifts.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = "Job Statistics", icon = Icons.Default.AddChart, url = Screen.JobStatistics.fullRoute, backgroundColor = Color.Yellow),
     )
     val ownerMenuItems = listOf(
         *(adminMenuItems.toTypedArray()),

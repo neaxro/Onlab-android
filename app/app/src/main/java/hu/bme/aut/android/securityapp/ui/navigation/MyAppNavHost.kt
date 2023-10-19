@@ -16,6 +16,7 @@ import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.CreateDashbo
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobDetailScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobEditScreen
+import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.jobstatistics.JobStatisticsScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.DetailShiftScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.EditShiftScreen
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.PendingShiftsScreen
@@ -275,6 +276,16 @@ fun MyAppNavHost(
             )
         ){
             JobEditScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.JobStatistics.fullRoute,
+        ){
+            JobStatisticsScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }
