@@ -545,12 +545,14 @@ namespace SecurityApi.Services
                 .Sum(s => s.EarnedMoney);
 
             var peopleSalary = _context.Shifts
+                .Include(s => s.People)
                 .Where(s => s.JobId == jobId
                             && s.StatusId == DatabaseConstants.ACCEPTED_STATUS_ID)
                 .GroupBy(s => s.People.Name)
                 .Select(g => new PersonSalaryStatistic(
                     (int)g.Select(s => s.PeopleId).First(),
                     g.Key,
+                    g.Select(s => s.People.ProfilePicture).First(),
                     (float)g.Sum(s => s.EarnedMoney)
                 ))
                 .ToList();

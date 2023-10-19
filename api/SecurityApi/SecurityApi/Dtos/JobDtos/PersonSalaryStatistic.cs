@@ -5,5 +5,6 @@ namespace SecurityApi.Dtos.JobDtos;
 public record PersonSalaryStatistic(
     int PersonId,
     string PersonName,
+    byte[] ProfilePicture,
     float FullSalary
     );
