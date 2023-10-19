@@ -104,7 +104,7 @@ class ShiftScreenViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                     _shiftState.update {
                         it.copy(
                             isActive = result.data != null,
@@ -129,7 +129,7 @@ class ShiftScreenViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                     _shiftState.update {
                         it.copy(
                             isActive = false,

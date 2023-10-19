@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
+import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +67,7 @@ fun JobDetailScreen(
                 title = job.title,
                 onNavigate = onNavigateBack,
                 actions = {
-                    if(job.owner.id == LoggedPerson.ID){
+                    if (job.owner.id == LoggedPerson.ID) {
                         IconButton(onClick = { navigateEditJob(job.id) }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                         }
@@ -75,80 +76,84 @@ fun JobDetailScreen(
                 screenState = viewModel.screenState.collectAsState()
             )
         },
-        content = {
+        snackbarHost = {
+            MySnackbarHost(
+                screenState = viewModel.screenState,
+            )
+        },
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = it.calculateTopPadding())
+                .scrollable(scrollState, orientation = Orientation.Vertical)
+        ) {
+
+            DataTextBox(
+                text = job.description,
+                icon = Icons.Rounded.Description,
+                description = "Job description",
+            )
+
+            DataTextBox(
+                text = job.pin,
+                icon = Icons.Rounded.Key,
+                description = "Connection PIN"
+            )
+
             Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = it.calculateTopPadding())
-                    .scrollable(scrollState, orientation = Orientation.Vertical)
+                    .padding(10.dp)
+                    .background(Color(211, 243, 107), RoundedCornerShape(10.dp))
+                    .border(3.dp, Color.Black, RoundedCornerShape(10.dp))
+                    .padding(10.dp)
             ) {
 
-                DataTextBox(
-                    text = job.description,
-                    icon = Icons.Rounded.Description,
-                    description = "Job description",
-                )
-
-                DataTextBox(
-                    text = job.pin,
-                    icon = Icons.Rounded.Key,
-                    description = "Connection PIN"
-                )
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .background(Color(211, 243, 107), RoundedCornerShape(10.dp))
-                        .border(3.dp, Color.Black, RoundedCornerShape(10.dp))
-                        .padding(10.dp)
-                ) {
-
-                    if (job.owner.profilePicture != null) {
-                        Image(
-                            bitmap = job.owner.getProfileBitmap(),
-                            contentDescription = "Profile picture",
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(RoundedCornerShape(50.dp))
-                                .border(3.dp, Color.Black, RoundedCornerShape(50.dp))
-                        )
-                    } else {
-                        Image(
-                            imageVector = Icons.Rounded.Person,
-                            contentDescription = "Profile picture",
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(RoundedCornerShape(50.dp))
-                                .background(Color.White)
-                                .border(3.dp, Color.Black, RoundedCornerShape(50.dp))
-                        )
-                    }
-
-                    DataTextBox(
-                        text = job.owner.fullName,
-                        icon = Icons.Rounded.Person,
-                        description = "Owner full name",
-                        backgroundColor = Color.White
+                if (job.owner.profilePicture != null) {
+                    Image(
+                        bitmap = job.owner.getProfileBitmap(),
+                        contentDescription = "Profile picture",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(RoundedCornerShape(50.dp))
+                            .border(3.dp, Color.Black, RoundedCornerShape(50.dp))
                     )
-
-                    DataTextBox(
-                        text = job.owner.nickname,
-                        icon = Icons.Rounded.Badge,
-                        description = "Owner nickname",
-                        backgroundColor = Color.White
-                    )
-
-                    DataTextBox(
-                        text = job.owner.email,
-                        icon = Icons.Rounded.Email,
-                        description = "Owner email address",
-                        backgroundColor = Color.White
+                } else {
+                    Image(
+                        imageVector = Icons.Rounded.Person,
+                        contentDescription = "Profile picture",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(RoundedCornerShape(50.dp))
+                            .background(Color.White)
+                            .border(3.dp, Color.Black, RoundedCornerShape(50.dp))
                     )
                 }
+
+                DataTextBox(
+                    text = job.owner.fullName,
+                    icon = Icons.Rounded.Person,
+                    description = "Owner full name",
+                    backgroundColor = Color.White
+                )
+
+                DataTextBox(
+                    text = job.owner.nickname,
+                    icon = Icons.Rounded.Badge,
+                    description = "Owner nickname",
+                    backgroundColor = Color.White
+                )
+
+                DataTextBox(
+                    text = job.owner.email,
+                    icon = Icons.Rounded.Email,
+                    description = "Owner email address",
+                    backgroundColor = Color.White
+                )
             }
         }
-    )
+    }
 }
 
 @Composable

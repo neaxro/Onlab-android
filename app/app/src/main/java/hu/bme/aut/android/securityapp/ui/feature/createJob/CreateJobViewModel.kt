@@ -58,7 +58,7 @@ class CreateJobViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                     _creationState.value = CreationState.Created
                 }
 

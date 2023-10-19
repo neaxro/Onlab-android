@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.constants.Constants
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.ui.feature.common.MaxLengthOutlinedTextField
+import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
 @Composable
@@ -42,7 +43,12 @@ fun JobEditScreen(
                 onNavigate = { navigateBack() },
                 screenState = viewModel.screenState.collectAsState()
             )
-        }
+        },
+        snackbarHost = {
+            MySnackbarHost(
+                screenState = viewModel.screenState,
+            )
+        },
     ) {
         val paddingTop = it.calculateTopPadding()
 

@@ -34,6 +34,7 @@ import hu.bme.aut.android.securityapp.data.model.shift.getStartTime
 import hu.bme.aut.android.securityapp.ui.feature.common.DoubleDataRow
 import hu.bme.aut.android.securityapp.ui.feature.common.MyDatePicker
 import hu.bme.aut.android.securityapp.ui.feature.common.MyDropDownMenu
+import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTimePicker
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import java.time.LocalDateTime
@@ -58,7 +59,12 @@ fun EditShiftScreen(
                 onNavigate = { navigateBack() },
                 screenState = viewModel.screenState.collectAsState()
             )
-        }
+        },
+        snackbarHost = {
+            MySnackbarHost(
+                screenState = viewModel.screenState,
+            )
+        },
     ) {
         val paddingTop = it.calculateTopPadding()
 

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WageEditor
 
@@ -65,7 +66,12 @@ fun WageDetailScreen(
                 },
                 screenState = viewModel.screenState.collectAsState()
             )
-        }
+        },
+        snackbarHost = {
+            MySnackbarHost(
+                screenState = viewModel.screenState,
+            )
+        },
     ) {
         val paddingTop = it.calculateTopPadding()
 

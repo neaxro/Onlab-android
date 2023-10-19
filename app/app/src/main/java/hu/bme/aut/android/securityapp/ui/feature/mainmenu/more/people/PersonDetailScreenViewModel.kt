@@ -129,7 +129,7 @@ class PersonDetailScreenViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -144,7 +144,7 @@ class PersonDetailScreenViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)

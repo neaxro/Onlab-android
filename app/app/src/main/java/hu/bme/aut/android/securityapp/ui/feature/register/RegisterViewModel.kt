@@ -44,7 +44,7 @@ class RegisterViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success<PersonDefault> -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                 }
                 is Resource.Error<PersonDefault> -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)

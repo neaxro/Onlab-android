@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.JobCard
+import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsAction
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs.JobsViewModel
@@ -47,7 +48,6 @@ fun JobsScreen(
 
     Scaffold(
         topBar = {
-
             MyTopAppBar(
                 title = "Jobs",
                 actions = {
@@ -71,7 +71,12 @@ fun JobsScreen(
                 },
                 screenState = viewModel.screenState.collectAsState()
             )
-        }
+        },
+        snackbarHost = {
+            MySnackbarHost(
+                screenState = viewModel.screenState,
+            )
+        },
     ) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(1),

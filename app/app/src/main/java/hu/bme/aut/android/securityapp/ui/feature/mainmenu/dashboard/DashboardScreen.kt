@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardCard
+import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WelcomeBoard
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard.DashboardViewModel
@@ -66,7 +67,12 @@ fun DashboardScreen(
                     }
                 )
             }
-        }
+        },
+        snackbarHost = {
+            MySnackbarHost(
+                screenState = viewModel.screenState,
+            )
+        },
     ) {
         val paddingTop = it.calculateTopPadding()
         Column(

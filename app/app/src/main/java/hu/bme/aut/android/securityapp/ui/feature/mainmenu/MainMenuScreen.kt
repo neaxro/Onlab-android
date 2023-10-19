@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import hu.bme.aut.android.securityapp.ui.feature.common.MyBottomNavigationBar
+import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 data class NavigationItem(
@@ -43,7 +44,12 @@ fun MainMenuScreen(
                    mainMenuNavController.navigate(it.screen.baseRoute)
                },
            )
-        }
+        },
+        snackbarHost = {
+            MySnackbarHost(
+                screenState = viewModel.screenState,
+            )
+        },
     ) { paddingValues ->
         Box(
             modifier = Modifier

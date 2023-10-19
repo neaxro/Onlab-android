@@ -166,7 +166,7 @@ class EditShiftViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                     _shift.value = result.data!!
                 }
                 is Resource.Error -> {

@@ -64,7 +64,7 @@ class JobsViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
+                    _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                     LoggedPerson.TOKEN = result.data!!.token
                 }
                 is Resource.Error -> {
