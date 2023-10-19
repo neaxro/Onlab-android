@@ -11,16 +11,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.data.model.people.Person
-import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
+import hu.bme.aut.android.securityapp.data.model.people.toBitmap
 
 @Composable
 fun MyProfilePictureImage(
-    person: Person,
+    profilePicture: String?,
     modifier: Modifier = Modifier
 ){
-    if (person.profilePicture != null) {
+    if (profilePicture != null) {
         Image(
-            bitmap = person.getProfileBitmap(),
+            bitmap = profilePicture.toBitmap(),
             contentDescription = "Profile picture",
             modifier = modifier
         )
@@ -43,7 +43,7 @@ fun MyProfilePictureImagePreview(){
     )
 
     MyProfilePictureImage(
-        person = person,
+        profilePicture = person.profilePicture,
         modifier = Modifier
             .size(60.dp)
             .clip(RoundedCornerShape(30.dp))

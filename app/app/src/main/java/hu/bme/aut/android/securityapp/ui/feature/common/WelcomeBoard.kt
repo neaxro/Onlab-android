@@ -88,7 +88,7 @@ fun WelcomeBoard(
             }
 
             MyProfilePictureImage(
-                person = person,
+                profilePicture = person.profilePicture,
                 modifier = Modifier
                     .padding(10.dp)
                     .size(60.dp)
