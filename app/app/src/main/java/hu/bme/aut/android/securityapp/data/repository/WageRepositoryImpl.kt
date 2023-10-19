@@ -18,7 +18,7 @@ class WageRepositoryImpl constructor(
             val result = api.getCategories(jobId = jobId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully connected to job!", data = result.body()!!)
+                Resource.Success(message = "Successfully get categories!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -26,7 +26,7 @@ class WageRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -37,7 +37,7 @@ class WageRepositoryImpl constructor(
             val result = api.getWages(jobId = jobId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully connected to job!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried all wages!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -45,7 +45,7 @@ class WageRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -56,7 +56,7 @@ class WageRepositoryImpl constructor(
             val result = api.getWage(wageId = wageId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully connected to job!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried wage with ID: $wageId!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -64,7 +64,7 @@ class WageRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -75,7 +75,7 @@ class WageRepositoryImpl constructor(
             val result = api.updateWage(wageId = wageId, wageData = wageData)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully connected to job!", data = result.body()!!)
+                Resource.Success(message = "Successfully updated wage!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -83,7 +83,7 @@ class WageRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -94,7 +94,7 @@ class WageRepositoryImpl constructor(
             val result = api.deleteWage(wageId = wageId)
 
             val data = if(result.isSuccessful && result.code() == 204){
-                Resource.Success(message = "Wage succesfully deleted!", data = result.body()!!)
+                Resource.Success(message = "Wage successfully deleted!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -102,7 +102,7 @@ class WageRepositoryImpl constructor(
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -113,7 +113,7 @@ class WageRepositoryImpl constructor(
             val result = api.createWage(wageData = wageData)
 
             val data = if(result.isSuccessful && result.code() == 201){
-                Resource.Success(message = "Succesfully created a new Wage!", data = result.body()!!)
+                Resource.Success(message = "Successfully created a new wage!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -121,7 +121,7 @@ class WageRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection

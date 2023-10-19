@@ -24,7 +24,7 @@ class PersonRepositoryImpl constructor(
             val result = api.getPerson(personId = personId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Person successfully found!", data = result.body()!!)
+                Resource.Success(message = "Person successfully queried!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -108,7 +108,7 @@ class PersonRepositoryImpl constructor(
         return connection
     }
 
-    fun contentUriToFile(context: Context, contentUri: Uri): Uri? {
+    private fun contentUriToFile(context: Context, contentUri: Uri): Uri? {
         val contentResolver: ContentResolver = context.contentResolver
         val cacheDir = context.externalCacheDir ?: context.cacheDir
         val outputFile = File(cacheDir, "temp_file.jpg")

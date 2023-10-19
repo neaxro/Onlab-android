@@ -17,7 +17,7 @@ class LoginRepositoryImpl(
 
             // Check server response
             val res = if(response.code() == 200){
-                    Resource.Success(data = response.body()!!, message = "Succesfull, ID: ${response.code()}")
+                    Resource.Success(message = "Successfully logged in!", data = response.body()!!)
                 }
                 else{
                     // Server error
@@ -27,7 +27,7 @@ class LoginRepositoryImpl(
             res
         } catch (e: Exception){
             // Network error
-            Resource.Error(message = "Network error occured: ${e.message}")
+            Resource.Error(message = "Network error occurred: ${e.message}")
         }
 
         return result

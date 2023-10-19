@@ -14,7 +14,7 @@ class RoleRepositoryImpl constructor(
             val result = api.getAllRoles()
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully get all roles!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried all roles!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -22,7 +22,7 @@ class RoleRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -33,7 +33,7 @@ class RoleRepositoryImpl constructor(
             val result = api.getAllChoosableRoles()
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully get all roles!", data = result.body()!!)
+                Resource.Success(message = "Successfully get all choosable roles!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -41,7 +41,7 @@ class RoleRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -52,7 +52,7 @@ class RoleRepositoryImpl constructor(
             val result = api.getRoleById(roleId = roleId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully get role!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried role!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -60,7 +60,7 @@ class RoleRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection

@@ -15,10 +15,7 @@ class RegisterRepositoryImpl(
             val response = api.register(registerData)
             // Check server response
             val res = if(response.code() == 201) {
-                Resource.Success(
-                    data = registerData,
-                    message = "Successul, Code: ${response.code()}"
-                )
+                Resource.Success(message = "Successful registration!", data = registerData)
             }
             // Server error
             else{
@@ -28,7 +25,7 @@ class RegisterRepositoryImpl(
         }
         // Network error
         catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return result

@@ -18,7 +18,7 @@ class DashboardRepositoryImpl (
             val result = api.getAllDashboardsForPerson(jobId = jobId, personId = personId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+                Resource.Success(message = "All dashboards successfully queried!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -26,7 +26,7 @@ class DashboardRepositoryImpl (
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -37,7 +37,7 @@ class DashboardRepositoryImpl (
             val result = api.getDashboard(dashboardId = dashboardId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+                Resource.Success(message = "Dashboard with ID $dashboardId successfully queried!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -45,7 +45,7 @@ class DashboardRepositoryImpl (
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -56,7 +56,7 @@ class DashboardRepositoryImpl (
             val result = api.getAllDashboardsForJob(jobId = jobId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Job succesfully found!", data = result.body()!!)
+                Resource.Success(message = "All dashboards successfully queried fow JobId: $jobId!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -64,7 +64,7 @@ class DashboardRepositoryImpl (
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -75,7 +75,7 @@ class DashboardRepositoryImpl (
             val result = api.createDashboard(dashboard = dashboard)
 
             val data = if(result.isSuccessful && result.code() == 201){
-                Resource.Success(message = "Dashboard succesfully created!", data = result.body()!!)
+                Resource.Success(message = "Dashboard successfully created!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -83,7 +83,7 @@ class DashboardRepositoryImpl (
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -97,7 +97,7 @@ class DashboardRepositoryImpl (
             val result = api.updateDashboard(dashboardId = dashboardId, updateDashboardData = dashboardData)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Dashboard succesfully updated!", data = result.body()!!)
+                Resource.Success(message = "Dashboard successfully updated!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -105,7 +105,7 @@ class DashboardRepositoryImpl (
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -116,7 +116,7 @@ class DashboardRepositoryImpl (
             val result = api.deleteDashboard(dashboardId = dashboardId)
 
             val data = if(result.isSuccessful && result.code() == 204){
-                Resource.Success(message = "Dashboard succesfully deleted!", data = result.body()!!)
+                Resource.Success(message = "Dashboard successfully deleted!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -124,7 +124,7 @@ class DashboardRepositoryImpl (
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection

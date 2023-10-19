@@ -17,7 +17,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.getCurrentForPerson(jobId = jobId, personId = personId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully queried active shift for person in job!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried active shift for person in job!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -25,7 +25,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -36,7 +36,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.getById(shiftId = shiftId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully queried shift by id!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried shift with ID: $shiftId!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -44,7 +44,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -55,7 +55,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.createShift(shiftData = shiftData)
 
             val data = if(result.isSuccessful && result.code() == 201){
-                Resource.Success(message = "Succesfully created a new Shift!", data = result.body()!!)
+                Resource.Success(message = "Successfully created a new shift!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -63,7 +63,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -74,7 +74,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.endShift(shiftId = shiftId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully ended shift!", data = result.body()!!)
+                Resource.Success(message = "Successfully ended shift!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -82,7 +82,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -93,7 +93,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.getAllPendingInJob(jobId = jobId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully queried all pending shifts in job (ID: $jobId)!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried all pending shifts in job with ID: $jobId!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -101,7 +101,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -112,7 +112,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.acceptShift(shiftId = shiftId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully accepted pending shift in job (ShiftID: $shiftId)!", data = result.body()!!)
+                Resource.Success(message = "Successfully accepted shift!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -120,7 +120,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -131,7 +131,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.denyShift(shiftId = shiftId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully declined pending shift in job (ShiftID: $shiftId)!", data = result.body()!!)
+                Resource.Success(message = "Successfully declined shift!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -139,7 +139,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -150,7 +150,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.getAllJudgedShifts(jobId = jobId, personId = personId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully quired all judged shifts!", data = result.body()!!)
+                Resource.Success(message = "Successfully queried all judged shifts!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -158,7 +158,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -172,7 +172,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.updateShift(shiftId = shiftId, updateShiftData = updateShiftData)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Succesfully updated shift with shift ID: $shiftId!", data = result.body()!!)
+                Resource.Success(message = "Successfully updated shift!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -180,7 +180,7 @@ class ShiftRepositoryImpl constructor(
 
             data
         } catch(e: Exception){
-            Resource.Error("Network error occured: ${e.message}")
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
@@ -191,7 +191,7 @@ class ShiftRepositoryImpl constructor(
             val result = api.getJobStatistics(jobId = jobId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Successfully get job statistics for Job ID: $jobId!", data = result.body()!!)
+                Resource.Success(message = "Successfully get job statistics for job ID: $jobId!", data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
