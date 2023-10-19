@@ -44,7 +44,7 @@ fun MoreScreen(
     val adminMenuItems = listOf(
         *(userMenuItems.toTypedArray()),
         MoreMenu(title = "Pending Shifts", icon = Icons.Default.WorkHistory, url = Screen.PendingShifts.fullRoute, backgroundColor = Color.Green),
-        MoreMenu(title = "Job Statistics", icon = Icons.Default.AddChart, url = Screen.JobStatistics.fullRoute, backgroundColor = Color.Yellow),
+        MoreMenu(title = "Job Statistics", icon = Icons.Default.AddChart, url = Screen.JobStatistics.fullRoute, backgroundColor = Color.Green),
     )
     val ownerMenuItems = listOf(
         *(adminMenuItems.toTypedArray()),
