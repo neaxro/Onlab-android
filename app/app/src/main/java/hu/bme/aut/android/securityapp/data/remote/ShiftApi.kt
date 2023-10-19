@@ -2,6 +2,7 @@ package hu.bme.aut.android.securityapp.data.remote
 
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.shift.CreateShiftData
+import hu.bme.aut.android.securityapp.data.model.shift.JobStatistic
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.shift.UpdateShiftData
 import retrofit2.Response
@@ -69,4 +70,10 @@ interface ShiftApi {
         @Path("shiftId") shiftId: Int,
         @Body updateShiftData: UpdateShiftData
     ): Response<Shift>
+
+    @GET("/api/shift/statistics/{jobId}")
+    suspend fun getJobStatistics(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("jobId") jobId: Int,
+    ): Response<JobStatistic>
 }

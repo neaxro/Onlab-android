@@ -2,6 +2,7 @@ package hu.bme.aut.android.securityapp.data.repository
 
 import android.app.Application
 import hu.bme.aut.android.securityapp.data.model.shift.CreateShiftData
+import hu.bme.aut.android.securityapp.data.model.shift.JobStatistic
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.shift.UpdateShiftData
 import hu.bme.aut.android.securityapp.data.remote.ShiftApi
@@ -180,6 +181,25 @@ class ShiftRepositoryImpl constructor(
             data
         } catch(e: Exception){
             Resource.Error("Network error occured: ${e.message}")
+        }
+
+        return connection
+    }
+
+    override suspend fun getJobStatistics(jobId: Int): Resource<JobStatistic> {
+        val connection = try{
+            val result = api.getJobStatistics(jobId = jobId)
+
+            val data = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Successfully get job statistics for Job ID: $jobId!", data = result.body()!!)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch(e: Exception){
+            Resource.Error("Network error occurred: ${e.message}")
         }
 
         return connection
