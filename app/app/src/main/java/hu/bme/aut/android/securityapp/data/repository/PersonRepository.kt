@@ -12,4 +12,6 @@ interface PersonRepository {
     suspend fun updatePerson(personId: Int, person: PersonDefault): Resource<PersonDefault>
 
     suspend fun uploadProfilePicture(personId: Int, imageUri: Uri, context: Context): Resource<Unit>
+
+    suspend fun getProfilePicture(personId: Int): Resource<String?>
 }

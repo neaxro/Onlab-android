@@ -86,6 +86,28 @@ class PersonRepositoryImpl constructor(
         return connection
     }
 
+    override suspend fun getProfilePicture(personId: Int): Resource<String?> {
+        val connection = try {
+            val result = api.getProfilePicture(personId = personId)
+
+            val data: Resource<String?> = if(result.isSuccessful && result.code() == 200){
+                Resource.Success(message = "Person's profile picture successfully queried!", data = result.body()!!)
+            }
+            else if(result.isSuccessful && result.code() == 204){
+                Resource.Success(message = "Person's profile picture successfully queried!", data = null)
+            }
+            else{
+                Resource.Error(message = result.errorBody()!!.string())
+            }
+
+            data
+        } catch (e: Exception){
+            Resource.Error("Network error occurred: ${e.message}")
+        }
+
+        return connection
+    }
+
     fun contentUriToFile(context: Context, contentUri: Uri): Uri? {
         val contentResolver: ContentResolver = context.contentResolver
         val cacheDir = context.externalCacheDir ?: context.cacheDir

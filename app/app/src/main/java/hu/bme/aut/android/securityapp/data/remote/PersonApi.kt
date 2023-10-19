@@ -37,4 +37,10 @@ interface PersonApi {
         @Path("personId") personId: Int,
         @Part image: MultipartBody.Part
     ): Response<Unit>
+
+    @GET("/api/people/picture/{personId}")
+    suspend fun getProfilePicture(
+        @Header("Authorization") token: String = "Bearer ${LoggedPerson.TOKEN}",
+        @Path("personId") personId: Int,
+    ): Response<String>
 }
