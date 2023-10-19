@@ -236,5 +236,17 @@ namespace SecurityApi.Services
 
             return _converter.ToModel(person);
         }
+
+        public async Task<byte[]> GetImageForPerson(int personId)
+        {
+            var result = await _context.People.FirstOrDefaultAsync(p => p.Id == personId);
+
+            if (result == null)
+            {
+                throw new Exception(String.Format("Person with ID({0}) does not exist!", personId));
+            }
+
+            return result.ProfilePicture;
+        }
     }
 }

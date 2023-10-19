@@ -157,5 +157,27 @@ namespace SecurityApi.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpGet("profilepicture/{personId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<byte[]>> GetImageForPerson(int personId)
+        {
+            try
+            {
+                var result = await _service.GetImageForPerson(personId);
+
+                if(result == null)
+                    return NoContent();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }
