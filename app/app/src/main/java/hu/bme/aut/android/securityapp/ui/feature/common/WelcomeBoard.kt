@@ -90,9 +90,8 @@ fun WelcomeBoard(
             MyProfilePictureImage(
                 profilePicture = person.profilePicture,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .size(60.dp)
-                    .clip(RoundedCornerShape(30.dp))
+                    .size(90.dp)
+                    .clip(RoundedCornerShape(10.dp))
             )
         }
     }
