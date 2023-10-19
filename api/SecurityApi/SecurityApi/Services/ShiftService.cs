@@ -6,10 +6,13 @@ using Person = SecurityApi.Dtos.PersonDtos.Person;
 using Job = SecurityApi.Dtos.JobDtos.DetailJob;
 using State = SecurityApi.Dtos.StatusDtos.Status;
 using Wage = SecurityApi.Dtos.WageDtos.Wage;
+using PersonSalaryStatistic = SecurityApi.Dtos.JobDtos.PersonSalaryStatistic;
 using System.Data;
 using SecurityApi.Converters;
 using SecurityApi.Enums;
 using SecurityApi.Dtos.ShiftDtos;
+using SecurityApi.Dtos.JobDtos;
+using System.Linq;
 
 namespace SecurityApi.Services
 {
@@ -526,6 +529,34 @@ namespace SecurityApi.Services
                 .ToList();
 
             return shifts;
+        }
+
+        public JobStatistic GetJobStatistic(int jobId)
+        {
+            var job = _context.Jobs.FirstOrDefault(job => job.Id == jobId);
+            if (job == null)
+            {
+                throw new Exception(String.Format("Job with ID({0}) does not exist!", jobId));
+            }
+
+            var overallSalary = _context.Shifts
+                .Where(s => s.JobId == jobId
+                            && s.StatusId == DatabaseConstants.ACCEPTED_STATUS_ID)
+                .Sum(s => s.EarnedMoney);
+
+            var peopleSalary = _context.Shifts
+                .Where(s => s.JobId == jobId
+                            && s.StatusId == DatabaseConstants.ACCEPTED_STATUS_ID)
+                .GroupBy(s => s.People.Name)
+                .Select(g => new PersonSalaryStatistic(
+                    (int)g.Select(s => s.PeopleId).First(),
+                    g.Key,
+                    (float)g.Sum(s => s.EarnedMoney)
+                ))
+                .ToList();
+
+
+            return new JobStatistic((float)overallSalary, peopleSalary);
         }
     }
 }

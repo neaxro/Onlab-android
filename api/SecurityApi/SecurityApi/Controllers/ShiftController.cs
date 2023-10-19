@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecurityApi.Context;
+using SecurityApi.Dtos.JobDtos;
 using SecurityApi.Dtos.ShiftDtos;
 using SecurityApi.Model;
 using SecurityApi.Services;
@@ -255,6 +256,23 @@ namespace SecurityApi.Controllers
                 var result = await _service.Delete(shiftId);
                 return Ok(result);
             } catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin,Owner")]
+        [HttpGet("statistics/{jobId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<JobStatistic> GetJobStatistic(int jobId)
+        {
+            try
+            {
+                var result = _service.GetJobStatistic(jobId);
+                return Ok(result);
+            }
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }

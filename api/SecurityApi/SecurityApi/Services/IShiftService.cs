@@ -1,4 +1,5 @@
-﻿using SecurityApi.Dtos.ShiftDtos;
+﻿using SecurityApi.Dtos.JobDtos;
+using SecurityApi.Dtos.ShiftDtos;
 
 namespace SecurityApi.Services
 {
@@ -21,5 +22,6 @@ namespace SecurityApi.Services
         Task<Shift> AcceptShift(int shiftId);
         Task<Shift> DenyShift(int shiftId);
         Task WageChangedUpdate(int wageId);
+        JobStatistic GetJobStatistic(int jobId);
     }
 }
