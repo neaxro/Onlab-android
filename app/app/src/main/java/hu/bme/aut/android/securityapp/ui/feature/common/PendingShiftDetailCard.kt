@@ -63,8 +63,8 @@ fun PendingShiftDetailCard(
                 MyProfilePictureImage(
                     profilePicture = shift.person.profilePicture,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(5.dp))
                         .size(100.dp)
+                        .clip(RoundedCornerShape(10.dp))
                 )
 
                 Column(
