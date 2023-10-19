@@ -20,3 +20,9 @@ fun Person.getProfileBitmap(): ImageBitmap{
     val image: Bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     return image.asImageBitmap()
 }
+
+fun String.toBitmap(): ImageBitmap{
+    val imageBytes = Base64.getDecoder().decode(this)
+    val image: Bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    return image.asImageBitmap()
+}
