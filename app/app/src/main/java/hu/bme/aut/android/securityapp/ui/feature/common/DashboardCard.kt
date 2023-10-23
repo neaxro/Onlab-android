@@ -38,10 +38,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.model.dashboard.getCreationDate
 import hu.bme.aut.android.securityapp.data.model.dashboard.getCreationTime
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
+import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 import java.util.Base64
 
@@ -101,8 +103,10 @@ fun DashboardCard(
                     )
                 }
 
-                IconButton(onClick = { onDetails(dashboard.id) }) {
-                    Image(imageVector = Icons.Default.MoreHoriz, contentDescription = "Details")
+                if(LoggedPerson.getRole() is Roles.Owner || LoggedPerson.getRole() is Roles.Admin) {
+                    IconButton(onClick = { onDetails(dashboard.id) }) {
+                        Image(imageVector = Icons.Default.MoreHoriz, contentDescription = "Details")
+                    }
                 }
             }
 
