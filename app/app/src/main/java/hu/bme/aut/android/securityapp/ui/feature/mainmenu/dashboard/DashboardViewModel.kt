@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.dashboard
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ class DashboardViewModel@Inject constructor(
     private val dashboardRepository: DashboardRepository,
     private val personRepository: PersonRepository,
     private val wageRepository: WageRepository,
+    private val sharedPreferences: SharedPreferences,
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -40,14 +42,17 @@ class DashboardViewModel@Inject constructor(
 
     init {
         loadPersonData()
-        loadAllCategories()
 
-        val personRole = LoggedPerson.getRole()
-        if(personRole is Roles.Admin || personRole is Roles.Owner){
-            loadAllForAdmin()
-        }
-        else{
-            loadDashboardsForUser()
+        if(LoggedPerson.CURRENT_JOB_ID > 0) {
+
+            loadAllCategories()
+
+            val personRole = LoggedPerson.getRole()
+            if (personRole is Roles.Admin || personRole is Roles.Owner) {
+                loadAllForAdmin()
+            } else {
+                loadDashboardsForUser()
+            }
         }
     }
 

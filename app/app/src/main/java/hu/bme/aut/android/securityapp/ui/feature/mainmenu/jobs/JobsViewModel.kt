@@ -1,8 +1,10 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.bme.aut.android.securityapp.constants.AppRemember
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.repository.JobRepository
@@ -17,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class JobsViewModel @Inject constructor(
     private val jobRepository: JobRepository,
+    private val sharedPreferences: SharedPreferences
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -58,6 +61,7 @@ class JobsViewModel @Inject constructor(
         if(LoggedPerson.CURRENT_JOB_ID == jobId) return
 
         LoggedPerson.CURRENT_JOB_ID = jobId
+        AppRemember.rememberSelectedJobId(sharedPreferences = sharedPreferences, jobId = jobId)
 
         viewModelScope.launch(Dispatchers.IO) {
             val result = jobRepository.selectJob(jobId = LoggedPerson.CURRENT_JOB_ID, personId = LoggedPerson.ID)

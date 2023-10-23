@@ -1,10 +1,12 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.profile
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.bme.aut.android.securityapp.constants.AppRemember
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.repository.PersonRepository
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileScreenViewModel @Inject constructor(
     private val personRepository: PersonRepository,
+    private val sharedPreferences: SharedPreferences,
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -118,6 +121,11 @@ class ProfileScreenViewModel @Inject constructor(
     private fun logOut(){
         LoggedPerson.ID = 0
         LoggedPerson.CURRENT_JOB_ID = 0
+
+        with(AppRemember){
+            forgetSelectedJobId(sharedPreferences = sharedPreferences)
+            forgetLoginData(sharedPreferences = sharedPreferences)
+        }
     }
 }
 
