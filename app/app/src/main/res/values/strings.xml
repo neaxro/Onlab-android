@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SecurityApp</string>
+    <string name="shared_preferences_file_name">thingsToRemember</string>
 </resources>
