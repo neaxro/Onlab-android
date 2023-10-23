@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using SecurityApi.Context;
 using SecurityApi.Converters;
 using SecurityApi.Dtos.PersonDtos;
+using SecurityApi.Enums;
 using SecurityApi.Model;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -130,15 +131,6 @@ namespace SecurityApi.Services
             if (!isEmailValid.Success)
             {
                 throw new Exception("Email address invalid format!");
-            }
-
-            if(newPerson.Password.Length < 8)
-            {
-                throw new Exception("Password min size is 8 characters!");
-            }
-            else if (newPerson.Password.Length > 30)
-            {
-                throw new Exception("Password max size is 30 characters!");
             }
 
             using var tran = await _context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);

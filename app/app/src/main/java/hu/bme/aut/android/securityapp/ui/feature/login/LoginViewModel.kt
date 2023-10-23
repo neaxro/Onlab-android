@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
+import hu.bme.aut.android.securityapp.constants.sha256
 import hu.bme.aut.android.securityapp.constants.validateUserPassword
 import hu.bme.aut.android.securityapp.constants.validateUserUsername
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
@@ -37,8 +38,13 @@ class LoginViewModel @Inject constructor(
 
     private fun login(){
         _screenState.value = ScreenState.Loading()
+
+        val hashedLoginData = _loginData.value.copy(
+            password = _loginData.value.password.sha256()
+        )
+
         viewModelScope.launch(Dispatchers.IO) {
-            val result = loginRepository.loginPerson(loginData = _loginData.value)
+            val result = loginRepository.loginPerson(loginData = hashedLoginData)
 
             when(result){
                 is Resource.Success -> {

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
+import hu.bme.aut.android.securityapp.constants.sha256
 import hu.bme.aut.android.securityapp.constants.validateUserEmail
 import hu.bme.aut.android.securityapp.constants.validateUserFullName
 import hu.bme.aut.android.securityapp.constants.validateUserNickname
@@ -39,8 +40,13 @@ class RegisterViewModel @Inject constructor(
 
     private fun register(){
         _screenState.value = ScreenState.Loading()
+
+        val hashedRegisterData = _person.value.copy(
+            password = _person.value.password.sha256()
+        )
+
         viewModelScope.launch(Dispatchers.IO) {
-            val result: Resource<PersonDefault> = registerRepository.registerUser(registerData = _person.value)
+            val result: Resource<PersonDefault> = registerRepository.registerUser(registerData = hashedRegisterData)
 
             when(result){
                 is Resource.Success<PersonDefault> -> {
