@@ -32,7 +32,7 @@ create table [People]
 	Username nvarchar(30) unique,
 	Nickname nvarchar(30),
 	Email nvarchar(50),
-	Password nvarchar(30),
+	Password char(64),
 	ProfilePicture image
 )
 
