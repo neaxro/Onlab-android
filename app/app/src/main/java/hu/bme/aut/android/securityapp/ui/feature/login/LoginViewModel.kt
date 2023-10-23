@@ -1,17 +1,21 @@
 package hu.bme.aut.android.securityapp.ui.viewmodel
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.bme.aut.android.securityapp.constants.AppRemember
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.constants.sha256
 import hu.bme.aut.android.securityapp.constants.validateUserPassword
 import hu.bme.aut.android.securityapp.constants.validateUserUsername
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
+import hu.bme.aut.android.securityapp.data.repository.JobRepository
 import hu.bme.aut.android.securityapp.data.repository.LoginRepository
 import hu.bme.aut.android.securityapp.domain.wrappers.Resource
 import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,6 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
+    private val jobRepository: JobRepository,
+    private val sharedPreferences: SharedPreferences,
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -35,6 +41,14 @@ class LoginViewModel @Inject constructor(
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.NotLoggedIn)
     val loginState = _loginState.asStateFlow()
+
+    init {
+        val rememberedLoginData = AppRemember.getLoginData(sharedPreferences = sharedPreferences)
+        if(rememberedLoginData != null){
+            _loginData.value = rememberedLoginData
+            login()
+        }
+    }
 
     private fun login(){
         _screenState.value = ScreenState.Loading()
@@ -53,6 +67,14 @@ class LoginViewModel @Inject constructor(
 
                     LoggedPerson.ID = result.data!!.id
                     LoggedPerson.TOKEN = result.data.token
+
+                    AppRemember.rememberLoginData(
+                        sharedPreferences = sharedPreferences,
+                        username = _loginData.value.username,
+                        password = _loginData.value.password,
+                    )
+
+                    loadAndSelectRememberedJobId()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -97,6 +119,24 @@ class LoginViewModel @Inject constructor(
             }
 
             else -> {}
+        }
+    }
+
+    private fun loadAndSelectRememberedJobId(){
+        val rememberedJobId = AppRemember.getSelectedJobId(sharedPreferences = sharedPreferences)
+
+        if(rememberedJobId > 0){
+            val scope = CoroutineScope(Dispatchers.IO)
+            scope.launch {
+                val result = jobRepository.selectJob(jobId = rememberedJobId, personId = LoggedPerson.ID)
+                when(result){
+                    is Resource.Error -> {}
+                    is Resource.Success -> {
+                        LoggedPerson.CURRENT_JOB_ID = rememberedJobId
+                        LoggedPerson.TOKEN = result.data!!.token
+                    }
+                }
+            }
         }
     }
 }
