@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -54,6 +53,7 @@ fun ProfileScreen(
 
     val person = viewModel.userData.collectAsState()
     val profilePictureUri = viewModel.imageUri.collectAsState().value
+    val errors = viewModel.dataFieldErrors.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -116,17 +116,22 @@ fun ProfileScreen(
                 onPersonChange = { newUserData ->
                     viewModel.evoke(ProfileAction.SetUserData(userData = newUserData))
                 },
-                newPassword = false,
                 readOnly = isReadOnly,
                 onUriChange = { uri ->
                     if(uri != null){
                         viewModel.evoke(ProfileAction.SetUri(uri = uri))
                     }
-                }
+                },
+                newPassword = true,
+                onPasswordsChange = { password, passwordChange ->
+                    viewModel.evoke(ProfileAction.PasswordsChange(password = password, passwordChange = passwordChange))
+                },
+                enabled = !isReadOnly,
+                errors = errors
             )
 
             if(!isReadOnly){
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.padding(top = 20.dp))
                 OutlinedButton(
                     onClick = {
                         viewModel.evoke(ProfileAction.UpdatePerson(context = context))
@@ -136,6 +141,10 @@ fun ProfileScreen(
                         Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
                         Text(text = "Save", modifier = Modifier.padding(start = 10.dp))
                     }
+                }
+
+                if(profilePictureUri != null) {
+                    Spacer(modifier = Modifier.padding(bottom = 50.dp))
                 }
             }
         }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.constants.sha256
+import hu.bme.aut.android.securityapp.constants.validatePasswordsMatch
 import hu.bme.aut.android.securityapp.constants.validateUserEmail
 import hu.bme.aut.android.securityapp.constants.validateUserFullName
 import hu.bme.aut.android.securityapp.constants.validateUserNickname
@@ -119,7 +120,7 @@ class RegisterViewModel @Inject constructor(
         val nickNameCheck = validateUserNickname(_person.value.nickname)
         val emailAddressCheck = validateUserEmail(_person.value.email)
         val passwordCheck = validateUserPassword(_person.value.password)
-        val passwordMach = if(_person.value.password == _rePassword.value) DataFieldErrors.NoError else DataFieldErrors.PasswordMissmachError("Passwords do not mach!")
+        val passwordMach = validatePasswordsMatch(_person.value.password, _rePassword.value)
 
         _errors.update {
             it.copy(

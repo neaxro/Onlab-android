@@ -4,24 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -43,13 +32,10 @@ fun RegisterEditor(
     password: String,
     passwordChange: (String) -> Unit,
     passwordError: Boolean,
-    rePassword: String,
-    rePasswordChange: (String) -> Unit,
-    rePasswordError: Boolean,
+    passwordConfirm: String,
+    passwordConfirmChange: (String) -> Unit,
+    passwordConfirmError: Boolean,
 ) {
-    var passwordVisible by remember { mutableStateOf(false) }
-    var rePasswordVisible by remember { mutableStateOf(false) }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -101,56 +87,25 @@ fun RegisterEditor(
             isError = emailAddressError
         )
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = { passwordChange(it) },
-            label = { Text(text = "Password") },
-            singleLine = true,
-            trailingIcon = {
-                val image = if(passwordVisible){
-                    Icons.Filled.Visibility
-                } else{
-                    Icons.Filled.VisibilityOff
-                }
-
-                val description = if(passwordVisible) "Hide password" else "Show password"
-
-                IconButton(onClick = {
-                    passwordVisible = !passwordVisible
-                }) {
-                    Icon(imageVector = image, description)
-                }
+        MyPasswordTextField(
+            password = password,
+            onPasswordChange = {
+                passwordChange(it)
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            modifier = Modifier.padding(5.dp),
-            isError = passwordError
+            isError = passwordError,
+            label = { Text(text = "Password") },
+            modifier = Modifier
+                .padding(bottom = 5.dp),
         )
 
-        OutlinedTextField(
-            value = rePassword,
-            onValueChange = { rePasswordChange(it) },
-            label = { Text(text = "Verify password") },
-            singleLine = true,
-            trailingIcon = {
-                val image = if(rePasswordVisible){
-                    Icons.Filled.Visibility
-                } else{
-                    Icons.Filled.VisibilityOff
-                }
-
-                val description = if(rePasswordVisible) "Hide password" else "Show password"
-
-                IconButton(onClick = {
-                    rePasswordVisible = !rePasswordVisible
-                }) {
-                    Icon(imageVector = image, description)
-                }
+        MyPasswordTextField(
+            password = passwordConfirm,
+            onPasswordChange = {
+                passwordConfirmChange(it)
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = if (rePasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            modifier = Modifier.padding(5.dp),
-            isError = rePasswordError
+            isError = passwordConfirmError,
+            label = { Text(text = "Password again") },
+            modifier = Modifier,
         )
     }
 }
@@ -174,8 +129,8 @@ fun RegisterEditorPreview(){
         password = "",
         passwordChange = {},
         passwordError = false,
-        rePassword = "",
-        rePasswordChange = {},
-        rePasswordError = false
+        passwordConfirm = "",
+        passwordConfirmChange = {},
+        passwordConfirmError = false
     )
 }

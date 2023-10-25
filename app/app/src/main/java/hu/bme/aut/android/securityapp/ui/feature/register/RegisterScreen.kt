@@ -75,9 +75,9 @@ fun RegisterScreen(
                 password = person.password,
                 passwordChange = { viewModel.evoke(RegisterAction.ChangePassword(password = it)) },
                 passwordError = errors.password || errors.passwordMismatch,
-                rePassword = rePassword,
-                rePasswordChange = { viewModel.evoke(RegisterAction.ChangeRePassword(rePassword = it)) },
-                rePasswordError = errors.password || errors.passwordMismatch
+                passwordConfirm = rePassword,
+                passwordConfirmChange = { viewModel.evoke(RegisterAction.ChangeRePassword(rePassword = it)) },
+                passwordConfirmError = errors.password || errors.passwordMismatch
             )
 
             Spacer(modifier = Modifier.padding(20.dp))
