@@ -9,10 +9,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.constants.DataFieldErrors
+import hu.bme.aut.android.securityapp.constants.containsType
+import hu.bme.aut.android.securityapp.constants.getErrorMessage
 import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,10 +28,16 @@ fun PersonEditor(
     person: PersonDefault = PersonDefault(),
     onPersonChange: (PersonDefault) -> Unit = {},
     onUriChange: (Uri?) -> Unit,
+    onPasswordsChange: (String, String) -> Unit,
     readOnly: Boolean = true,
+    enabled: Boolean,
     newPassword: Boolean = false,
+    errors: Set<DataFieldErrors>,
     modifier: Modifier = Modifier,
 ){
+    var password by rememberSaveable { mutableStateOf("") }
+    var passwordConfirm by rememberSaveable { mutableStateOf("") }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -42,7 +55,15 @@ fun PersonEditor(
             modifier = Modifier
                 .padding(bottom = 5.dp),
             readOnly = readOnly,
-            enabled = !readOnly,
+            enabled = enabled,
+            isError = errors.containsType(errorType = DataFieldErrors.FullNameError::class.java),
+            supportingText = {
+                 errors.getErrorMessage(errorType = DataFieldErrors.FullNameError::class.java).let {
+                     if(it.isNotEmpty()){
+                         MySupportingText(text = it)
+                     }
+                 }
+            },
         )
 
         OutlinedTextField(
@@ -56,7 +77,15 @@ fun PersonEditor(
             modifier = Modifier
                 .padding(bottom = 5.dp),
             readOnly = readOnly,
-            enabled = !readOnly,
+            enabled = enabled,
+            isError = errors.containsType(errorType = DataFieldErrors.UserNameError::class.java),
+            supportingText = {
+                errors.getErrorMessage(errorType = DataFieldErrors.UserNameError::class.java).let {
+                    if(it.isNotEmpty()){
+                        MySupportingText(text = it)
+                    }
+                }
+            },
         )
 
         OutlinedTextField(
@@ -70,7 +99,15 @@ fun PersonEditor(
             modifier = Modifier
                 .padding(bottom = 5.dp),
             readOnly = readOnly,
-            enabled = !readOnly,
+            enabled = enabled,
+            isError = errors.containsType(errorType = DataFieldErrors.NickNameError::class.java),
+            supportingText = {
+                errors.getErrorMessage(errorType = DataFieldErrors.NickNameError::class.java).let {
+                    if(it.isNotEmpty()){
+                        MySupportingText(text = it)
+                    }
+                }
+            },
         )
 
         OutlinedTextField(
@@ -84,19 +121,58 @@ fun PersonEditor(
             modifier = Modifier
                 .padding(bottom = 5.dp),
             readOnly = readOnly,
-            enabled = !readOnly,
+            enabled = enabled,
+            isError = errors.containsType(errorType = DataFieldErrors.EmailAddressError::class.java),
+            supportingText = {
+                errors.getErrorMessage(errorType = DataFieldErrors.EmailAddressError::class.java).let {
+                    if(it.isNotEmpty()){
+                        MySupportingText(text = it)
+                    }
+                }
+            },
         )
 
         if(newPassword){
-            MyDoublePasswordTextFields(
-                password = person.password,
-                onPasswordChange = { pass1, pass2 ->
-                    if(pass1 == pass2){
-                        onPersonChange(person.copy(password = pass1))
+            MyPasswordTextField(
+                password = password,
+                onPasswordChange = {
+                    password = it
+                    onPasswordsChange(password, passwordConfirm)
+                },
+                isError = errors.containsType(errorType = DataFieldErrors.PasswordError::class.java),
+                readOnly = readOnly,
+                enabled = enabled,
+                label = { Text(text = "Password") },
+                modifier = Modifier
+                    .padding(bottom = 5.dp),
+                supportingText = {
+                    errors.getErrorMessage(errorType = DataFieldErrors.PasswordError::class.java).let {
+                        if(it.isNotEmpty()){
+                            MySupportingText(text = it)
+                        }
                     }
                 },
+            )
+
+            MyPasswordTextField(
+                password = passwordConfirm,
+                onPasswordChange = {
+                    passwordConfirm = it
+                    onPasswordsChange(password, passwordConfirm)
+                },
+                isError = errors.containsType(errorType = DataFieldErrors.PasswordError::class.java)
+                        || errors.containsType(errorType = DataFieldErrors.PasswordMismatchError::class.java),
                 readOnly = readOnly,
-                enabled = !readOnly,
+                enabled = enabled,
+                label = { Text(text = "Password again") },
+                modifier = Modifier,
+                supportingText = {
+                    errors.getErrorMessage(errorType = DataFieldErrors.PasswordMismatchError::class.java).let {
+                        if(it.isNotEmpty()){
+                            MySupportingText(text = it)
+                        }
+                    }
+                },
             )
         }
 
@@ -104,7 +180,7 @@ fun PersonEditor(
             imageSelected = { uri ->
                 onUriChange(uri)
             },
-            enabled = !readOnly,
+            enabled = enabled,
             modifier = Modifier.padding(top = 10.dp)
         )
     }
@@ -117,6 +193,11 @@ fun PersonEditorPreview(){
         person = PersonDefault("Nemes Axel Roland", "nemesa", "Axi", "neaxro@gmail.com"),
         readOnly = false,
         newPassword = true,
-        onUriChange = {}
+        onUriChange = {},
+        enabled = true,
+        onPasswordsChange = { a, b ->
+
+        },
+        errors = setOf()
     )
 }
