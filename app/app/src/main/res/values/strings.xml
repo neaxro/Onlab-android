@@ -136,4 +136,8 @@
     <string name="composable_image">Image</string>
     <string name="composable_choose_image">Choose Image</string>
     <string name="composable_full_name">Full name</string>
+    <string name="composable_1f_hours">%.1f hours</string>
+    <string name="composable_fromto">FromTo</string>
+    <string name="composable_1f_ft_hour">%.1f Ft/hour</string>
+    <string name="composable_1f_ft">%.1f Ft</string>
 </resources>
