@@ -37,7 +37,11 @@
     <string name="repository_message_wage_successfully_changed_for_person">Wage successfully changed for person!</string>
     <string name="repository_message_role_successfully_changed_for_person">Role successfully changed for person!</string>
     <string name="repository_message_job_successfully_updated">Job successfully updated!</string>
-    
+
     <string name="repository_message_successfully_logged_in">Successfully logged in!</string>
+    <string name="repository_message_person_successfully_queried">Person successfully queried!</string>
+    <string name="repository_message_person_successfully_updated">Person successfully updated!</string>
+    <string name="repository_message_profile_picture_successfully_uploaded">Profile picture successfully uploaded!</string>
+    <string name="repository_message_person_s_profile_picture_successfully_queried">Person\'s profile picture successfully queried!</string>
 
 </resources>
