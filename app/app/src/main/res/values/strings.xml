@@ -106,4 +106,5 @@
     <string name="composable_min_max_length_indicator">%1$s/%2$s</string>
     <string name="composable_invalid_value">Invalid value</string>
     <string name="composable_valid_value">Valid value</string>
+    <string name="composable_icon">Icon</string>
 </resources>
