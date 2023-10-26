@@ -113,4 +113,6 @@
     <string name="composable_profile_picture">Profile picture</string>
     <string name="composable_search">Search</string>
     <string name="composable_navigate_back">Navigate back</string>
+    <string name="composable_total_salary">Total Salary:</string>
+    <string name="composable_s_ft">%s Ft</string>
 </resources>
