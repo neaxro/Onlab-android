@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">SecurityApp</string>
     <string name="shared_preferences_file_name">thingsToRemember</string>
+
     <string name="validator_error_fullname_is_empty">Fullname is empty!</string>
     <string name="validator_error_fullname_is_too_long">Fullname is too long!</string>
     <string name="validator_error_contains_numbers">Contains numbers!</string>
@@ -17,4 +18,13 @@
     <string name="validator_error_title_is_empty">Title is empty!</string>
     <string name="validator_error_title_is_too_long">Title is too long!</string>
     <string name="validator_error_passwords_do_not_match">Passwords do not match!</string>
+    
+    <string name="repository_message_all_dashboards_successfully_queried">All dashboards successfully queried!</string>
+    <string name="repository_message_network_error_occurred">Network error occurred: %1$s</string>
+    <string name="repository_message_dashboard_with_id_successfully_queried">Dashboard with ID %1$s successfully queried!</string>
+    <string name="repository_message_all_dashboards_successfully_queried_fow_jobid">All dashboards successfully queried fow JobId: %1$s!</string>
+    <string name="repository_message_dashboard_successfully_created">Dashboard successfully created!</string>
+    <string name="repository_message_dashboard_successfully_updated">Dashboard successfully updated!</string>
+    <string name="repository_message_dashboard_successfully_deleted">Dashboard successfully deleted!</string>
+
 </resources>
