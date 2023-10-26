@@ -111,4 +111,5 @@
     <string name="composable_hide_password">Hide password</string>
     <string name="composable_show_password">Show password</string>
     <string name="composable_profile_picture">Profile picture</string>
+    <string name="composable_search">Search</string>
 </resources>
