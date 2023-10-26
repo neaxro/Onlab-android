@@ -133,4 +133,6 @@
     <string name="composable_email_address">Email address</string>
     <string name="composable_password">Password</string>
     <string name="composable_password_again">Password again</string>
+    <string name="composable_image">Image</string>
+    <string name="composable_choose_image">Choose Image</string>
 </resources>

@@ -19,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 
 @Composable
 fun PhotoPicker(
@@ -48,9 +50,9 @@ fun PhotoPicker(
         modifier = modifier
     ) {
         Row {
-            Icon(imageVector = Icons.Default.Image, contentDescription = "Image")
+            Icon(imageVector = Icons.Default.Image, contentDescription = stringResource(R.string.composable_image))
             Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-            Text(text = "Choose Image")
+            Text(text = stringResource(R.string.composable_choose_image))
         }
     }
 }
