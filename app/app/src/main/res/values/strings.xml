@@ -18,7 +18,7 @@
     <string name="validator_error_title_is_empty">Title is empty!</string>
     <string name="validator_error_title_is_too_long">Title is too long!</string>
     <string name="validator_error_passwords_do_not_match">Passwords do not match!</string>
-    
+
     <string name="repository_message_all_dashboards_successfully_queried">All dashboards successfully queried!</string>
     <string name="repository_message_network_error_occurred">Network error occurred: %1$s</string>
     <string name="repository_message_dashboard_with_id_successfully_queried">Dashboard with ID %1$s successfully queried!</string>
@@ -26,5 +26,16 @@
     <string name="repository_message_dashboard_successfully_created">Dashboard successfully created!</string>
     <string name="repository_message_dashboard_successfully_updated">Dashboard successfully updated!</string>
     <string name="repository_message_dashboard_successfully_deleted">Dashboard successfully deleted!</string>
+
+    <string name="repository_message_all_jobs_successfully_queried_for_person_with_id">All jobs successfully queried for person with ID: %1$s!</string>
+    <string name="repository_message_person_data_successfully_queried">Person data successfully queried!</string>
+    <string name="repository_message_job_successfully_created">Job successfully created!</string>
+    <string name="repository_message_successfully_connected_to_job">Successfully connected to job!</string>
+    <string name="repository_message_job_successfully_queried_with_id">Job successfully queried with ID: %1$s!</string>
+    <string name="repository_message_job_successfully_selected">Job successfully selected!</string>
+    <string name="repository_message_all_person_successfully_queried_in_job_with_id">All person successfully queried in job with ID: %1$s!</string>
+    <string name="repository_message_wage_successfully_changed_for_person">Wage successfully changed for person!</string>
+    <string name="repository_message_role_successfully_changed_for_person">Role successfully changed for person!</string>
+    <string name="repository_message_job_successfully_updated">Job successfully updated!</string>
 
 </resources>
