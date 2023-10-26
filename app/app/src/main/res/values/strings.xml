@@ -61,4 +61,11 @@
     <string name="repository_message_successfully_queried_all_judged_shifts">Successfully queried all judged shifts!</string>
     <string name="repository_message_successfully_updated_shift">Successfully updated shift!</string>
     <string name="repository_message_successfully_get_job_statistics_for_job_id">Successfully get job statistics for job ID: %1$s!</string>
+    <!-- WageRepository -->
+    <string name="repository_message_successfully_get_categories">Successfully get categories!</string>
+    <string name="repository_message_successfully_queried_all_wages">Successfully queried all wages!</string>
+    <string name="repository_message_successfully_queried_wage_with_id">Successfully queried wage with ID: %1$s!</string>
+    <string name="repository_message_successfully_updated_wage">Successfully updated wage!</string>
+    <string name="repository_message_wage_successfully_deleted">Wage successfully deleted!</string>
+    <string name="repository_message_successfully_created_a_new_wage">Successfully created a new wage!</string>
 </resources>
