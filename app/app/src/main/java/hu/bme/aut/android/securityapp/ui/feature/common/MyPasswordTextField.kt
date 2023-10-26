@@ -14,9 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import hu.bme.aut.android.securityapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +48,11 @@ fun MyPasswordTextField(
                 Icons.Filled.VisibilityOff
             }
 
-            val description = if(passwordVisible) "Hide password" else "Show password"
+            val description = if(passwordVisible) {
+                stringResource(R.string.composable_hide_password)
+            } else {
+                stringResource(R.string.composable_show_password)
+            }
 
             IconButton(onClick = {
                 passwordVisible = !passwordVisible

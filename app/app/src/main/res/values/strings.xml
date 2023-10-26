@@ -108,4 +108,6 @@
     <string name="composable_valid_value">Valid value</string>
     <string name="composable_icon">Icon</string>
     <string name="composable_confirm">Confirm</string>
+    <string name="composable_hide_password">Hide password</string>
+    <string name="composable_show_password">Show password</string>
 </resources>
