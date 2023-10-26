@@ -152,4 +152,6 @@
     <string name="composable_name">Name</string>
     <string name="composable_price">Price</string>
     <string name="composable_ft_hour">Ft/hour</string>
+    <string name="composable_value_ft_hour">%1$s Ft/hour</string>
+    <string name="composable_edit_category">Edit category</string>
 </resources>
