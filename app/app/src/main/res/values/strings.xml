@@ -50,4 +50,15 @@
     <string name="repository_message_successfully_queried_all_roles">Successfully queried all roles!</string>
     <string name="repository_message_successfully_get_all_choosable_roles">Successfully get all choosable roles!</string>
     <string name="repository_message_successfully_queried_role">Successfully queried role!</string>
+    <!-- ShiftRepository -->
+    <string name="repository_message_successfully_queried_active_shift_for_person_in_job">Successfully queried active shift for person in job!</string>
+    <string name="repository_message_successfully_queried_shift_with_id">Successfully queried shift with ID: %1$s!</string>
+    <string name="repository_message_successfully_created_a_new_shift">Successfully created a new shift!</string>
+    <string name="repository_message_successfully_ended_shift">Successfully ended shift!</string>
+    <string name="repository_message_successfully_queried_all_pending_shifts_in_job_with_id">Successfully queried all pending shifts in job with ID: %1$s!</string>
+    <string name="repository_message_successfully_accepted_shift">Successfully accepted shift!</string>
+    <string name="repository_message_successfully_declined_shift">Successfully declined shift!</string>
+    <string name="repository_message_successfully_queried_all_judged_shifts">Successfully queried all judged shifts!</string>
+    <string name="repository_message_successfully_updated_shift">Successfully updated shift!</string>
+    <string name="repository_message_successfully_get_job_statistics_for_job_id">Successfully get job statistics for job ID: %1$s!</string>
 </resources>
