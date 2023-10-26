@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">SecurityApp</string>
     <string name="shared_preferences_file_name">thingsToRemember</string>
+    <string name="validator_error_fullname_is_empty">Fullname is empty!</string>
+    <string name="validator_error_fullname_is_too_long">Fullname is too long!</string>
+    <string name="validator_error_contains_numbers">Contains numbers!</string>
+    <string name="validator_error_contains_special_characters">Contains special characters!</string>
+    <string name="validator_error_starts_or_ends_witch_whitespace">Starts or ends witch whitespace!</string>
+    <string name="validator_error_contains_more_than_3_words">Contains more than 3 words!</string>
+    <string name="validator_error_invalid_characters">Invalid characters!</string>
+    <string name="validator_error_contains_capital_letters">Contains capital letters!</string>
+    <string name="validator_error_nickname_must_contains_only_letters">Nickname must contains only letters!</string>
+    <string name="validator_error_invalid_format">Invalid format!</string>
+    <string name="validator_error_password_is_too_short">Password is too short!</string>
+    <string name="validator_error_password_is_too_long">Password is too long!</string>
+    <string name="validator_error_pin_must_be_long">Pin must be %1$s long!</string>
+    <string name="validator_error_title_is_empty">Title is empty!</string>
+    <string name="validator_error_title_is_too_long">Title is too long!</string>
+    <string name="validator_error_passwords_do_not_match">Passwords do not match!</string>
 </resources>

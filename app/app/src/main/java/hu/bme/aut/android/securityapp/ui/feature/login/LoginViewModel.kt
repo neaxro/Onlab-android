@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.viewmodel
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,6 +29,7 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val jobRepository: JobRepository,
     private val sharedPreferences: SharedPreferences,
+    private val applicationContext: Context
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -99,7 +101,7 @@ class LoginViewModel @Inject constructor(
 
                 _errors.update {
                     it.copy(
-                        userName = validateUserUsername(action.username.trim()) != DataFieldErrors.NoError
+                        userName = validateUserUsername(action.username.trim(), applicationContext) != DataFieldErrors.NoError
                     )
                 }
             }
@@ -113,7 +115,7 @@ class LoginViewModel @Inject constructor(
 
                 _errors.update {
                     it.copy(
-                        password = validateUserPassword(action.password.trim()) != DataFieldErrors.NoError
+                        password = validateUserPassword(action.password.trim(), applicationContext) != DataFieldErrors.NoError
                     )
                 }
             }

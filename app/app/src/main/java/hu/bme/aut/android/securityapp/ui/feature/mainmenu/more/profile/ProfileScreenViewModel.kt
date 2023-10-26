@@ -31,6 +31,7 @@ import javax.inject.Inject
 class ProfileScreenViewModel @Inject constructor(
     private val personRepository: PersonRepository,
     private val sharedPreferences: SharedPreferences,
+    private val applicationContext: Context
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -178,18 +179,19 @@ class ProfileScreenViewModel @Inject constructor(
     private fun validateFields(){
         val errors = mutableSetOf<DataFieldErrors>()
 
-        errors.add(validateUserFullName(fullname = _userData.value.fullName))
-        errors.add(validateUserUsername(username = _userData.value.username))
-        errors.add(validateUserNickname(nickname = _userData.value.nickname))
-        errors.add(validateUserEmail(email = _userData.value.email))
+        errors.add(validateUserFullName(fullname = _userData.value.fullName, applicationContext))
+        errors.add(validateUserUsername(username = _userData.value.username, applicationContext))
+        errors.add(validateUserNickname(nickname = _userData.value.nickname, applicationContext))
+        errors.add(validateUserEmail(email = _userData.value.email, applicationContext))
 
         if(_passwordChangeData.value.password.isNotEmpty() || _passwordChangeData.value.passwordChange.isNotEmpty()) {
-            errors.add(validateUserPassword(password = _passwordChangeData.value.password))
-            errors.add(validateUserPassword(password = _passwordChangeData.value.passwordChange))
+            errors.add(validateUserPassword(password = _passwordChangeData.value.password, applicationContext))
+            errors.add(validateUserPassword(password = _passwordChangeData.value.passwordChange, applicationContext))
             errors.add(
                 validatePasswordsMatch(
                     password = _passwordChangeData.value.password,
-                    passwordChange = _passwordChangeData.value.passwordChange
+                    passwordChange = _passwordChangeData.value.passwordChange,
+                    applicationContext
                 )
             )
         }
