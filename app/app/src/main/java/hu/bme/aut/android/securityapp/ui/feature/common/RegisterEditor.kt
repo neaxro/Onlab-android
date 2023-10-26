@@ -10,9 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +48,7 @@ fun RegisterEditor(
             value = fullName,
             onValueChange = { fullNameChange(it) },
             label = {
-                Text(text = "Full name")
+                Text(text = stringResource(R.string.composable_full_name))
             },
             singleLine = true,
             modifier = Modifier.padding(5.dp),
@@ -57,7 +59,7 @@ fun RegisterEditor(
             value = userName,
             onValueChange = { userNameChange(it) },
             label = {
-                Text(text = "Username")
+                Text(text = stringResource(id = R.string.composable_username))
             },
             singleLine = true,
             modifier = Modifier.padding(5.dp),
@@ -68,7 +70,7 @@ fun RegisterEditor(
             value = nickName,
             onValueChange = { nickNameChange(it) },
             label = {
-                Text(text = "Nickname")
+                Text(text = stringResource(id = R.string.composable_nickname))
             },
             singleLine = true,
             modifier = Modifier.padding(5.dp),
@@ -79,7 +81,7 @@ fun RegisterEditor(
             value = emailAddress,
             onValueChange = { emailAddressChange(it) },
             label = {
-                Text(text = "Email address")
+                Text(text = stringResource(id = R.string.composable_email_address))
             },
             singleLine = true,
             modifier = Modifier.padding(5.dp),
@@ -93,7 +95,7 @@ fun RegisterEditor(
                 passwordChange(it)
             },
             isError = passwordError,
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(id = R.string.composable_password)) },
             modifier = Modifier
                 .padding(bottom = 5.dp),
         )
@@ -104,7 +106,7 @@ fun RegisterEditor(
                 passwordConfirmChange(it)
             },
             isError = passwordConfirmError,
-            label = { Text(text = "Password again") },
+            label = { Text(text = stringResource(id = R.string.composable_password_again)) },
             modifier = Modifier,
         )
     }

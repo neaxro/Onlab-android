@@ -135,4 +135,5 @@
     <string name="composable_password_again">Password again</string>
     <string name="composable_image">Image</string>
     <string name="composable_choose_image">Choose Image</string>
+    <string name="composable_full_name">Full name</string>
 </resources>
