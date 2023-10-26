@@ -77,6 +77,7 @@
     <string name="wrappers_screen_state_loading">Loading...</string>
     <string name="wrappers_screen_state_finished">Finished!</string>
     <string name="wrappers_screen_state_success">Success!</string>
+    <!-- Composable -->
     <string name="composable_something_went_wrong">Something went wrong...</string>
     <string name="composable_show_snackbar">Show snackbar</string>
     <string name="composable_ok">Ok</string>
@@ -86,4 +87,10 @@
     <string name="composable_creator">Creator</string>
     <string name="composable_role">Role</string>
     <string name="composable_nan">NaN</string>
+    <string name="composable_title">Title</string>
+    <string name="composable_invalid_title">Invalid Title</string>
+    <string name="composable_valid_title">Valid Title</string>
+    <string name="composable_message">Message</string>
+    <string name="composable_category">Category</string>
+    <string name="composable_categories">Categories</string>
 </resources>
