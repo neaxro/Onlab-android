@@ -140,4 +140,9 @@
     <string name="composable_fromto">FromTo</string>
     <string name="composable_1f_ft_hour">%.1f Ft/hour</string>
     <string name="composable_1f_ft">%.1f Ft</string>
+    <string name="composable_accept_shift">Accept Shift</string>
+    <string name="composable_do_you_want_to_accept_the_shift">Do you want to accept the shift?</string>
+    <string name="composable_cancel">Cancel</string>
+    <string name="composable_deny_shift">Deny Shift</string>
+    <string name="composable_do_you_want_to_deny_the_shift">Do you want to deny the shift?</string>
 </resources>

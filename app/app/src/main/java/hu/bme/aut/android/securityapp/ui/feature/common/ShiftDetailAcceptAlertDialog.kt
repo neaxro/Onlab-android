@@ -4,6 +4,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts.ShiftDetailAlertDialogState
 
 @Composable
@@ -16,10 +18,10 @@ fun ShiftDetailAcceptAlertDialog(
     if(state == ShiftDetailAlertDialogState.AcceptIntent) {
         AlertDialog(
             title = {
-                Text(text = "Accept Shift")
+                Text(text = stringResource(R.string.composable_accept_shift))
             },
             text = {
-                Text(text = "Do you want to accept the shift?")
+                Text(text = stringResource(R.string.composable_do_you_want_to_accept_the_shift))
             },
             onDismissRequest = {
                 dismiss()
@@ -30,7 +32,7 @@ fun ShiftDetailAcceptAlertDialog(
                         accept()
                     }
                 ) {
-                    Text("Accept")
+                    Text(stringResource(R.string.composable_accept))
                 }
             },
             dismissButton = {
@@ -39,7 +41,7 @@ fun ShiftDetailAcceptAlertDialog(
                         dismiss()
                     }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.composable_cancel))
                 }
             }
         )
@@ -47,10 +49,10 @@ fun ShiftDetailAcceptAlertDialog(
     else if (state == ShiftDetailAlertDialogState.DenyIntent){
         AlertDialog(
             title = {
-                Text(text = "Deny Shift")
+                Text(text = stringResource(R.string.composable_deny_shift))
             },
             text = {
-                Text(text = "Do you want to deny the shift?")
+                Text(text = stringResource(R.string.composable_do_you_want_to_deny_the_shift))
             },
             onDismissRequest = {
                 dismiss()
@@ -61,7 +63,7 @@ fun ShiftDetailAcceptAlertDialog(
                         deny()
                     }
                 ) {
-                    Text("Deny")
+                    Text(stringResource(R.string.composable_deny))
                 }
             },
             dismissButton = {
@@ -70,7 +72,7 @@ fun ShiftDetailAcceptAlertDialog(
                         dismiss()
                     }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.composable_cancel))
                 }
             }
         )
