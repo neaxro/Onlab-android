@@ -94,4 +94,5 @@
     <string name="composable_category">Category</string>
     <string name="composable_categories">Categories</string>
     <string name="composable_enable_gps_position">Enable GPS Position</string>
+    <string name="composable_show_details">Show details</string>
 </resources>
