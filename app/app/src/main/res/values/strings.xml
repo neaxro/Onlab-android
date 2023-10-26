@@ -80,4 +80,10 @@
     <string name="composable_something_went_wrong">Something went wrong...</string>
     <string name="composable_show_snackbar">Show snackbar</string>
     <string name="composable_ok">Ok</string>
+    <string name="composable_person">Person</string>
+    <string name="composable_details">Details</string>
+    <string name="composable_creation_date">Creation date</string>
+    <string name="composable_creator">Creator</string>
+    <string name="composable_role">Role</string>
+    <string name="composable_nan">NaN</string>
 </resources>

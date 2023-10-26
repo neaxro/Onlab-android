@@ -33,11 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.model.dashboard.getCreationDate
@@ -88,7 +90,7 @@ fun DashboardCard(
 
                     Image(
                         bitmap = image.asImageBitmap(),
-                        contentDescription = "Person",
+                        contentDescription = stringResource(R.string.composable_person),
                         modifier = Modifier
                             .size(40.dp)
                             .clip(RoundedCornerShape(30.dp))
@@ -96,7 +98,7 @@ fun DashboardCard(
                 } else {
                     Image(
                         imageVector = Icons.Default.Person,
-                        contentDescription = "Person",
+                        contentDescription = stringResource(R.string.composable_person),
                         modifier = Modifier
                             .size(40.dp)
                             .clip(RoundedCornerShape(30.dp))
@@ -105,7 +107,10 @@ fun DashboardCard(
 
                 if(LoggedPerson.getRole() is Roles.Owner || LoggedPerson.getRole() is Roles.Admin) {
                     IconButton(onClick = { onDetails(dashboard.id) }) {
-                        Image(imageVector = Icons.Default.MoreHoriz, contentDescription = "Details")
+                        Image(imageVector = Icons.Default.MoreHoriz, contentDescription = stringResource(
+                            R.string.composable_details
+                        )
+                        )
                     }
                 }
             }
@@ -122,7 +127,7 @@ fun DashboardCard(
             DoubleDataRow(
                 title = {
                     Text(
-                        text = "Creation date",
+                        text = stringResource(R.string.composable_creation_date),
                         fontWeight = FontWeight.Light,
                     )
                 },
@@ -137,7 +142,7 @@ fun DashboardCard(
             DoubleDataRow(
                 title = {
                     Text(
-                        text = "Creator",
+                        text = stringResource(R.string.composable_creator),
                         fontWeight = FontWeight.Medium,
                     )
                 },
@@ -152,13 +157,15 @@ fun DashboardCard(
             DoubleDataRow(
                 title = {
                     Text(
-                        text = "Role",
+                        text = stringResource(R.string.composable_role),
                         fontWeight = FontWeight.Normal,
                     )
                 },
                 value = {
                     Text(
-                        text = categories.firstOrNull { it.id == dashboard.groupId }?.name ?: "NaN",
+                        text = categories.firstOrNull { it.id == dashboard.groupId }?.name ?: stringResource(
+                            R.string.composable_nan
+                        ),
                         fontWeight = FontWeight.Normal
                     )
                 }
