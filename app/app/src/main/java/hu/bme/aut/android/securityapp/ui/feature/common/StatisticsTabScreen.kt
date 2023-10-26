@@ -16,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import hu.bme.aut.android.securityapp.R
 
 @Composable
 fun StatisticsTabScreen(
@@ -24,7 +26,12 @@ fun StatisticsTabScreen(
     modifier: Modifier = Modifier
 ) {
     var tabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("All", "Accepted", "Denied", "Pending")
+    val tabs = listOf(
+        stringResource(R.string.composable_all),
+        stringResource(R.string.composable_accepted),
+        stringResource(R.string.composable_denied),
+        stringResource(R.string.composable_pending)
+    )
 
     TabRow(
         selectedTabIndex = tabIndex,
@@ -40,10 +47,10 @@ fun StatisticsTabScreen(
                 },
                 icon = {
                     when(index){
-                        0 -> Image(imageVector = Icons.Default.AllInclusive, contentDescription = "All")
-                        1 -> Image(imageVector = Icons.Default.Check, contentDescription = "Accepted")
-                        2 -> Image(imageVector = Icons.Default.Close, contentDescription = "Denied")
-                        3 -> Image(imageVector = Icons.Default.QuestionMark, contentDescription = "Pending")
+                        0 -> Image(imageVector = Icons.Default.AllInclusive, contentDescription = stringResource(R.string.composable_all))
+                        1 -> Image(imageVector = Icons.Default.Check, contentDescription = stringResource(R.string.composable_accepted))
+                        2 -> Image(imageVector = Icons.Default.Close, contentDescription = stringResource(R.string.composable_denied))
+                        3 -> Image(imageVector = Icons.Default.QuestionMark, contentDescription = stringResource(R.string.composable_pending))
                     }
                 }
             )
