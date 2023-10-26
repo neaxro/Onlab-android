@@ -77,4 +77,7 @@
     <string name="wrappers_screen_state_loading">Loading...</string>
     <string name="wrappers_screen_state_finished">Finished!</string>
     <string name="wrappers_screen_state_success">Success!</string>
+    <string name="composable_something_went_wrong">Something went wrong...</string>
+    <string name="composable_show_snackbar">Show snackbar</string>
+    <string name="composable_ok">Ok</string>
 </resources>

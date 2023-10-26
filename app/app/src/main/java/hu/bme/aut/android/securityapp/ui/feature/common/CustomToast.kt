@@ -12,7 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,12 +27,14 @@ fun MySnackBar(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
 ) {
+    val context = LocalContext.current
+
     LaunchedEffect(screenState) {
         screenState.collect{ newState ->
             scope.launch {
                 snackbarHostState.showSnackbar(
                     message = newState.message,
-                    actionLabel = "Ok",
+                    actionLabel = context.getString(R.string.composable_ok),
                     duration = SnackbarDuration.Short
                 )
             }
@@ -45,7 +50,7 @@ fun CustomToastDemo() {
     val screenStates = listOf(
         ScreenState.Loading(),
         ScreenState.Success(),
-        ScreenState.Error(message = "Something went wrong..."),
+        ScreenState.Error(message = stringResource(R.string.composable_something_went_wrong)),
         ScreenState.Finished(),
     )
 
@@ -59,7 +64,7 @@ fun CustomToastDemo() {
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                text = { Text("Show snackbar") },
+                text = { Text(stringResource(R.string.composable_show_snackbar)) },
                 icon = { Icon(Icons.Filled.Image, contentDescription = "") },
                 onClick = {
                     index++
@@ -68,15 +73,6 @@ fun CustomToastDemo() {
                     }
 
                     screenState.value = screenStates[index]
-
-                    /*scope.launch {
-                        val result = snackbarHostState
-                            .showSnackbar(
-                                message = screenState.value.message,
-                                actionLabel = "Ok",
-                                duration = SnackbarDuration.Short
-                            )
-                    }*/
                 }
             )
         }
