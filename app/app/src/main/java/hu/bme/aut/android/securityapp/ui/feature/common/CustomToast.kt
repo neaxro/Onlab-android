@@ -45,7 +45,7 @@ fun CustomToastDemo() {
     val screenStates = listOf(
         ScreenState.Loading(),
         ScreenState.Success(),
-        ScreenState.Error("Something went wrong..."),
+        ScreenState.Error(message = "Something went wrong..."),
         ScreenState.Finished(),
     )
 

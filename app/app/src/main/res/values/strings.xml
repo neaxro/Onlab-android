@@ -68,8 +68,13 @@
     <string name="repository_message_successfully_updated_wage">Successfully updated wage!</string>
     <string name="repository_message_wage_successfully_deleted">Wage successfully deleted!</string>
     <string name="repository_message_successfully_created_a_new_wage">Successfully created a new wage!</string>
+    <!-- WrappersRole -->
     <string name="wrappers_roles_owner">Owner</string>
     <string name="wrappers_roles_admin">Admin</string>
     <string name="wrappers_roles_user">User</string>
     <string name="wrappers_roles_anonymous">Anonymous</string>
+    <!-- WrappersScreenState -->
+    <string name="wrappers_screen_state_loading">Loading...</string>
+    <string name="wrappers_screen_state_finished">Finished!</string>
+    <string name="wrappers_screen_state_success">Success!</string>
 </resources>
