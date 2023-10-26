@@ -22,10 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,13 +60,13 @@ fun WageEditor(
                 }
             },
             label = {
-                Text(text = "Name")
+                Text(text = stringResource(R.string.composable_name))
             },
             isError = isNameError,
             singleLine = true,
             supportingText = {
                 Text(
-                    text = "${name.length}/$maxNameLength",
+                    text = stringResource(R.string.composable_min_max_length_indicator, name.length, maxNameLength),
                     textAlign = TextAlign.End,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -73,13 +75,13 @@ fun WageEditor(
                 if (isNameError) {
                     Icon(
                         imageVector = Icons.Rounded.Error,
-                        contentDescription = "Invalid Title",
+                        contentDescription = stringResource(id = R.string.composable_invalid_title),
                         tint = Color.Red
                     )
                 } else if (name.length > 0) {
                     Icon(
                         imageVector = Icons.Rounded.Check,
-                        contentDescription = "Valid Title",
+                        contentDescription = stringResource(id = R.string.composable_valid_title),
                         tint = Color.Green
                     )
                 }
@@ -105,11 +107,11 @@ fun WageEditor(
             },
             singleLine = true,
             label = {
-                Text(text = "Price")
+                Text(text = stringResource(R.string.composable_price))
             },
             isError = isPriceError,
             trailingIcon = {
-                Text(text = "Ft/hour", modifier = Modifier.padding(end = 10.dp))
+                Text(text = stringResource(R.string.composable_ft_hour), modifier = Modifier.padding(end = 10.dp))
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             readOnly = isReadOnly,
