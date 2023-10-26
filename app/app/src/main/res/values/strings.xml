@@ -115,4 +115,15 @@
     <string name="composable_navigate_back">Navigate back</string>
     <string name="composable_total_salary">Total Salary:</string>
     <string name="composable_s_ft">%s Ft</string>
+    <string name="composable_edit_shift">Edit Shift</string>
+    <string name="composable_start_of_the_shift">Start of the shift:</string>
+    <string name="composable_end_of_the_shift">End of the shift:</string>
+    <string name="composable_wage_name">Wage name:</string>
+    <string name="composable_total_hours">Total hours:</string>
+    <string name="composable_total_money">Total money:</string>
+    <string name="composable__0f_ft_h">%.0f Ft/h</string>
+    <string name="composable__1f_ft_h">%.1f Ft/h</string>
+    <string name="composable__1f_ft">%.1f Ft</string>
+    <string name="composable_deny">Deny</string>
+    <string name="composable_accept">Accept</string>
 </resources>

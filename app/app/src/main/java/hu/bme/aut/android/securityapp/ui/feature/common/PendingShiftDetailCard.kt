@@ -24,10 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.shift.getEndDate
@@ -88,7 +90,7 @@ fun PendingShiftDetailCard(
                         .height(IntrinsicSize.Max),
                 ) {
                     FilledIconButton(onClick = { editShift() }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Shift")
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(R.string.composable_edit_shift))
                     }
                 }
             }
@@ -96,7 +98,7 @@ fun PendingShiftDetailCard(
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
             DoubleDataRow(
-                title = { Text(text = "Start of the shift:") },
+                title = { Text(text = stringResource(R.string.composable_start_of_the_shift)) },
                 value = {
                     Column {
                         Text(text = shift.getStartDate())
@@ -109,7 +111,7 @@ fun PendingShiftDetailCard(
             Spacer(modifier = Modifier.padding(top = 5.dp))
 
             DoubleDataRow(
-                title = { Text(text = "End of the shift:") },
+                title = { Text(text = stringResource(R.string.composable_end_of_the_shift)) },
                 value = {
                     Column {
                         Text(text = shift.getEndDate())
@@ -122,27 +124,27 @@ fun PendingShiftDetailCard(
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
             DoubleDataRow(
-                title = { Text(text = "Wage name:") },
+                title = { Text(text = stringResource(R.string.composable_wage_name)) },
                 value = { Text(text = shift.wage.name) },
             )
 
             DoubleDataRow(
-                title = { Text(text = "Wage:") },
-                value = { Text(text = String.format("%.0f Ft/h", shift.wage.price)) },
+                title = { Text(text = stringResource(id = R.string.composable_wage)) },
+                value = { Text(text = String.format(stringResource(R.string.composable__0f_ft_h), shift.wage.price)) },
             )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
             DoubleDataRow(
-                title = { Text(text = "Total hours:") },
-                value = { Text(text = String.format("%.1f Ft/h", shift.getTotalHours())) },
+                title = { Text(text = stringResource(R.string.composable_total_hours)) },
+                value = { Text(text = String.format(stringResource(R.string.composable__1f_ft_h), shift.getTotalHours())) },
             )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
             DoubleDataRow(
-                title = { Text(text = "Total money:") },
-                value = { Text(text = String.format("%.1f Ft", shift.earnedMoney)) },
+                title = { Text(text = stringResource(R.string.composable_total_money)) },
+                value = { Text(text = String.format(stringResource(R.string.composable__1f_ft), shift.earnedMoney)) },
             )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
@@ -158,7 +160,7 @@ fun PendingShiftDetailCard(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text(text = "Deny")
+                    Text(text = stringResource(R.string.composable_deny))
                 }
 
                 OutlinedButton(
@@ -167,7 +169,7 @@ fun PendingShiftDetailCard(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
                 ) {
-                    Text(text = "Accept")
+                    Text(text = stringResource(R.string.composable_accept))
                 }
             }
         }
