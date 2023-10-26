@@ -126,4 +126,5 @@
     <string name="composable__1f_ft">%.1f Ft</string>
     <string name="composable_deny">Deny</string>
     <string name="composable_accept">Accept</string>
+    <string name="composable_role_name">Role name</string>
 </resources>
