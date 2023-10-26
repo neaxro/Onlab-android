@@ -37,5 +37,7 @@
     <string name="repository_message_wage_successfully_changed_for_person">Wage successfully changed for person!</string>
     <string name="repository_message_role_successfully_changed_for_person">Role successfully changed for person!</string>
     <string name="repository_message_job_successfully_updated">Job successfully updated!</string>
+    
+    <string name="repository_message_successfully_logged_in">Successfully logged in!</string>
 
 </resources>

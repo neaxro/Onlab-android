@@ -1,6 +1,7 @@
 package hu.bme.aut.android.securityapp.data.repository
 
 import android.app.Application
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.people.LoginData
 import hu.bme.aut.android.securityapp.data.model.people.LoginResponse
 import hu.bme.aut.android.securityapp.data.remote.LoginApi
@@ -10,6 +11,9 @@ class LoginRepositoryImpl(
     private val api: LoginApi,
     private val app: Application
 ): LoginRepository {
+
+    private val context = app.applicationContext
+
     override suspend fun loginPerson(loginData: LoginData): Resource<LoginResponse> {
 
         val result = try{
@@ -17,7 +21,7 @@ class LoginRepositoryImpl(
 
             // Check server response
             val res = if(response.code() == 200){
-                    Resource.Success(message = "Successfully logged in!", data = response.body()!!)
+                    Resource.Success(message = context.getString(R.string.repository_message_successfully_logged_in), data = response.body()!!)
                 }
                 else{
                     // Server error
@@ -27,7 +31,11 @@ class LoginRepositoryImpl(
             res
         } catch (e: Exception){
             // Network error
-            Resource.Error(message = "Network error occurred: ${e.message}")
+            Resource.Error(
+                context.getString(
+                    R.string.repository_message_network_error_occurred,
+                    e.message
+                ))
         }
 
         return result
