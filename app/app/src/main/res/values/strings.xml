@@ -127,4 +127,10 @@
     <string name="composable_deny">Deny</string>
     <string name="composable_accept">Accept</string>
     <string name="composable_role_name">Role name</string>
+    <string name="composable_fullname">Fullname</string>
+    <string name="composable_username">Username</string>
+    <string name="composable_nickname">Nickname</string>
+    <string name="composable_email_address">Email address</string>
+    <string name="composable_password">Password</string>
+    <string name="composable_password_again">Password again</string>
 </resources>
