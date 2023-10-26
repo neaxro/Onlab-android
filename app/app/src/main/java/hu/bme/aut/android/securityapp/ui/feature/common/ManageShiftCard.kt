@@ -16,8 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
 import hu.bme.aut.android.securityapp.data.model.shift.getEarnedMoney
 import hu.bme.aut.android.securityapp.data.model.shift.getElapsedTimeString
@@ -49,7 +51,7 @@ fun ManageShiftCard(
         ) {
 
             DoubleDataRow(
-                title = { Text(text = "Started at:") },
+                title = { Text(text = stringResource(R.string.composable_started_at)) },
                 value = {
                     Column {
                         Text(text = shiftInformation?.getStartDate() ?: "-")
@@ -60,18 +62,18 @@ fun ManageShiftCard(
             )
 
             DoubleDataRow(
-                title = { Text(text = "Earned money:") },
+                title = { Text(text = stringResource(R.string.composable_earned_money)) },
                 value = { Text(text = shiftInformation?.getElapsedTimeString() ?: "-") },
             )
 
             DoubleDataRow(
-                title = { Text(text = "Elapsed time:") },
-                value = { Text(text = String.format("%.0f Ft", shiftInformation?.getEarnedMoney() ?: 0.0)) },
+                title = { Text(text = stringResource(R.string.composable_elapsed_time)) },
+                value = { Text(text = String.format(stringResource(R.string.composable_0f_ft), shiftInformation?.getEarnedMoney() ?: 0.0)) },
             )
 
             DoubleDataRow(
-                title = { Text(text = "Wage:") },
-                value = { Text(text = String.format("%.0f Ft/hour", shiftInformation?.wage?.price ?: wage.price)) },
+                title = { Text(text = stringResource(R.string.composable_wage)) },
+                value = { Text(text = String.format(stringResource(R.string.composable_0f_ft_hour), shiftInformation?.wage?.price ?: wage.price)) },
             )
 
             Spacer(modifier = Modifier.padding(top = 20.dp))
@@ -83,7 +85,7 @@ fun ManageShiftCard(
                     onWageChange(selectedWage)
                 },
                 icon = Icons.Outlined.Wallet,
-                label = "Wage",
+                label = stringResource(R.string.composable_wage),
                 isReadOnly = enabled,
                 item = shiftInformation?.wage?.name ?: wage.name
             )
@@ -91,8 +93,8 @@ fun ManageShiftCard(
             Spacer(modifier = Modifier.padding(top = 20.dp))
 
             MyToggleButton(
-                textA = "Start Shift",
-                textB = "Stop Shift",
+                textA = stringResource(R.string.composable_start_shift),
+                textB = stringResource(R.string.composable_stop_shift),
                 activeA = !enabled,
                 onPress = { state ->
                     onClick(state)

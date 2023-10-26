@@ -95,4 +95,12 @@
     <string name="composable_categories">Categories</string>
     <string name="composable_enable_gps_position">Enable GPS Position</string>
     <string name="composable_show_details">Show details</string>
+    <string name="composable_started_at">Started at:</string>
+    <string name="composable_earned_money">Earned money:</string>
+    <string name="composable_elapsed_time">Elapsed time:</string>
+    <string name="composable_0f_ft">%.0f Ft</string>
+    <string name="composable_wage">Wage:</string>
+    <string name="composable_0f_ft_hour">%.0f Ft/hour</string>
+    <string name="composable_start_shift">Start Shift</string>
+    <string name="composable_stop_shift">Stop Shift</string>
 </resources>
