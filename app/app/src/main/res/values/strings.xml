@@ -154,4 +154,8 @@
     <string name="composable_ft_hour">Ft/hour</string>
     <string name="composable_value_ft_hour">%1$s Ft/hour</string>
     <string name="composable_edit_category">Edit category</string>
+    <string name="composable_good_morning">Good Morning!</string>
+    <string name="composable_good_afternoon">Good Afternoon!</string>
+    <string name="composable_welcome_back">Welcome Back!</string>
+    <string name="composable_role_value">Role: %1$s</string>
 </resources>

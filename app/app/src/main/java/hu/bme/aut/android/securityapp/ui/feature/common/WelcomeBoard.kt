@@ -21,10 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import java.time.LocalTime
@@ -34,18 +37,19 @@ fun WelcomeBoard(
     person: Person,
     modifier: Modifier = Modifier
 ){
-    var greetingText by remember { mutableStateOf("Good Morning!") }
+    val context = LocalContext.current
+    var greetingText by remember { mutableStateOf(context.getString(R.string.composable_good_morning)) }
 
     LaunchedEffect(true){
         greetingText = when(LocalTime.now().hour){
             in 0..12 -> {
-                "Good Morning!"
+                context.getString(R.string.composable_good_morning)
             }
             in 13..18 -> {
-                "Good Afternoon!"
+                context.getString(R.string.composable_good_afternoon)
             }
             else -> {
-                "Welcome Back!"
+                context.getString(R.string.composable_welcome_back)
             }
         }
     }
@@ -81,7 +85,10 @@ fun WelcomeBoard(
                     fontSize = 15.sp,
                 )
                 Text(
-                    text = "Role: ${LoggedPerson.getRole().title}",
+                    text = stringResource(
+                        R.string.composable_role_value,
+                        LoggedPerson.getRole().title
+                    ),
                     fontWeight = FontWeight.Medium,
                     fontSize = 15.sp,
                 )
