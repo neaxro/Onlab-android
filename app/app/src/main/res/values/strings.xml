@@ -107,4 +107,5 @@
     <string name="composable_invalid_value">Invalid value</string>
     <string name="composable_valid_value">Valid value</string>
     <string name="composable_icon">Icon</string>
+    <string name="composable_confirm">Confirm</string>
 </resources>
