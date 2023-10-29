@@ -202,4 +202,6 @@
     <!-- Composable - MainMenu - Shift -->
     <string name="composable_shift_title">Shift</string>
     <string name="composable_reload">Reload</string>
+    <!-- Composable - MainMenu - More -->
+    <string name="composable_more_title">More</string>
 </resources>
