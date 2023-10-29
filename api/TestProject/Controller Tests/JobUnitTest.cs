@@ -22,7 +22,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SecurityApiTest
+namespace SecurityApiTest.Controller_Tests
 {
     public class JobUnitTest
     {
