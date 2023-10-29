@@ -176,4 +176,16 @@
     <string name="composable_register_now">Register Now</string>
     <string name="composable_already_have_account">Already have account?</string>
     <string name="composable_login_now">Login now</string>
+    <!-- Composable - MainMenu - Dashboard -->
+    <string name="composable_dashboard_title">Dashboard</string>
+    <string name="composable_create_new_message">Create new message</string>
+    <string name="composable_there_are_no_messages">There are no messages!</string>
+    <string name="composable_message_detail_title">Message Detail</string>
+    <string name="composable_delete_message">Delete message</string>
+    <string name="composable_edit_message">Edit message</string>
+    <string name="composable_update_message">Update message</string>
+    <string name="composable_update">Update</string>
+    <string name="composable_create_message_title">Create Message</string>
+    <string name="composable_save_dashboard">Save dashboard</string>
+    <string name="composable_save">Save</string>
 </resources>

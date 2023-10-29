@@ -26,10 +26,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardEditor
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.model.DashboardUi
@@ -50,7 +52,7 @@ fun DashboardDetailScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Message Detail",
+                title = stringResource(R.string.composable_message_detail_title),
                 onNavigate = navigateBack,
                 actions = {
                     IconButton(onClick = {
@@ -59,7 +61,7 @@ fun DashboardDetailScreen(
                     }) {
                         Image(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete message"
+                            contentDescription = stringResource(R.string.composable_delete_message)
                         )
                     }
                     IconButton(onClick = {
@@ -73,7 +75,7 @@ fun DashboardDetailScreen(
                     }) {
                         Image(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit message"
+                            contentDescription = stringResource(R.string.composable_edit_message)
                         )
                     }
                 },
@@ -116,11 +118,11 @@ fun DashboardDetailScreen(
                     Row {
                         Image(
                             imageVector = Icons.Default.Save,
-                            contentDescription = "Update message"
+                            contentDescription = stringResource(R.string.composable_update_message)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
 
-                        Text(text = "Update")
+                        Text(text = stringResource(R.string.composable_update))
                     }
                 }
             }
