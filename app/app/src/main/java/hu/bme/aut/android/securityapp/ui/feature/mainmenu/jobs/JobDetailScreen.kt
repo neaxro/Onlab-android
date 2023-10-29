@@ -37,11 +37,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
@@ -69,7 +71,9 @@ fun JobDetailScreen(
                 actions = {
                     if (job.owner.id == LoggedPerson.ID) {
                         IconButton(onClick = { navigateEditJob(job.id) }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(
+                                R.string.composable_edit
+                            ))
                         }
                     }
                 },
@@ -92,13 +96,13 @@ fun JobDetailScreen(
             DataTextBox(
                 text = job.description,
                 icon = Icons.Rounded.Description,
-                description = "Job description",
+                description = stringResource(R.string.composable_job_description),
             )
 
             DataTextBox(
                 text = job.pin,
                 icon = Icons.Rounded.Key,
-                description = "Connection PIN"
+                description = stringResource(R.string.composable_connection_pin)
             )
 
             Column(
@@ -113,7 +117,7 @@ fun JobDetailScreen(
                 if (job.owner.profilePicture != null) {
                     Image(
                         bitmap = job.owner.getProfileBitmap(),
-                        contentDescription = "Profile picture",
+                        contentDescription = stringResource(id = R.string.composable_profile_picture),
                         modifier = Modifier
                             .size(100.dp)
                             .clip(RoundedCornerShape(50.dp))
@@ -122,7 +126,7 @@ fun JobDetailScreen(
                 } else {
                     Image(
                         imageVector = Icons.Rounded.Person,
-                        contentDescription = "Profile picture",
+                        contentDescription = stringResource(id = R.string.composable_profile_picture),
                         modifier = Modifier
                             .size(100.dp)
                             .clip(RoundedCornerShape(50.dp))
@@ -134,21 +138,21 @@ fun JobDetailScreen(
                 DataTextBox(
                     text = job.owner.fullName,
                     icon = Icons.Rounded.Person,
-                    description = "Owner full name",
+                    description = stringResource(R.string.composable_owner_full_name),
                     backgroundColor = Color.White
                 )
 
                 DataTextBox(
                     text = job.owner.nickname,
                     icon = Icons.Rounded.Badge,
-                    description = "Owner nickname",
+                    description = stringResource(R.string.composable_owner_nickname),
                     backgroundColor = Color.White
                 )
 
                 DataTextBox(
                     text = job.owner.email,
                     icon = Icons.Rounded.Email,
-                    description = "Owner email address",
+                    description = stringResource(R.string.composable_owner_email_address),
                     backgroundColor = Color.White
                 )
             }

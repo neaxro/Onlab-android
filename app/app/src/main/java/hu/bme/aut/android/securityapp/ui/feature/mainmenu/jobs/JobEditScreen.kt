@@ -18,8 +18,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.Constants
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.ui.feature.common.MaxLengthOutlinedTextField
@@ -39,7 +41,7 @@ fun JobEditScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Edit Job",
+                title = stringResource(R.string.composable_edit_job_title),
                 onNavigate = { navigateBack() },
                 screenState = viewModel.screenState.collectAsState()
             )
@@ -61,7 +63,7 @@ fun JobEditScreen(
 
             MaxLengthOutlinedTextField(
                 value = job.title,
-                label = { Text("Title") },
+                label = { Text(stringResource(id = R.string.composable_title)) },
                 onValueChange = { newTitle ->
                     if(newTitle.length <= Constants.MAX_JOB_TITLE_LENGTH) {
                         viewModel.evoke(JobEditAction.UpdateTitle(title = newTitle))
@@ -77,7 +79,7 @@ fun JobEditScreen(
 
             MaxLengthOutlinedTextField(
                 value = job.description,
-                label = { Text("Description") },
+                label = { Text(stringResource(id = R.string.composable_description)) },
                 onValueChange = { newDescription ->
                     if(newDescription.length <= Constants.MAX_JOB_DESCRIPTION_LENGTH) {
                         viewModel.evoke(JobEditAction.UpdateDescription(description = newDescription))
@@ -99,9 +101,9 @@ fun JobEditScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
+                    Icon(imageVector = Icons.Default.Save, contentDescription = stringResource(id = R.string.composable_save))
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                    Text(text = "Update")
+                    Text(text = stringResource(id = R.string.composable_update))
                 }
             }
         }

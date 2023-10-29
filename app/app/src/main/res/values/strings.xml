@@ -188,4 +188,15 @@
     <string name="composable_create_message_title">Create Message</string>
     <string name="composable_save_dashboard">Save dashboard</string>
     <string name="composable_save">Save</string>
+    <!-- Composable - MainMenu - Jobs -->
+    <string name="composable_jobs_title">Jobs</string>
+    <string name="composable_create_new_job">Create new job</string>
+    <string name="composable_connect_for_job">Connect for job</string>
+    <string name="composable_edit_job_title">Edit Job</string>
+    <string name="composable_edit">Edit</string>
+    <string name="composable_job_description">Job description</string>
+    <string name="composable_connection_pin">Connection PIN</string>
+    <string name="composable_owner_full_name">Owner full name</string>
+    <string name="composable_owner_nickname">Owner nickname</string>
+    <string name="composable_owner_email_address">Owner email address</string>
 </resources>
