@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityApi", "SecurityApi\SecurityApi.csproj", "{8211FC68-C5A0-49A7-BDE9-641E92155D0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "..\TestProject\TestProject.csproj", "{AF02EF73-7505-4CCC-A4B5-E8F62FDC7DF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityApiTest", "..\TestProject\SecurityApiTest.csproj", "{AF02EF73-7505-4CCC-A4B5-E8F62FDC7DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
