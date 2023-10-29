@@ -64,7 +64,7 @@ class WageDetailScreenViewModel @Inject constructor(
                     _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                 }
                 is Resource.Error -> {
-                    _screenState.value = ScreenState.Error(result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
@@ -80,7 +80,7 @@ class WageDetailScreenViewModel @Inject constructor(
                     _screenState.value = ScreenState.Success(message = result.message!!, show = true)
                 }
                 is Resource.Error -> {
-                    _screenState.value = ScreenState.Error(result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }

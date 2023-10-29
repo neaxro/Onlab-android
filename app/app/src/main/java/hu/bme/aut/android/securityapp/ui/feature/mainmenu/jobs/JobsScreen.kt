@@ -21,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.JobCard
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
@@ -49,14 +51,14 @@ fun JobsScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Jobs",
+                title = stringResource(R.string.composable_jobs_title),
                 actions = {
                     IconButton(onClick = {
                         navigateToCreateJob()
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
-                            contentDescription = "Create new job"
+                            contentDescription = stringResource(R.string.composable_create_new_job)
                         )
                     }
 
@@ -65,7 +67,7 @@ fun JobsScreen(
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.AddLink,
-                            contentDescription = "Connect for job"
+                            contentDescription = stringResource(R.string.composable_connect_for_job)
                         )
                     }
                 },

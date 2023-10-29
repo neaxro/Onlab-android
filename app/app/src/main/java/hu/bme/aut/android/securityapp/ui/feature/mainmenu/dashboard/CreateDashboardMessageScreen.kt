@@ -18,9 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardEditor
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
@@ -38,7 +40,7 @@ fun CreateDashboardMessageScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Create Message",
+                title = stringResource(R.string.composable_create_message_title),
                 onNavigate = navigateBack,
                 screenState = viewModel.screenState.collectAsState()
             )
@@ -77,9 +79,9 @@ fun CreateDashboardMessageScreen(
                 enabled = message.title.isNotEmpty()
             ) {
                 Row {
-                    Image(imageVector = Icons.Default.Save, contentDescription = "Save dashboard")
+                    Image(imageVector = Icons.Default.Save, contentDescription = stringResource(R.string.composable_save_dashboard))
                     Spacer(modifier = Modifier.width(10.dp))
-                    Text(text = "Save")
+                    Text(text = stringResource(R.string.composable_save))
                 }
             }
         }

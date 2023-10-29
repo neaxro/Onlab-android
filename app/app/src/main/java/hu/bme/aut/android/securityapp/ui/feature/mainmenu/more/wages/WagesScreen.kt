@@ -18,8 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WageListItem
@@ -39,7 +41,7 @@ fun WagesScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Wage Categories",
+                title = stringResource(R.string.composable_wage_categories_title),
                 onNavigate = {
                     navigateBack()
                 },
@@ -47,7 +49,9 @@ fun WagesScreen(
                     IconButton(onClick = {
                         viewModel.evoke(WagesAction.Refresh)
                     }) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = stringResource(
+                            id = R.string.composable_refresh
+                        ))
                     }
                 },
                 screenState = viewModel.screenState.collectAsState()
@@ -55,7 +59,7 @@ fun WagesScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navigateToCreate() }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Create wage")
+                Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(R.string.composable_create_wage))
             }
         },
         snackbarHost = {

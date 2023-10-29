@@ -15,8 +15,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.constants.containsType
 import hu.bme.aut.android.securityapp.constants.getErrorMessage
@@ -50,7 +52,7 @@ fun PersonEditor(
                 onPersonChange(person.copy(fullName = it))
             },
             label = {
-                Text(text = "Fullname")
+                Text(text = stringResource(R.string.composable_fullname))
             },
             modifier = Modifier
                 .padding(bottom = 5.dp),
@@ -72,7 +74,7 @@ fun PersonEditor(
                 onPersonChange(person.copy(username = it))
             },
             label = {
-                Text(text = "Username")
+                Text(text = stringResource(R.string.composable_username))
             },
             modifier = Modifier
                 .padding(bottom = 5.dp),
@@ -94,7 +96,7 @@ fun PersonEditor(
                 onPersonChange(person.copy(nickname = it))
             },
             label = {
-                Text(text = "Nickname")
+                Text(text = stringResource(R.string.composable_nickname))
             },
             modifier = Modifier
                 .padding(bottom = 5.dp),
@@ -116,7 +118,7 @@ fun PersonEditor(
                 onPersonChange(person.copy(email = it))
             },
             label = {
-                Text(text = "Email address")
+                Text(text = stringResource(R.string.composable_email_address))
             },
             modifier = Modifier
                 .padding(bottom = 5.dp),
@@ -142,7 +144,7 @@ fun PersonEditor(
                 isError = errors.containsType(errorType = DataFieldErrors.PasswordError::class.java),
                 readOnly = readOnly,
                 enabled = enabled,
-                label = { Text(text = "Password") },
+                label = { Text(text = stringResource(R.string.composable_password)) },
                 modifier = Modifier
                     .padding(bottom = 5.dp),
                 supportingText = {
@@ -164,7 +166,7 @@ fun PersonEditor(
                         || errors.containsType(errorType = DataFieldErrors.PasswordMismatchError::class.java),
                 readOnly = readOnly,
                 enabled = enabled,
-                label = { Text(text = "Password again") },
+                label = { Text(text = stringResource(R.string.composable_password_again)) },
                 modifier = Modifier,
                 supportingText = {
                     errors.getErrorMessage(errorType = DataFieldErrors.PasswordMismatchError::class.java).let {

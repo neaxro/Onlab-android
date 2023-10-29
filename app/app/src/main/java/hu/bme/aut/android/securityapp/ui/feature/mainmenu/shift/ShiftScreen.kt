@@ -19,9 +19,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.ui.feature.common.ManageShiftCard
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
@@ -47,14 +49,16 @@ fun ShiftScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Shift",
+                title = stringResource(R.string.composable_shift_title),
                 actions = {
                     IconButton(
                         onClick = {
                             viewModel.evoke(ShiftAction.RefreshData)
                         }
                     ) {
-                        Icon(imageVector = Icons.Rounded.Refresh, contentDescription = "Reload")
+                        Icon(imageVector = Icons.Rounded.Refresh, contentDescription = stringResource(
+                            R.string.composable_reload
+                        ))
                     }
                 },
                 screenState = viewModel.screenState.collectAsState()

@@ -15,9 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 import hu.bme.aut.android.securityapp.ui.theme.LimeMain
 import java.text.DecimalFormat
@@ -47,13 +49,16 @@ fun WageListItem(
                 text = wage.name,
                 fontWeight = FontWeight.Bold
             )
-            Text(text = "${decimalFormatter.format(wage.price)} Ft/hour")
+            Text(text = stringResource(
+                R.string.composable_value_ft_hour,
+                decimalFormatter.format(wage.price)
+            ))
         }
 
         IconButton(
             onClick = { onEdit(wage) }
         ) {
-            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit category")
+            Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(R.string.composable_edit_category))
         }
     }
 }

@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.domain.wrappers.ScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,6 +28,7 @@ fun MySnackbarHost(
     actionPerformed: () -> Unit = {},
     dismissed: () -> Unit = {},
 ){
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -39,7 +42,7 @@ fun MySnackbarHost(
                     val actionResult = snackbarHostState
                         .showSnackbar(
                             message = newState.message,
-                            actionLabel = "Ok",
+                            actionLabel = context.getString(R.string.composable_ok),
                             duration = SnackbarDuration.Short
                         )
 

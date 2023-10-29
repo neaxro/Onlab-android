@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.jobs
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,6 +24,7 @@ import kotlin.properties.Delegates
 class JobEditViewModel @Inject constructor(
     private val jobRepository: JobRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val applicationContext: Context
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -68,8 +70,8 @@ class JobEditViewModel @Inject constructor(
     private fun checkErrors(){
         _errors.update {
             it.copy(
-                titleError = validateJobTitle(title = _updateJobData.value.title),
-                descriptionError = validateJobDescription(description = _updateJobData.value.description)
+                titleError = validateJobTitle(title = _updateJobData.value.title, applicationContext),
+                descriptionError = validateJobDescription(description = _updateJobData.value.description, applicationContext)
             )
         }
     }

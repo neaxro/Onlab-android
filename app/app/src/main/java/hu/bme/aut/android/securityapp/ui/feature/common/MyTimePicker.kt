@@ -16,7 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import hu.bme.aut.android.securityapp.R
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +48,7 @@ fun MyTimePicker(
             val selectedTime = date.copy(hour = timePickerState.hour, minute = timePickerState.minute)
             onConfirm(selectedTime)
         }) {
-            Text(text = "Confirm")
+            Text(text = stringResource(id = R.string.composable_confirm))
         }
     }
 }

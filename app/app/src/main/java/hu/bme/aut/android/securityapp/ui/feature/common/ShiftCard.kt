@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
@@ -68,7 +70,7 @@ fun ShiftCard(
                         color = LimeMain
                     )
                     Text(
-                        text = String.format("%.1f hours", shift.getTotalHours()),
+                        text = String.format(stringResource(R.string.composable_1f_hours), shift.getTotalHours()),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = LimeMain,
@@ -94,7 +96,7 @@ fun ShiftCard(
                     Text(text = shift.getStartTime())
                 }
 
-                Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "FromTo")
+                Icon(imageVector = Icons.Default.ArrowForward, contentDescription = stringResource(R.string.composable_fromto))
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -121,7 +123,7 @@ fun ShiftCard(
                 )
 
                 BackgroundedText(
-                    text = String.format("%.1f Ft/hour", shift.wage.price),
+                    text = String.format(stringResource(R.string.composable_1f_ft_hour), shift.wage.price),
                     color = LimeMain,
                     backgroundColor = Color.Black,
                     cornerShape = RoundedCornerShape(5.dp),
@@ -132,7 +134,7 @@ fun ShiftCard(
             }
 
             BackgroundedText(
-                text = String.format("%.1f Ft", shift.earnedMoney),
+                text = String.format(stringResource(R.string.composable_1f_ft), shift.earnedMoney),
                 color = LimeMain,
                 fontWeight = FontWeight.ExtraBold,
                 backgroundColor = Color.Black,

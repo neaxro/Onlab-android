@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.DataFieldErrors
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
@@ -60,7 +62,7 @@ fun ConnectToJobScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Connect to job",
+                title = stringResource(R.string.composable_connect_to_job_title),
                 onNavigate = onNavigateBack,
                 screenState = viewModel.screenState.collectAsState()
             )
@@ -122,7 +124,7 @@ fun DecoratorBox(
     ) {
 
         Text(
-            text = "Job Pin",
+            text = stringResource(R.string.composable_job_pin),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )

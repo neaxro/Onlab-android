@@ -13,10 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
@@ -58,13 +60,13 @@ fun SimpleShift(
             )
 
             DoubleDataRow(
-                title = { Text(text = "Total hours:") },
+                title = { Text(text = stringResource(id = R.string.composable_total_hours)) },
                 value = { Text(text = String.format("%.1f hours", shift.getTotalHours())) }
             )
 
             DoubleDataRow(
-                title = { Text(text = "Earned money:", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
-                value = { Text(text = String.format("%.1f Ft", shift.earnedMoney ?: 0.0), fontSize = 20.sp, fontWeight = FontWeight.Bold) }
+                title = { Text(text = stringResource(id = R.string.composable_earned_money), fontSize = 20.sp, fontWeight = FontWeight.Bold) },
+                value = { Text(text = String.format(stringResource(id = R.string.composable_1f_ft), shift.earnedMoney ?: 0.0), fontSize = 20.sp, fontWeight = FontWeight.Bold) }
             )
         }
 

@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SharedPreferencesModule {
+object AppModule {
 
     @Provides
     @Singleton
@@ -21,5 +21,13 @@ object SharedPreferencesModule {
     ): SharedPreferences {
         val filename = context.resources.getString(R.string.shared_preferences_file_name)
         return context.getSharedPreferences(filename, Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppContext(
+        @ApplicationContext context: Context
+    ): Context {
+        return context
     }
 }

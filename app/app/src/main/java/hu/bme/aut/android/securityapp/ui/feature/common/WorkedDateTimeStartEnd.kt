@@ -12,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.job.DetailedJob
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.shift.Shift
@@ -42,7 +44,7 @@ fun WorkedDateTimeStartEnd(
             Text(text = shift.getStartTime())
         }
 
-        Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "FromTo")
+        Icon(imageVector = Icons.Default.ArrowForward, contentDescription = stringResource(id = R.string.composable_fromto))
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

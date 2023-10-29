@@ -19,8 +19,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.feature.common.MoreMenuItem
@@ -35,21 +37,21 @@ fun MoreScreen(
     navigateTo: (String) -> Unit,
 ){
     val anonymousMenuItems = listOf(
-        MoreMenu(title = "Profile", icon = Icons.Default.AccountBox, url = Screen.Profile.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = stringResource(id = R.string.composable_my_profile_title), icon = Icons.Default.AccountBox, url = Screen.Profile.fullRoute, backgroundColor = Color.Green),
     )
     val userMenuItems = listOf(
         *(anonymousMenuItems.toTypedArray()),
-        MoreMenu(title = "My Statistics", icon = Icons.Default.QueryStats, url = Screen.Statistics.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = stringResource(id = R.string.composable_statistics_title), icon = Icons.Default.QueryStats, url = Screen.Statistics.fullRoute, backgroundColor = Color.Green),
     )
     val adminMenuItems = listOf(
         *(userMenuItems.toTypedArray()),
-        MoreMenu(title = "Pending Shifts", icon = Icons.Default.WorkHistory, url = Screen.PendingShifts.fullRoute, backgroundColor = Color.Green),
-        MoreMenu(title = "Job Statistics", icon = Icons.Default.AddChart, url = Screen.JobStatistics.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = stringResource(R.string.composable_pending_shifts_title), icon = Icons.Default.WorkHistory, url = Screen.PendingShifts.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = stringResource(id = R.string.composable_job_statistics_title), icon = Icons.Default.AddChart, url = Screen.JobStatistics.fullRoute, backgroundColor = Color.Green),
     )
     val ownerMenuItems = listOf(
         *(adminMenuItems.toTypedArray()),
-        MoreMenu(title = "People", icon = Icons.Default.People, url = Screen.People.fullRoute, backgroundColor = Color.Green),
-        MoreMenu(title = "Wages", icon = Icons.Default.MonetizationOn, url = Screen.Wages.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = stringResource(R.string.composable_people_on_job_title), icon = Icons.Default.People, url = Screen.People.fullRoute, backgroundColor = Color.Green),
+        MoreMenu(title = stringResource(R.string.composable_wage_categories_title), icon = Icons.Default.MonetizationOn, url = Screen.Wages.fullRoute, backgroundColor = Color.Green),
     )
 
     val menuItems = when(userRole){
@@ -62,7 +64,7 @@ fun MoreScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "More",
+                title = stringResource(R.string.composable_more_title),
             )
         }
     ) {

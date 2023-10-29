@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Biztonságos alkalmazás</string>
+    <string name="shared_preferences_file_name">thingsToRemember</string>
+    <!-- DataValidators -->
+    <string name="validator_error_fullname_is_empty">A név üres!</string>
+    <string name="validator_error_fullname_is_too_long">A név túl hosszú!</string>
+    <string name="validator_error_contains_numbers">Tartalmaz számokat!</string>
+    <string name="validator_error_contains_special_characters">Tartalmaz speciális karaktereket!</string>
+    <string name="validator_error_starts_or_ends_witch_whitespace">Szóközzel kezdődik vagy végződik!</string>
+    <string name="validator_error_contains_more_than_3_words">Tartalmaz több, mint 3 szót!</string>
+    <string name="validator_error_invalid_characters">Érvénytelen karakterek!</string>
+    <string name="validator_error_contains_capital_letters">Tartalmaz nagybetűket!</string>
+    <string name="validator_error_nickname_must_contains_only_letters">A becenév csak betűket tartalmazhat!</string>
+    <string name="validator_error_invalid_format">Érvénytelen formátum!</string>
+    <string name="validator_error_password_is_too_short">A jelszó túl rövid!</string>
+    <string name="validator_error_password_is_too_long">A jelszó túl hosszú!</string>
+    <string name="validator_error_pin_must_be_long">A PIN hossza %1$s kell legyen!</string>
+    <string name="validator_error_title_is_empty">A cím üres!</string>
+    <string name="validator_error_title_is_too_long">A cím túl hosszú!</string>
+    <string name="validator_error_passwords_do_not_match">A jelszavak nem egyeznek meg!</string>
+    <!-- DashboardRepository -->
+    <string name="repository_message_all_dashboards_successfully_queried">Minden műszerfal sikeresen lekérdezve!</string>
+    <string name="repository_message_network_error_occurred">Hálózati hiba történt: %1$s</string>
+    <string name="repository_message_dashboard_with_id_successfully_queried">A(z) %1$s azonosítójú műszerfal sikeresen lekérdezve!</string>
+    <string name="repository_message_all_dashboards_successfully_queried_fow_jobid">Minden műszerfal sikeresen lekérdezve munkaazonosítóhoz: %1$s!</string>
+    <string name="repository_message_dashboard_successfully_created">Műszerfal sikeresen létrehozva!</string>
+    <string name="repository_message_dashboard_successfully_updated">Műszerfal sikeresen frissítve!</string>
+    <string name="repository_message_dashboard_successfully_deleted">Műszerfal sikeresen törölve!</string>
+    <!-- JobRepository -->
+    <string name="repository_message_all_jobs_successfully_queried_for_person_with_id">Minden munka sikeresen lekérdezve azonosítóval rendelkező személyhez: %1$s!</string>
+    <string name="repository_message_person_data_successfully_queried">Személyadatok sikeresen lekérdezve!</string>
+    <string name="repository_message_job_successfully_created">Munka sikeresen létrehozva!</string>
+    <string name="repository_message_successfully_connected_to_job">Sikeresen csatlakozva a munkához!</string>
+    <string name="repository_message_job_successfully_queried_with_id">Munka sikeresen lekérdezve azonosítóval: %1$s!</string>
+    <string name="repository_message_job_successfully_selected">Munka sikeresen kiválasztva!</string>
+    <string name="repository_message_all_person_successfully_queried_in_job_with_id">Minden személy sikeresen lekérdezve a munkában azonosítóval: %1$s!</string>
+    <string name="repository_message_wage_successfully_changed_for_person">Sikeresen megváltoztatta a bért a személynek!</string>
+    <string name="repository_message_role_successfully_changed_for_person">Sikeresen megváltoztatta a személy szerepét!</string>
+    <string name="repository_message_job_successfully_updated">Munka sikeresen frissítve!</string>
+    <!-- LoginRepository -->
+    <string name="repository_message_successfully_logged_in">Sikeresen bejelentkezve!</string>
+    <!-- PersonRepository -->
+    <string name="repository_message_person_successfully_queried">Személy sikeresen lekérdezve!</string>
+    <string name="repository_message_person_successfully_updated">Személy sikeresen frissítve!</string>
+    <string name="repository_message_profile_picture_successfully_uploaded">Profilkép sikeresen feltöltve!</string>
+    <string name="repository_message_person_s_profile_picture_successfully_queried">Személy profilképe sikeresen lekérdezve!</string>
+    <!-- RegisterRepository -->
+    <string name="repository_message_successful_registration">Sikeres regisztráció!</string>
+    <!-- RoleRepository -->
+    <string name="repository_message_successfully_queried_all_roles">Sikeresen lekérdezte az összes szerepet!</string>
+    <string name="repository_message_successfully_get_all_choosable_roles">Sikeresen lekérdezte az összes választható szerepet!</string>
+    <string name="repository_message_successfully_queried_role">Sikeresen lekérdezte a szerepet!</string>
+    <!-- ShiftRepository -->
+    <string name="repository_message_successfully_queried_active_shift_for_person_in_job">Sikeresen lekérdezte az aktív műszakot a személynek a munkában!</string>
+    <string name="repository_message_successfully_queried_shift_with_id">Sikeresen lekérdezte a műszakot azonosítóval: %1$s!</string>
+    <string name="repository_message_successfully_created_a_new_shift">Sikeresen létrehozott egy új műszakot!</string>
+    <string name="repository_message_successfully_ended_shift">Sikeresen befejezte a műszakot!</string>
+    <string name="repository_message_successfully_queried_all_pending_shifts_in_job_with_id">Sikeresen lekérdezte az összes függő műszakot a munkában azonosítóval: %1$s!</string>
+    <string name="repository_message_successfully_accepted_shift">Sikeresen elfogadta a műszakot!</string>
+    <string name="repository_message_successfully_declined_shift">Sikeresen elutasította a műszakot!</string>
+    <string name="repository_message_successfully_queried_all_judged_shifts">Sikeresen lekérdezte az összes elbírált műszakot!</string>
+    <string name="repository_message_successfully_updated_shift">Sikeresen frissítette a műszakot!</string>
+    <string name="repository_message_successfully_get_job_statistics_for_job_id">Sikeresen lekérdezte a munka statisztikáit azonosítóval: %1$s!</string>
+    <!-- WageRepository -->
+    <string name="repository_message_successfully_get_categories">Sikeresen lekérdezte a kategóriákat!</string>
+    <string name="repository_message_successfully_queried_all_wages">Sikeresen lekérdezte az összes bért!</string>
+    <string name="repository_message_successfully_queried_wage_with_id">Sikeresen lekérdezte a bért azonosítóval: %1$s!</string>
+    <string name="repository_message_successfully_updated_wage">Sikeresen frissítette a bért!</string>
+    <string name="repository_message_wage_successfully_deleted">Bér sikeresen törölve!</string>
+    <string name="repository_message_successfully_created_a_new_wage">Sikeresen létrehozott egy új bért!</string>
+    <!-- WrappersRole -->
+    <string name="wrappers_roles_owner">Tulajdonos</string>
+    <string name="wrappers_roles_admin">Adminisztrátor</string>
+    <string name="wrappers_roles_user">Felhasználó</string>
+    <string name="wrappers_roles_anonymous">Névtelen</string>
+    <!-- WrappersScreenState -->
+    <string name="wrappers_screen_state_loading">Betöltés...</string>
+    <string name="wrappers_screen_state_finished">Kész!</string>
+    <string name="wrappers_screen_state_success">Siker!</string>
+    <!-- Composable - Common -->
+    <string name="composable_something_went_wrong">Valami hiba történt...</string>
+    <string name="composable_show_snackbar">Snackbar megjelenítése</string>
+    <string name="composable_ok">Rendben</string>
+    <string name="composable_person">Személy</string>
+    <string name="composable_details">Részletek</string>
+    <string name="composable_creation_date">Létrehozás dátuma</string>
+    <string name="composable_creator">Létrehozó</string>
+    <string name="composable_role">Szerep</string>
+    <string name="composable_nan">Nem szám</string>
+    <string name="composable_title">Cím</string>
+    <string name="composable_invalid_title">Érvénytelen Cím</string>
+    <string name="composable_valid_title">Érvényes Cím</string>
+    <string name="composable_message">Üzenet</string>
+    <string name="composable_category">Kategória</string>
+    <string name="composable_categories">Kategóriák</string>
+    <string name="composable_enable_gps_position">GPS pozíció engedélyezése</string>
+    <string name="composable_show_details">Részletek megjelenítése</string>
+    <string name="composable_started_at">Kezdet:</string>
+    <string name="composable_earned_money">Keresett pénz:</string>
+    <string name="composable_elapsed_time">Eltelt idő:</string>
+    <string name="composable_0f_ft">%.0f Ft</string>
+    <string name="composable_wage">Díjazás:</string>
+    <string name="composable_0f_ft_hour">%.0f Ft/óra</string>
+    <string name="composable_start_shift">Műszak indítása</string>
+    <string name="composable_stop_shift">Műszak leállítása</string>
+    <string name="composable_min_max_length_indicator">%1$s/%2$s</string>
+    <string name="composable_invalid_value">Érvénytelen érték</string>
+    <string name="composable_valid_value">Érvényes érték</string>
+    <string name="composable_icon">Ikon</string>
+    <string name="composable_confirm">Megerősítés</string>
+    <string name="composable_hide_password">Jelszó elrejtése</string>
+    <string name="composable_show_password">Jelszó megjelenítése</string>
+    <string name="composable_profile_picture">Profilkép</string>
+    <string name="composable_search">Keresés</string>
+    <string name="composable_navigate_back">Visszanavigálás</string>
+    <string name="composable_total_salary">Teljes fizetés:</string>
+    <string name="composable_s_ft">%s Ft</string>
+    <string name="composable_edit_shift">Műszak szerkesztése</string>
+    <string name="composable_start_of_the_shift">Műszak kezdete:</string>
+    <string name="composable_end_of_the_shift">Műszak vége:</string>
+    <string name="composable_wage_name">Díjazás neve:</string>
+    <string name="composable_total_hours">Teljes órák:</string>
+    <string name="composable_total_money">Teljes összeg:</string>
+    <string name="composable__0f_ft_h">%.0f Ft/óra</string>
+    <string name="composable__1f_ft_h">%.1f Ft/óra</string>
+    <string name="composable__1f_ft">%.1f Ft</string>
+    <string name="composable_deny">Elutasítás</string>
+    <string name="composable_accept">Elfogadás</string>
+    <string name="composable_role_name">Szerep neve</string>
+    <string name="composable_fullname">Teljes név</string>
+    <string name="composable_username">Felhasználónév</string>
+    <string name="composable_nickname">Becenév</string>
+    <string name="composable_email_address">E-mail cím</string>
+    <string name="composable_password">Jelszó</string>
+    <string name="composable_password_again">Jelszó újra</string>
+    <string name="composable_image">Kép</string>
+    <string name="composable_choose_image">Kép kiválasztása</string>
+    <string name="composable_full_name">Teljes név</string>
+    <string name="composable_1f_hours">%.1f óra</string>
+    <string name="composable_fromto">Kezdet-vége</string>
+    <string name="composable_1f_ft_hour">%.1f Ft/óra</string>
+    <string name="composable_1f_ft">%.1f Ft</string>
+    <string name="composable_accept_shift">Műszak elfogadása</string>
+    <string name="composable_do_you_want_to_accept_the_shift">Szeretné elfogadni a műszakot?</string>
+    <string name="composable_cancel">Mégse</string>
+    <string name="composable_deny_shift">Műszak elutasítása</string>
+    <string name="composable_do_you_want_to_deny_the_shift">Szeretné elutasítani a műszakot?</string>
+    <string name="composable_all">Mind</string>
+    <string name="composable_accepted">Elfogadva</string>
+    <string name="composable_denied">Elutasítva</string>
+    <string name="composable_pending">Függőben</string>
+    <string name="composable_name">Név</string>
+    <string name="composable_price">Ár</string>
+    <string name="composable_ft_hour">Ft/óra</string>
+    <string name="composable_value_ft_hour">%1$s Ft/óra</string>
+    <string name="composable_edit_category">Kategória szerkesztése</string>
+    <string name="composable_good_morning">Jó reggelt!</string>
+    <string name="composable_good_afternoon">Jó napot!</string>
+    <string name="composable_welcome_back">Üdvözöljük újra!</string>
+    <string name="composable_role_value">Szerep: %1$s</string>
+    <!-- Composable - ConnectToJob -->
+    <string name="composable_connect_to_job_title">Kapcsolódás álláshoz</string>
+    <string name="composable_job_pin">Állás PIN</string>
+    <!-- Composable - CreateJob -->
+    <string name="composable_create_job_title">Állás létrehozása</string>
+    <string name="composable_job_s_name">Állás neve</string>
+    <string name="composable_description">Leírás</string>
+    <string name="composable_create">Létrehozás</string>
+    <!-- Composable - Login -->
+    <string name="composable_login_title">Bejelentkezés</string>
+    <string name="composable_sign_in">Bejelentkezés</string>
+    <string name="composable_not_a_member">Nem vagy még tag?</string>
+    <string name="composable_join_now">Csatlakozzon most</string>
+    <!-- Composable - Register -->
+    <string name="composable_register_title">Regisztráció</string>
+    <string name="composable_register_now">Regisztráció most</string>
+    <string name="composable_already_have_account">Már van fiókja?</string>
+    <string name="composable_login_now">Bejelentkezés most</string>
+    <!-- Composable - MainMenu - Dashboard -->
+    <string name="composable_dashboard_title">Irányítópult</string>
+    <string name="composable_create_new_message">Új üzenet létrehozása</string>
+    <string name="composable_there_are_no_messages">Nincsenek üzenetek!</string>
+    <string name="composable_message_detail_title">Üzenet részletei</string>
+    <string name="composable_delete_message">Üzenet törlése</string>
+    <string name="composable_edit_message">Üzenet szerkesztése</string>
+    <string name="composable_update_message">Üzenet frissítése</string>
+    <string name="composable_update">Frissítés</string>
+    <string name="composable_create_message_title">Üzenet létrehozása</string>
+    <string name="composable_save_dashboard">Irányítópult mentése</string>
+    <string name="composable_save">Mentés</string>
+    <!-- Composable - MainMenu - Jobs -->
+    <string name="composable_jobs_title">Állások</string>
+    <string name="composable_create_new_job">Új állás létrehozása</string>
+    <string name="composable_connect_for_job">Kapcsolódás álláshoz</string>
+    <string name="composable_edit_job_title">Állás szerkesztése</string>
+    <string name="composable_edit">Szerkesztés</string>
+    <string name="composable_job_description">Állás leírása</string>
+    <string name="composable_connection_pin">Kapcsolat PIN</string>
+    <string name="composable_owner_full_name">Tulajdonos teljes neve</string>
+    <string name="composable_owner_nickname">Tulajdonos becenév</string>
+    <string name="composable_owner_email_address">Tulajdonos e-mail címe</string>
+    <!-- Composable - MainMenu - Shift -->
+    <string name="composable_shift_title">Műszak</string>
+    <string name="composable_reload">Újratöltés</string>
+    <!-- Composable - MainMenu - More -->
+    <string name="composable_more_title">Továbbiak</string>
+    <!-- Composable - MainMenu - More - JobStatistics -->
+    <string name="composable_job_statistics_title">Állás statisztika</string>
+    <!-- Composable - MainMenu - More - PendingShifts -->
+    <string name="composable_pending_shifts_title">Függőben lévő műszakok</string>
+    <string name="composable_refresh">Frissítés</string>
+    <string name="composable_edit_shift_title">Műszak szerkesztése</string>
+    <string name="composable_start_date">Kezdeti dátum:</string>
+    <string name="composable_start_time">Kezdeti idő:</string>
+    <string name="composable_end_date">Befejezési dátum:</string>
+    <string name="composable_end_time">Befejezési idő:</string>
+    <string name="composable_default_wage_name">Alap díj név:</string>
+    <string name="composable_default_wage_price">Alap díj ár:</string>
+    <string name="composable_choose_wage">Díj választása</string>
+    <string name="composable_save_changes">Változtatások mentése</string>
+    <string name="composable_select_start_time">Kezdeti idő kiválasztása</string>
+    <string name="composable_select_start_date">Kezdeti dátum kiválasztása</string>
+    <string name="composable_select_end_time">Befejezési idő kiválasztása</string>
+    <string name="composable_select_end_date">Befejezési dátum kiválasztása</string>
+    <string name="composable_detailed_shift_title">Részletes műszak</string>
+    <!-- Composable - MainMenu - More - People -->
+    <string name="composable_people_on_job_title">Emberek az álláson</string>
+    <string name="composable_show_searchbar">Keresőmező megjelenítése</string>
+    <string name="composable_wages">Díjak</string>
+    <string name="composable_roles">Szerepek</string>
+    <!-- Composable - MainMenu - More - Profile -->
+    <string name="composable_my_profile_title">Saját profilom</string>
+    <string name="composable_edit_profile">Profil szerkesztése</string>
+    <string name="composable_log_out">Kijelentkezés</string>
+    <!-- Composable - MainMenu - More - Statistics -->
+    <string name="composable_statistics_title">Statisztikák</string>
+    <!-- Composable - MainMenu - More - Wages -->
+    <string name="composable_wage_categories_title">Díj kategóriák</string>
+    <string name="composable_create_wage">Díj létrehozása</string>
+    <string name="composable_wage_details_title">Díj részletei</string>
+    <string name="composable_delete">Törlés</string>
+    <string name="composable_create_wage_title">Díj létrehozása</string>
+</resources>

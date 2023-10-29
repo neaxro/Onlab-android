@@ -13,9 +13,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.SimpleShift
@@ -30,7 +32,7 @@ fun StatisticsScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Statistics",
+                title = stringResource(R.string.composable_statistics_title),
                 onNavigate = {
                     navigateBack()
                 },
@@ -68,7 +70,9 @@ fun StatisticsScreen(
                 items(items = shifts){ shift ->
                     SimpleShift(
                         shift = shift,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 2.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 2.dp)
                     )
                 }
             }

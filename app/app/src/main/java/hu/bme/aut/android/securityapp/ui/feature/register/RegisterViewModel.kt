@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.feature.register
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerRepository: RegisterRepository
+    private val registerRepository: RegisterRepository,
+    private val applicationContext: Context
 ): ViewModel() {
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -115,12 +117,12 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun checkAllValues(){
-        val fullNameCheck = validateUserFullName(_person.value.fullName)
-        val userNameCheck = validateUserUsername(_person.value.username)
-        val nickNameCheck = validateUserNickname(_person.value.nickname)
-        val emailAddressCheck = validateUserEmail(_person.value.email)
-        val passwordCheck = validateUserPassword(_person.value.password)
-        val passwordMach = validatePasswordsMatch(_person.value.password, _rePassword.value)
+        val fullNameCheck = validateUserFullName(_person.value.fullName, applicationContext)
+        val userNameCheck = validateUserUsername(_person.value.username, applicationContext)
+        val nickNameCheck = validateUserNickname(_person.value.nickname, applicationContext)
+        val emailAddressCheck = validateUserEmail(_person.value.email, applicationContext)
+        val passwordCheck = validateUserPassword(_person.value.password, applicationContext)
+        val passwordMach = validatePasswordsMatch(_person.value.password, _rePassword.value, applicationContext)
 
         _errors.update {
             it.copy(

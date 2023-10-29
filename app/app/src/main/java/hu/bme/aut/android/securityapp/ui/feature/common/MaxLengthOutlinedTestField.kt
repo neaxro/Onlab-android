@@ -10,7 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import hu.bme.aut.android.securityapp.R
 
 @Composable
 fun MaxLengthOutlinedTextField(
@@ -36,7 +38,11 @@ fun MaxLengthOutlinedTextField(
         singleLine = singleLine,
         supportingText = {
             Text(
-                text = "${value.length}/$maxLength",
+                text = stringResource(
+                    R.string.composable_min_max_length_indicator,
+                    value.length,
+                    maxLength
+                ),
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -45,13 +51,13 @@ fun MaxLengthOutlinedTextField(
             if (isError) {
                 Icon(
                     imageVector = Icons.Rounded.Error,
-                    contentDescription = "Invalid value",
+                    contentDescription = stringResource(R.string.composable_invalid_value),
                     tint = Color.Red
                 )
-            } else if (value.length > 0) {
+            } else if (value.isNotEmpty()) {
                 Icon(
                     imageVector = Icons.Rounded.Check,
-                    contentDescription = "Valid value",
+                    contentDescription = stringResource(R.string.composable_valid_value),
                     tint = Color.Green
                 )
             }

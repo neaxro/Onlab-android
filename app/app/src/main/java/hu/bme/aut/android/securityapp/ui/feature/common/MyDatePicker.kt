@@ -17,7 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import hu.bme.aut.android.securityapp.R
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -57,7 +59,7 @@ fun MyDatePicker(
                 .copy(hour = date.hour, minute = date.minute, second = date.second, nano = date.nano)
             onConfirm(selectedDate)
         }) {
-            Text(text = "Confirm")
+            Text(text = stringResource(R.string.composable_confirm))
         }
     }
 }

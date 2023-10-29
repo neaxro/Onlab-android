@@ -26,9 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.dashboard.Dashboard
 import hu.bme.aut.android.securityapp.data.model.wage.Wage
 
@@ -70,10 +72,13 @@ fun DashboardEditor(
                 }
             },
             label = {
-                Text(text = "Title")
+                Text(text = stringResource(R.string.composable_title))
             },
             leadingIcon = {
-                Icon(imageVector = Icons.Rounded.Title, contentDescription = "Title")
+                Icon(
+                    imageVector = Icons.Rounded.Title,
+                    contentDescription = stringResource(R.string.composable_title)
+                )
             },
             singleLine = true,
             supportingText = {
@@ -88,13 +93,13 @@ fun DashboardEditor(
                 if (isError) {
                     Icon(
                         imageVector = Icons.Rounded.Error,
-                        contentDescription = "Invalid Title",
+                        contentDescription = stringResource(R.string.composable_invalid_title),
                         tint = Color.Red
                     )
                 } else if (titleLength > 0) {
                     Icon(
                         imageVector = Icons.Rounded.Check,
-                        contentDescription = "Valid Title",
+                        contentDescription = stringResource(R.string.composable_valid_title),
                         tint = Color.Green
                     )
                 }
@@ -113,7 +118,7 @@ fun DashboardEditor(
                 }
             },
             label = {
-                Text(text = "Message")
+                Text(text = stringResource(R.string.composable_message))
             },
             singleLine = false,
             maxLines = 10,
@@ -141,12 +146,12 @@ fun DashboardEditor(
                 value = selectedWage.name,
                 onValueChange = {},
                 label = {
-                    Text(text = "Category")
+                    Text(text = stringResource(R.string.composable_category))
                 },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.Category,
-                        contentDescription = "Categories"
+                        contentDescription = stringResource(R.string.composable_categories)
                     )
                 },
                 trailingIcon = {
@@ -189,17 +194,6 @@ private fun checkTitle(title: String): Boolean{
     val result = title.matches(numberRegex) || title.matches(specialCharacterRegex)
 
     return title.isEmpty() || result
-}
-
-private fun isReadyForUpload(titleError: Boolean, category: Wage?, onError: (String) -> Unit): Boolean{
-    if(titleError) return false
-
-    if(category == null){
-        onError("Select a category!")
-        return false
-    }
-
-    return true
 }
 
 @Composable

@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.feature.connecttojob
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConnectToJobViewModel @Inject constructor(
-    private val jobRepository: JobRepository
+    private val jobRepository: JobRepository,
+    private val applicationContext: Context
 ): ViewModel() {
 
     val numberOfDigits = 6
@@ -48,7 +50,7 @@ class ConnectToJobViewModel @Inject constructor(
             is ConnectToJobAction.UpdateDigits -> {
                 if(action.digits.length <= numberOfDigits){
                     _digits.value = action.digits
-                    _errors.value = validateConnectionPin(pin = _digits.value, numberOfDigits = numberOfDigits)
+                    _errors.value = validateConnectionPin(pin = _digits.value, numberOfDigits = numberOfDigits, context = applicationContext)
                 }
             }
         }

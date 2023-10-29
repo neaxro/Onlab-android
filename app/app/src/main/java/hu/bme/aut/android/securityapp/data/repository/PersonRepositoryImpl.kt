@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.people.PersonDefault
 import hu.bme.aut.android.securityapp.data.remote.PersonApi
@@ -19,12 +20,15 @@ class PersonRepositoryImpl constructor(
     private val api: PersonApi,
     private val app: Application,
 ): PersonRepository {
+
+    private val context = app.applicationContext
+
     override suspend fun getPerson(personId: Int): Resource<Person> {
         val connection = try {
             val result = api.getPerson(personId = personId)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Person successfully queried!", data = result.body()!!)
+                Resource.Success(message = context.getString(R.string.repository_message_person_successfully_queried), data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -32,7 +36,11 @@ class PersonRepositoryImpl constructor(
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occurred: ${e.message}")
+            Resource.Error(
+                context.getString(
+                    R.string.repository_message_network_error_occurred,
+                    e.message
+                ))
         }
 
         return connection
@@ -43,7 +51,7 @@ class PersonRepositoryImpl constructor(
             val result = api.updatePerson(personId = personId, person = person)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Person successfully updated!", data = result.body()!!)
+                Resource.Success(message = context.getString(R.string.repository_message_person_successfully_updated), data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -51,7 +59,11 @@ class PersonRepositoryImpl constructor(
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occurred: ${e.message}")
+            Resource.Error(
+                context.getString(
+                    R.string.repository_message_network_error_occurred,
+                    e.message
+                ))
         }
 
         return connection
@@ -72,7 +84,7 @@ class PersonRepositoryImpl constructor(
             val result = api.uploadProfilePicture(personId = personId, image = imagePart)
 
             val data = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Profile picture successfully uploaded!", data = result.body()!!)
+                Resource.Success(message = context.getString(R.string.repository_message_profile_picture_successfully_uploaded), data = result.body()!!)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -80,7 +92,11 @@ class PersonRepositoryImpl constructor(
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occurred: ${e.message}")
+            Resource.Error(
+                context.getString(
+                    R.string.repository_message_network_error_occurred,
+                    e.message
+                ))
         }
 
         return connection
@@ -91,10 +107,10 @@ class PersonRepositoryImpl constructor(
             val result = api.getProfilePicture(personId = personId)
 
             val data: Resource<String?> = if(result.isSuccessful && result.code() == 200){
-                Resource.Success(message = "Person's profile picture successfully queried!", data = result.body()!!)
+                Resource.Success(message = context.getString(R.string.repository_message_person_s_profile_picture_successfully_queried), data = result.body()!!)
             }
             else if(result.isSuccessful && result.code() == 204){
-                Resource.Success(message = "Person's profile picture successfully queried!", data = null)
+                Resource.Success(message = context.getString(R.string.repository_message_person_s_profile_picture_successfully_queried), data = null)
             }
             else{
                 Resource.Error(message = result.errorBody()!!.string())
@@ -102,7 +118,11 @@ class PersonRepositoryImpl constructor(
 
             data
         } catch (e: Exception){
-            Resource.Error("Network error occurred: ${e.message}")
+            Resource.Error(
+                context.getString(
+                    R.string.repository_message_network_error_occurred,
+                    e.message
+                ))
         }
 
         return connection

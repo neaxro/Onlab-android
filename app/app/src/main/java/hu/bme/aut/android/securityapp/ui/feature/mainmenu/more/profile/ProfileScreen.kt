@@ -31,11 +31,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.PersonEditor
@@ -58,7 +60,7 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "My Profile",
+                title = stringResource(R.string.composable_my_profile_title),
                 onNavigate = {
                     navigateBack()
                 },
@@ -66,13 +68,15 @@ fun ProfileScreen(
                     IconButton(onClick = {
                         isReadOnly = !isReadOnly
                     }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit profile")
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(R.string.composable_edit_profile))
                     }
                     IconButton(onClick = {
                         viewModel.evoke(ProfileAction.LogOut)
                         onLogOut()
                     }) {
-                        Icon(imageVector = Icons.Default.Logout, contentDescription = "Log out")
+                        Icon(imageVector = Icons.Default.Logout, contentDescription = stringResource(
+                            R.string.composable_log_out
+                        ))
                     }
                 },
                 screenState = viewModel.screenState.collectAsState()
@@ -102,7 +106,7 @@ fun ProfileScreen(
                         .data(profilePictureUri)
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(id = R.string.composable_profile_picture),
                     modifier = Modifier
                         .size(200.dp)
                         .padding(bottom = 15.dp)
@@ -138,8 +142,12 @@ fun ProfileScreen(
                     }
                 ) {
                     Row {
-                        Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
-                        Text(text = "Save", modifier = Modifier.padding(start = 10.dp))
+                        Icon(imageVector = Icons.Default.Save, contentDescription = stringResource(
+                            id = R.string.composable_save
+                        ))
+                        Text(text = stringResource(
+                            id = R.string.composable_save
+                        ), modifier = Modifier.padding(start = 10.dp))
                     }
                 }
 

@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.bme.aut.android.securityapp.R
@@ -23,7 +24,7 @@ fun MyProfilePictureImage(
 
         Image(
             bitmap = profilePicture.toBitmap(),
-            contentDescription = "Profile picture",
+            contentDescription = stringResource(R.string.composable_profile_picture),
             modifier = modifier,
             contentScale = ContentScale.Crop
         )
@@ -31,7 +32,7 @@ fun MyProfilePictureImage(
     else{
         Image(
             painter = painterResource(id = R.drawable.profile_picture_placeholder),
-            contentDescription = "Profile picture",
+            contentDescription = stringResource(id = R.string.composable_profile_picture),
             modifier = modifier,
             contentScale = ContentScale.Crop
         )

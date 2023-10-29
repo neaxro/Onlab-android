@@ -23,9 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MyDropDownMenu
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
@@ -80,7 +82,7 @@ fun PersonDetailedScreen(
                     selectedWage = it
                 },
                 icon = Icons.Default.Money,
-                label = "Wages",
+                label = stringResource(R.string.composable_wages),
                 item = selectedWage
             )
 
@@ -92,7 +94,7 @@ fun PersonDetailedScreen(
                     selectedRole = it
                 },
                 icon = Icons.Default.QuestionMark,
-                label = "Roles",
+                label = stringResource(R.string.composable_roles),
                 item = selectedRole
             )
 
@@ -109,9 +111,9 @@ fun PersonDetailedScreen(
                 },
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.Save, contentDescription = "Create")
+                    Icon(imageVector = Icons.Default.Save, contentDescription = stringResource(id = R.string.composable_create))
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                    Text(text = "Save")
+                    Text(text = stringResource(id = R.string.composable_save))
                 }
             }
         }

@@ -20,8 +20,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 import hu.bme.aut.android.securityapp.ui.feature.common.DashboardCard
@@ -47,7 +49,7 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
              MyTopAppBar(
-                 title = "Dashboard",
+                 title = stringResource(R.string.composable_dashboard_title),
                  screenState = viewModel.screenState.collectAsState()
              )
         },
@@ -62,7 +64,7 @@ fun DashboardScreen(
                     content = {
                         Icon(
                             imageVector = Icons.Rounded.Add,
-                            contentDescription = "Create new message"
+                            contentDescription = stringResource(R.string.composable_create_new_message)
                         )
                     }
                 )
@@ -87,7 +89,7 @@ fun DashboardScreen(
             )
 
             if(messages.isEmpty()){
-                Text(text = "There are no messages!", modifier = Modifier)
+                Text(text = stringResource(R.string.composable_there_are_no_messages), modifier = Modifier)
             }
             else{
                 LazyColumn(

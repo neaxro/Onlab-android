@@ -17,10 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.people.Person
 import hu.bme.aut.android.securityapp.data.model.people.PersonDetail
 import hu.bme.aut.android.securityapp.data.model.people.getProfileBitmap
@@ -50,7 +52,7 @@ fun PeopleOnJobCard(
             if(person.basicInfo.profilePicture == null){
                 Image(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "Person",
+                    contentDescription = stringResource(id = R.string.composable_person),
                     modifier = Modifier
                         .fillMaxWidth()
                         .size(100.dp)
@@ -59,7 +61,7 @@ fun PeopleOnJobCard(
             else {
                 Image(
                     bitmap = person.basicInfo.getProfileBitmap(),
-                    contentDescription = "Profile picture",
+                    contentDescription = stringResource(id = R.string.composable_profile_picture),
                     modifier = Modifier
                         .fillMaxWidth()
                 )
@@ -83,7 +85,7 @@ fun PeopleOnJobCard(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Wage name:",
+                    text = stringResource(id = R.string.composable_wage_name),
                     fontWeight = FontWeight.Normal,
                 )
                 Text(
@@ -98,7 +100,7 @@ fun PeopleOnJobCard(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Role name",
+                    text = stringResource(R.string.composable_role_name),
                     fontWeight = FontWeight.Normal,
                 )
                 Text(

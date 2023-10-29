@@ -5,16 +5,15 @@ import com.auth0.android.jwt.JWT
 import hu.bme.aut.android.securityapp.domain.wrappers.Roles
 
 object LoggedPerson {
+    private lateinit var jwt: JWT
+
     var ID: Int = 0
     var CURRENT_JOB_ID = 0
-
     var TOKEN: String = ""
         set(value){
             jwt = JWT(value)
             field = value
         }
-
-    lateinit var jwt: JWT
 
     fun getRole(): Roles{
         val claim = jwt.getClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").asString()

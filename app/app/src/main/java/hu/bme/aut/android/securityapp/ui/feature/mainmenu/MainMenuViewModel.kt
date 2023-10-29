@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu
 
+import android.app.Application
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Dashboard
 import androidx.compose.material.icons.rounded.MoreHoriz
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.rounded.Work
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.constants.LoggedPerson
 import hu.bme.aut.android.securityapp.data.repository.DashboardRepository
 import hu.bme.aut.android.securityapp.data.repository.JobRepository
@@ -25,17 +27,17 @@ import javax.inject.Inject
 class MainMenuViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository,
     private val jobRepository: JobRepository,
+    private val application: Application,
 ) : ViewModel() {
-
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
     private val _bottomNavigationItems = MutableStateFlow<List<NavigationItem>>(
         listOf(
-            NavigationItem(id = 0, name = "Jobs", screen = Screen.Jobs, icon = Icons.Rounded.Work, badgeCount = 0),
-            NavigationItem(id = 1, name = "Dashboard", screen = Screen.Dashboard, icon = Icons.Rounded.Dashboard, badgeCount = 0),
-            NavigationItem(id = 2, name = "Shift", screen = Screen.Shift, icon = Icons.Rounded.Shield, badgeCount = 0),
-            NavigationItem(id = 3, name = "More", screen = Screen.Statistics, icon = Icons.Rounded.MoreHoriz, badgeCount = 0),
+            NavigationItem(id = 0, name = application.applicationContext.getString(R.string.composable_jobs_title), screen = Screen.Jobs, icon = Icons.Rounded.Work, badgeCount = 0),
+            NavigationItem(id = 1, name = application.applicationContext.getString(R.string.composable_dashboard_title), screen = Screen.Dashboard, icon = Icons.Rounded.Dashboard, badgeCount = 0),
+            NavigationItem(id = 2, name = application.applicationContext.getString(R.string.composable_shift_title), screen = Screen.Shift, icon = Icons.Rounded.Shield, badgeCount = 0),
+            NavigationItem(id = 3, name = application.applicationContext.getString(R.string.composable_more_title), screen = Screen.Statistics, icon = Icons.Rounded.MoreHoriz, badgeCount = 0),
         )
     )
     val bottomNavigationItems = _bottomNavigationItems.asStateFlow()

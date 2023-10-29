@@ -22,9 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WageEditor
@@ -44,7 +46,7 @@ fun CreateWageScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Create Wage",
+                title = stringResource(R.string.composable_create_wage_title),
                 onNavigate = {
                     navigateBack()
                 },
@@ -96,9 +98,13 @@ fun CreateWageScreen(
                     enabled = !isError
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(imageVector = Icons.Default.Save, contentDescription = "Create")
+                        Icon(imageVector = Icons.Default.Save, contentDescription = stringResource(
+                            id = R.string.composable_create
+                        ))
                         Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                        Text(text = "Create")
+                        Text(text = stringResource(
+                            id = R.string.composable_create
+                        ))
                     }
                 }
             }
