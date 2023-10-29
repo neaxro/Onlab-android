@@ -16,7 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace TestProject
+namespace SecurityApiTest
 {
     public class DashboardUnitTest
     {
