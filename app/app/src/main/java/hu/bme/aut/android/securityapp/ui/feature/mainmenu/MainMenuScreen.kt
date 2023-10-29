@@ -8,15 +8,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MyBottomNavigationBar
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
-import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.navigation.Screen
 
 data class NavigationItem(
@@ -38,12 +35,6 @@ fun MainMenuScreen(
     val bottomNavigationItems = viewModel.bottomNavigationItems.collectAsState().value
 
     Scaffold(
-        topBar = {
-            MyTopAppBar(
-                title = stringResource(R.string.composable_more_title),
-                screenState = viewModel.screenState.collectAsState()
-            )
-        },
         bottomBar = {
            MyBottomNavigationBar(
                items = bottomNavigationItems,
