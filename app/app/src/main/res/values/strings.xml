@@ -234,4 +234,10 @@
     <string name="composable_log_out">Log out</string>
     <!-- Composable - MainMenu - More - Statistics -->
     <string name="composable_statistics_title">Statistics</string>
+    <!-- Composable - MainMenu - More - Wages -->
+    <string name="composable_wage_categories_title">Wage Categories</string>
+    <string name="composable_create_wage">Create wage</string>
+    <string name="composable_wage_details_title">Wage Details</string>
+    <string name="composable_delete">Delete</string>
+    <string name="composable_create_wage_title">Create Wage</string>
 </resources>

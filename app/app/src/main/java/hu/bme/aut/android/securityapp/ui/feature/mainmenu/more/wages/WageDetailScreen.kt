@@ -25,9 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.WageEditor
@@ -48,7 +50,7 @@ fun WageDetailScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Wage Details",
+                title = stringResource(R.string.composable_wage_details_title),
                 onNavigate = {
                     navigateBack()
                 },
@@ -56,12 +58,13 @@ fun WageDetailScreen(
                     IconButton(onClick = {
                         isEditing = !isEditing
                     }) {
-                        Icon(imageVector = Icons.Default.Edit, "Edit")
+                        Icon(imageVector = Icons.Default.Edit, stringResource(id = R.string.composable_edit))
                     }
                     IconButton(onClick = {
                         viewModel.evoke(WageDetailAction.DeleteWage)
                     }) {
-                        Icon(imageVector = Icons.Default.Delete, "Delete")
+                        Icon(imageVector = Icons.Default.Delete,
+                            stringResource(R.string.composable_delete))
                     }
                 },
                 screenState = viewModel.screenState.collectAsState()
@@ -109,9 +112,13 @@ fun WageDetailScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
+                            Icon(imageVector = Icons.Default.Save, contentDescription = stringResource(
+                                id = R.string.composable_refresh
+                            ))
                             Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                            Text(text = "Save")
+                            Text(text = stringResource(
+                                id = R.string.composable_refresh
+                            ))
                         }
                     }
                 }
