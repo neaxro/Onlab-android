@@ -171,4 +171,9 @@
     <string name="composable_sign_in">Sign in</string>
     <string name="composable_not_a_member">Not a member?</string>
     <string name="composable_join_now">Join now</string>
+    <!-- Composable - Register -->
+    <string name="composable_register_title">Register</string>
+    <string name="composable_register_now">Register Now</string>
+    <string name="composable_already_have_account">Already have account?</string>
+    <string name="composable_login_now">Login now</string>
 </resources>

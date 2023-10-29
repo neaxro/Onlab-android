@@ -17,8 +17,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.RegisterEditor
@@ -41,7 +43,7 @@ fun RegisterScreen(
     Scaffold (
         topBar = {
             MyTopAppBar(
-                title = "Register",
+                title = stringResource(R.string.composable_register_title),
                 screenState = viewModel.screenState.collectAsState()
             )
         },
@@ -95,7 +97,7 @@ fun RegisterScreen(
                     },
                     enabled = !errors.isError()
                 ) {
-                    Text(text = "Register Now")
+                    Text(text = stringResource(R.string.composable_register_now))
                 }
 
                 Row(
@@ -104,14 +106,14 @@ fun RegisterScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    Text(text = "Already have account?")
+                    Text(text = stringResource(R.string.composable_already_have_account))
 
                     TextButton(
                         onClick = {
                             navigateToLogin()
                         }
                     ) {
-                        Text(text = "Login now")
+                        Text(text = stringResource(R.string.composable_login_now))
                     }
                 }
             }
