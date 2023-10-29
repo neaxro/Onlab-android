@@ -232,4 +232,6 @@
     <string name="composable_my_profile_title">My Profile</string>
     <string name="composable_edit_profile">Edit profile</string>
     <string name="composable_log_out">Log out</string>
+    <!-- Composable - MainMenu - More - Statistics -->
+    <string name="composable_statistics_title">Statistics</string>
 </resources>
