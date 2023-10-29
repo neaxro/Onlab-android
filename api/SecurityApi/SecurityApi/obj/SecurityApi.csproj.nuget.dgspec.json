@@ -89,6 +89,14 @@
               "target": "Package",
               "version": "[7.0.11, )"
             },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.69, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.3, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -104,6 +112,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[7.0.3, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )"
             }
           },
           "imports": [
