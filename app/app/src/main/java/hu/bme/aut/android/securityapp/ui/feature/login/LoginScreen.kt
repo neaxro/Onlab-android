@@ -10,11 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.viewmodel.LoginAction
@@ -46,7 +48,7 @@ fun LoginScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Login",
+                title = stringResource(R.string.composable_login_title),
                 screenState = viewModel.screenState.collectAsState()
             )
         },
@@ -70,7 +72,7 @@ fun LoginScreen(
                 onValueChange = {
                     viewModel.evoke(LoginAction.UpdateUsername(username = it))
                 },
-                label = { Text(text = "Username") },
+                label = { Text(text = stringResource(id = R.string.composable_username)) },
                 singleLine = true,
                 isError = errors.userName
             )
@@ -82,7 +84,7 @@ fun LoginScreen(
                 onValueChange = {
                     viewModel.evoke(LoginAction.UpdatePassword(password = it))
                 },
-                label = { Text(text = "Password") },
+                label = { Text(text = stringResource(id = R.string.composable_password)) },
                 singleLine = true,
                 trailingIcon = {
                     val image = if (passwordVisible) {
@@ -91,7 +93,7 @@ fun LoginScreen(
                         Icons.Filled.VisibilityOff
                     }
 
-                    val description = if (passwordVisible) "Hide password" else "Show password"
+                    val description = if (passwordVisible) stringResource(id = R.string.composable_hide_password) else stringResource(id = R.string.composable_show_password)
 
                     IconButton(onClick = {
                         passwordVisible = !passwordVisible
@@ -115,7 +117,7 @@ fun LoginScreen(
                     viewModel.evoke(LoginAction.Login)
                 },
             ) {
-                Text(text = "Sign in")
+                Text(text = stringResource(R.string.composable_sign_in))
             }
 
             Row(
@@ -124,14 +126,14 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
-                Text(text = "Not a member?")
+                Text(text = stringResource(R.string.composable_not_a_member))
 
                 TextButton(
                     onClick = {
                         navigateToRegister()
                     }
                 ) {
-                    Text(text = "Join now")
+                    Text(text = stringResource(R.string.composable_join_now))
                 }
             }
         }

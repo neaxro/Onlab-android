@@ -166,4 +166,9 @@
     <string name="composable_job_s_name">Job\'s name</string>
     <string name="composable_description">Description</string>
     <string name="composable_create">Create</string>
+    <!-- Composable - Login -->
+    <string name="composable_login_title">Login</string>
+    <string name="composable_sign_in">Sign in</string>
+    <string name="composable_not_a_member">Not a member?</string>
+    <string name="composable_join_now">Join now</string>
 </resources>
