@@ -228,4 +228,8 @@
     <string name="composable_show_searchbar">Show Searchbar</string>
     <string name="composable_wages">Wages</string>
     <string name="composable_roles">Roles</string>
+    <!-- Composable - MainMenu - More - Profile -->
+    <string name="composable_my_profile_title">My Profile</string>
+    <string name="composable_edit_profile">Edit profile</string>
+    <string name="composable_log_out">Log out</string>
 </resources>
