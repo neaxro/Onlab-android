@@ -11,8 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.OverallSalaryCard
@@ -31,7 +33,7 @@ fun JobStatisticsScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Job Statistics",
+                title = stringResource(R.string.composable_job_statistics_title),
                 onNavigate = { navigateBack() },
                 screenState = viewModel.screenState.collectAsState()
             )

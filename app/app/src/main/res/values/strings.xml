@@ -204,4 +204,6 @@
     <string name="composable_reload">Reload</string>
     <!-- Composable - MainMenu - More -->
     <string name="composable_more_title">More</string>
+    <!-- Composable - MainMenu - More - JobStatistics -->
+    <string name="composable_job_statistics_title">Job Statistics</string>
 </resources>
