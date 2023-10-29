@@ -25,9 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySearchBar
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
@@ -50,7 +52,7 @@ fun PeopleScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "People On Job",
+                title = stringResource(R.string.composable_people_on_job_title),
                 onNavigate = {
                     navigateBack()
                 },
@@ -62,7 +64,7 @@ fun PeopleScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Show Searchbar"
+                            contentDescription = stringResource(R.string.composable_show_searchbar)
                         )
                     }
                     IconButton(
@@ -72,7 +74,7 @@ fun PeopleScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
-                            contentDescription = "Refresh data"
+                            contentDescription = stringResource(id = R.string.composable_refresh)
                         )
                     }
                 },

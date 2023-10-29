@@ -223,4 +223,9 @@
     <string name="composable_select_end_time">Select End Time</string>
     <string name="composable_select_end_date">Select End Date</string>
     <string name="composable_detailed_shift_title">Detailed Shift</string>
+    <!-- Composable - MainMenu - More - People -->
+    <string name="composable_people_on_job_title">People On Job</string>
+    <string name="composable_show_searchbar">Show Searchbar</string>
+    <string name="composable_wages">Wages</string>
+    <string name="composable_roles">Roles</string>
 </resources>
