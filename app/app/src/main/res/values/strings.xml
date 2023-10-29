@@ -199,4 +199,7 @@
     <string name="composable_owner_full_name">Owner full name</string>
     <string name="composable_owner_nickname">Owner nickname</string>
     <string name="composable_owner_email_address">Owner email address</string>
+    <!-- Composable - MainMenu - Shift -->
+    <string name="composable_shift_title">Shift</string>
+    <string name="composable_reload">Reload</string>
 </resources>
