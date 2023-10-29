@@ -13,9 +13,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 
@@ -40,7 +42,7 @@ fun CreateJobScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Create Job",
+                title = stringResource(R.string.composable_create_job_title),
                 onNavigate = {
                     navigateToMainMenu()
                 },
@@ -67,7 +69,7 @@ fun CreateJobScreen(
                 onValueChange = { newJobName ->
                     viewModel.evoke(CreateJobAction.UpdateJobName(jobName = newJobName))
                 },
-                label = { Text(text = "Job's name")},
+                label = { Text(text = stringResource(R.string.composable_job_s_name))},
                 singleLine = true,
             )
 
@@ -78,7 +80,7 @@ fun CreateJobScreen(
                 onValueChange = { newDescription ->
                     viewModel.evoke(CreateJobAction.UpdateDescription(description = newDescription))
                 },
-                label = { Text(text = "Description")},
+                label = { Text(text = stringResource(R.string.composable_description))},
                 maxLines = 3,
                 modifier = Modifier.height(150.dp)
             )
@@ -93,7 +95,7 @@ fun CreateJobScreen(
                 modifier = Modifier
                     .fillMaxWidth(0.6f),
             ) {
-                Text(text = "Create")
+                Text(text = stringResource(R.string.composable_create))
             }
         }
     }

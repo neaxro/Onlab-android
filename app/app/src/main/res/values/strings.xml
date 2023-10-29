@@ -161,4 +161,9 @@
     <!-- Composable - ConnectToJob -->
     <string name="composable_connect_to_job_title">Connect to job</string>
     <string name="composable_job_pin">Job Pin</string>
+    <!-- Composable - CreateJob -->
+    <string name="composable_create_job_title">Create Job</string>
+    <string name="composable_job_s_name">Job\'s name</string>
+    <string name="composable_description">Description</string>
+    <string name="composable_create">Create</string>
 </resources>
