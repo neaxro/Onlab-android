@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.PendingShiftDetailCard
@@ -33,13 +35,15 @@ fun DetailShiftScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Detailed Shift",
+                title = stringResource(R.string.composable_detailed_shift_title),
                 onNavigate = {
                     navigateBack()
                 },
                 actions = {
                     IconButton(onClick = { viewModel.evoke(ShiftDetailAction.Refresh) }) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = stringResource(
+                            id = R.string.composable_refresh
+                        ))
                     }
                 },
                 screenState = viewModel.screenState.collectAsState()

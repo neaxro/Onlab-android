@@ -14,9 +14,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.common.ShiftCard
@@ -34,13 +36,15 @@ fun PendingShiftsScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Pending Shifts",
+                title = stringResource(R.string.composable_pending_shifts_title),
                 onNavigate = {
                     navigateBack()
                 },
                 actions = {
                     IconButton(onClick = { viewModel.evoke(PendingShiftsAction.Refresh) }) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = stringResource(
+                            R.string.composable_refresh
+                        ))
                     }
                 },
                 screenState = viewModel.screenState.collectAsState()

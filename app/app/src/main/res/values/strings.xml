@@ -206,4 +206,21 @@
     <string name="composable_more_title">More</string>
     <!-- Composable - MainMenu - More - JobStatistics -->
     <string name="composable_job_statistics_title">Job Statistics</string>
+    <!-- Composable - MainMenu - More - PendingShifts -->
+    <string name="composable_pending_shifts_title">Pending Shifts</string>
+    <string name="composable_refresh">Refresh</string>
+    <string name="composable_edit_shift_title">Edit Shift</string>
+    <string name="composable_start_date">Start date:</string>
+    <string name="composable_start_time">Start time:</string>
+    <string name="composable_end_date">End date:</string>
+    <string name="composable_end_time">End time:</string>
+    <string name="composable_default_wage_name">Default Wage Name:</string>
+    <string name="composable_default_wage_price">Default Wage Price:</string>
+    <string name="composable_choose_wage">Choose wage</string>
+    <string name="composable_save_changes">Save Changes</string>
+    <string name="composable_select_start_time">Select Start Time</string>
+    <string name="composable_select_start_date">Select Start Date</string>
+    <string name="composable_select_end_time">Select End Time</string>
+    <string name="composable_select_end_date">Select End Date</string>
+    <string name="composable_detailed_shift_title">Detailed Shift</string>
 </resources>

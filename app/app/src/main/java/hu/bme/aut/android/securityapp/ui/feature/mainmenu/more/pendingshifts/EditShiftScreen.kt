@@ -1,5 +1,6 @@
 package hu.bme.aut.android.securityapp.ui.feature.mainmenu.more.pendingshifts
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,13 +21,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.bme.aut.android.securityapp.R
 import hu.bme.aut.android.securityapp.data.model.shift.getEndDate
 import hu.bme.aut.android.securityapp.data.model.shift.getEndTime
 import hu.bme.aut.android.securityapp.data.model.shift.getStartDate
@@ -46,7 +50,8 @@ fun EditShiftScreen(
     navigateBack: () -> Unit,
     viewModel: EditShiftViewModel = hiltViewModel()
 ){
-    var whatToShow by remember { mutableStateOf<ShowDialog>(ShowDialog.Nothing) }
+    val context = LocalContext.current
+    var whatToShow by rememberSaveable { mutableStateOf<ShowDialog>(ShowDialog.Nothing()) }
 
     val shift = viewModel.shift.collectAsState().value
     val wages = viewModel.wages.collectAsState().value
@@ -55,7 +60,7 @@ fun EditShiftScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Edit Shift",
+                title = stringResource(R.string.composable_edit_shift_title),
                 onNavigate = { navigateBack() },
                 screenState = viewModel.screenState.collectAsState()
             )
@@ -81,10 +86,10 @@ fun EditShiftScreen(
                     .fillMaxSize()
             ) {
                 DoubleDataRow(
-                    title = { Text(text = "Start date:") },
+                    title = { Text(text = stringResource(R.string.composable_start_date)) },
                     value = {
                         TextButton(onClick = {
-                            whatToShow = ShowDialog.ShowStartDate
+                            whatToShow = ShowDialog.ShowStartDate(context = context)
                         }) {
                             Text(text = shift.getStartDate())
                         }
@@ -92,10 +97,10 @@ fun EditShiftScreen(
                 )
 
                 DoubleDataRow(
-                    title = { Text(text = "Start time:") },
+                    title = { Text(text = stringResource(R.string.composable_start_time)) },
                     value = {
                         TextButton(onClick = {
-                            whatToShow = ShowDialog.ShowStartTime
+                            whatToShow = ShowDialog.ShowStartTime(context = context)
                         }) {
                             Text(text = shift.getStartTime())
                         }
@@ -103,10 +108,10 @@ fun EditShiftScreen(
                 )
 
                 DoubleDataRow(
-                    title = { Text(text = "End date:") },
+                    title = { Text(text = stringResource(R.string.composable_end_date)) },
                     value = {
                         TextButton(onClick = {
-                            whatToShow = ShowDialog.ShowEndDate
+                            whatToShow = ShowDialog.ShowEndDate(context = context)
                         }) {
                             Text(text = shift.getEndDate())
                         }
@@ -114,10 +119,10 @@ fun EditShiftScreen(
                 )
 
                 DoubleDataRow(
-                    title = { Text(text = "End time:") },
+                    title = { Text(text = stringResource(R.string.composable_end_time)) },
                     value = {
                         TextButton(onClick = {
-                            whatToShow = ShowDialog.ShowEndTime
+                            whatToShow = ShowDialog.ShowEndTime(context = context)
                         }) {
                             Text(text = shift.getEndTime())
                         }
@@ -125,16 +130,16 @@ fun EditShiftScreen(
                 )
 
                 DoubleDataRow(
-                    title = { Text(text = "Default Wage Name:") },
+                    title = { Text(text = stringResource(R.string.composable_default_wage_name)) },
                     value = {
                         Text(text = person.wage.name)
                     }
                 )
 
                 DoubleDataRow(
-                    title = { Text(text = "Default Wage Price:") },
+                    title = { Text(text = stringResource(R.string.composable_default_wage_price)) },
                     value = {
-                        Text(text = String.format("%.0f Ft/hour", person.wage.price))
+                        Text(text = String.format(stringResource(id = R.string.composable_0f_ft_hour), person.wage.price))
                     }
                 )
 
@@ -150,7 +155,7 @@ fun EditShiftScreen(
                                 viewModel.evoke(EditShiftAction.SetWage(wageName = newWageName))
                             },
                             icon = Icons.Default.Wallet,
-                            label = "Choose wage"
+                            label = stringResource(R.string.composable_choose_wage)
                         )
                     }
                 )
@@ -163,7 +168,7 @@ fun EditShiftScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(imageVector = Icons.Default.Save, contentDescription = "Save Changes")
+                        Icon(imageVector = Icons.Default.Save, contentDescription = stringResource(R.string.composable_save_changes))
                         Spacer(modifier = Modifier.padding(horizontal = 5.dp))
                         Text(text = "Edit")
                     }
@@ -171,27 +176,27 @@ fun EditShiftScreen(
             }
 
             when(whatToShow){
-                ShowDialog.ShowStartTime -> {
+                is ShowDialog.ShowStartTime -> {
                     AlertDialog(
-                        onDismissRequest = { whatToShow = ShowDialog.Nothing },
+                        onDismissRequest = { whatToShow = ShowDialog.Nothing() },
                     ) {
                         MyTimePicker(
                             date = parseStringToLocalDateTime(shift.startTime),
                             onConfirm = { newTime ->
-                                whatToShow = ShowDialog.Nothing
+                                whatToShow = ShowDialog.Nothing()
                                 viewModel.evoke(EditShiftAction.SetStartTime(newTime))
                             },
                         )
                     }
                 }
-                ShowDialog.ShowStartDate -> {
+                is ShowDialog.ShowStartDate -> {
                     AlertDialog(
-                        onDismissRequest = { whatToShow = ShowDialog.Nothing },
+                        onDismissRequest = { whatToShow = ShowDialog.Nothing() },
                     ) {
                         MyDatePicker(
                             date = parseStringToLocalDateTime(shift.startTime),
                             onConfirm = { newDate ->
-                                whatToShow = ShowDialog.Nothing
+                                whatToShow = ShowDialog.Nothing()
                                 viewModel.evoke(EditShiftAction.SetStartDate(time = newDate))
                             },
                             title = {
@@ -200,27 +205,27 @@ fun EditShiftScreen(
                         )
                     }
                 }
-                ShowDialog.ShowEndTime -> {
+                is ShowDialog.ShowEndTime -> {
                     AlertDialog(
-                        onDismissRequest = { whatToShow = ShowDialog.Nothing },
+                        onDismissRequest = { whatToShow = ShowDialog.Nothing() },
                     ) {
                         MyTimePicker(
                             date = parseStringToLocalDateTime(shift.endTime!!),
                             onConfirm = { newTime ->
-                                whatToShow = ShowDialog.Nothing
+                                whatToShow = ShowDialog.Nothing()
                                 viewModel.evoke(EditShiftAction.SetEndTime(newTime))
                             },
                         )
                     }
                 }
-                ShowDialog.ShowEndDate -> {
+                is ShowDialog.ShowEndDate -> {
                     AlertDialog(
-                        onDismissRequest = { whatToShow = ShowDialog.Nothing },
+                        onDismissRequest = { whatToShow = ShowDialog.Nothing() },
                     ) {
                         MyDatePicker(
                             date = parseStringToLocalDateTime(shift.endTime!!),
                             onConfirm = { newDate ->
-                                whatToShow = ShowDialog.Nothing
+                                whatToShow = ShowDialog.Nothing()
                                 viewModel.evoke(EditShiftAction.SetEndDate(time = newDate))
                             },
                             title = {
@@ -229,7 +234,7 @@ fun EditShiftScreen(
                         )
                     }
                 }
-                ShowDialog.Nothing -> { /* Show Nothing */ }
+                is ShowDialog.Nothing -> { /* Show Nothing */ }
             }
         }
     }
@@ -240,12 +245,12 @@ fun parseStringToLocalDateTime(dateTimeString: String): LocalDateTime {
     return LocalDateTime.parse(dateTimeString, formatter)
 }
 
-sealed class ShowDialog(val title: String = ""){
-    object ShowStartTime : ShowDialog(title = "Select Start Time")
-    object ShowStartDate : ShowDialog(title = "Select Start Date")
-    object ShowEndTime : ShowDialog(title = "Select End Time")
-    object ShowEndDate : ShowDialog(title = "Select End Date")
-    object Nothing : ShowDialog()
+sealed class ShowDialog(val title: String = "", val context: Context?){
+    class ShowStartTime(context: Context) : ShowDialog(title = context.getString(R.string.composable_select_start_time), context = context)
+    class ShowStartDate(context: Context) : ShowDialog(title = context.getString(R.string.composable_select_start_date), context = context)
+    class ShowEndTime(context: Context) : ShowDialog(title = context.getString(R.string.composable_select_end_time), context = context)
+    class ShowEndDate(context: Context) : ShowDialog(title = context.getString(R.string.composable_select_end_date), context = context)
+    class Nothing : ShowDialog(context = null)
 }
 
 @Preview(showBackground = true)
