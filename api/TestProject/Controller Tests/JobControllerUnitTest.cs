@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace SecurityApiTest.Controller_Tests
 {
-    public class JobUnitTest
+    public class JobControllerUnitTest
     {
         DetailJob dj1, dj2;
         Person owner;
@@ -34,7 +34,7 @@ namespace SecurityApiTest.Controller_Tests
         Mock<IJobService> jobServiceMock;
         JobController jobController;
 
-        public JobUnitTest()
+        public JobControllerUnitTest()
         {
             owner = new Person(1, "Teszt Elek", "tesztelek", "elek", "testelek@unit.test", new byte[] { 1, 1, 1 } );
             

@@ -18,14 +18,14 @@ using System.Threading.Tasks;
 
 namespace SecurityApiTest.Controller_Tests
 {
-    public class DashboardUnitTest
+    public class DashboardControllerUnitTest
     {
         Dashboard d1, d2, d3;
         List<Dashboard> dashboards;
         Mock<IDashboardService> mockService;
         DashboardController dashboardController;
 
-        public DashboardUnitTest()
+        public DashboardControllerUnitTest()
         {
             d1 = new Dashboard(1,"Sample Dashboard 1","Sample Message 1","", "", null, 1, "");
             d2 = new Dashboard(2,"Sample Dashboard 2","Sample Message 2","", "", null, 2, "");
