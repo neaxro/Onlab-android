@@ -204,7 +204,8 @@ namespace SecurityApiTest
                     Id = i,
                     Name = $"Wage {i}",
                     Price = (float)(i * 10.0),
-                    JobId = i
+                    JobId = i,
+                    Job = GetRandomJob(i),
                 };
 
                 wages.Add(wage);
