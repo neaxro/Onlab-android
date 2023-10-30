@@ -219,5 +219,6 @@ namespace SecurityApiTest
         public static Role GetRandomRole(int id) => GetRoles(id).FirstOrDefault(r => r.Id == id);
         public static Wage GetRandomWage(int id) => GetWages(id).FirstOrDefault(w => w.Id == id);
         public static State GetRandomState(int id) => GetStates(id).FirstOrDefault(s => s.Id == id);
+        public static Position GetRandomPosition(int id) => GetPositions(id).FirstOrDefault(p => p.Id == id);
     }
 }
