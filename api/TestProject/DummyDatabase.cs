@@ -1,4 +1,5 @@
-﻿using SecurityApi.Model;
+﻿using SecurityApi.Enums;
+using SecurityApi.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,6 +153,17 @@ namespace SecurityApiTest
 
             for (int i = 1; i <= count; i++)
             {
+                int stateId;
+
+                if(i % 4 == 0)
+                    stateId = DatabaseConstants.DENY_STATUS_ID;
+                else if(i % 3 == 0)
+                    stateId = DatabaseConstants.ACCEPTED_STATUS_ID;
+                else if(i % 2 == 0)
+                    stateId = DatabaseConstants.PROCESSING_STATUS_ID;
+                else
+                    stateId = DatabaseConstants.PENDING_STATUS_ID;
+
                 var shift = new Shift
                 {
                     Id = i,
@@ -161,7 +173,7 @@ namespace SecurityApiTest
                     PeopleId = i,
                     JobId = i,
                     WageId = i,
-                    StatusId = i,
+                    StatusId = stateId,
                     Job = GetRandomJob(i),
                     People = GetRandomPerson(i),
                     Status = GetRandomState(i),
