@@ -124,6 +124,7 @@
     <string name="composable_total_money">Teljes összeg:</string>
     <string name="composable__0f_ft_h">%.0f Ft/óra</string>
     <string name="composable__1f_ft_h">%.1f Ft/óra</string>
+    <string name="composable_hours">%.1f h</string>
     <string name="composable__1f_ft">%.1f Ft</string>
     <string name="composable_deny">Elutasítás</string>
     <string name="composable_accept">Elfogadás</string>

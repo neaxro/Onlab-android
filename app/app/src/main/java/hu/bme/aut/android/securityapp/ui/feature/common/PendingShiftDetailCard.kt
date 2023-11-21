@@ -137,7 +137,7 @@ fun PendingShiftDetailCard(
 
             DoubleDataRow(
                 title = { Text(text = stringResource(R.string.composable_total_hours)) },
-                value = { Text(text = String.format(stringResource(R.string.composable__1f_ft_h), shift.getTotalHours())) },
+                value = { Text(text = String.format(stringResource(R.string.composable_hours), shift.getTotalHours())) },
             )
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
