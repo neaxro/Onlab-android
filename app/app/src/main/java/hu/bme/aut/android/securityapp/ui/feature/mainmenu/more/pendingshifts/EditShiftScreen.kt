@@ -129,20 +129,6 @@ fun EditShiftScreen(
                     }
                 )
 
-                DoubleDataRow(
-                    title = { Text(text = stringResource(R.string.composable_default_wage_name)) },
-                    value = {
-                        Text(text = person.wage.name)
-                    }
-                )
-
-                DoubleDataRow(
-                    title = { Text(text = stringResource(R.string.composable_default_wage_price)) },
-                    value = {
-                        Text(text = String.format(stringResource(id = R.string.composable_0f_ft_hour), person.wage.price))
-                    }
-                )
-
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                 DoubleDataRow(
