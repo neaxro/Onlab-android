@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +31,10 @@ import hu.bme.aut.android.securityapp.ui.feature.common.MySnackbarHost
 import hu.bme.aut.android.securityapp.ui.feature.common.MyTopAppBar
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.shift.ShiftAction
 import hu.bme.aut.android.securityapp.ui.feature.mainmenu.shift.ShiftScreenViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
+import java.lang.Thread.sleep
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +49,17 @@ fun ShiftScreen(
 
     var checked by remember {
         mutableStateOf(false)
+    }
+
+    LaunchedEffect(shiftState){
+        coroutineScope {
+            while (shiftState.isActive){
+                viewModel.evoke(ShiftAction.RefreshData)
+                withContext(Dispatchers.IO) {
+                    sleep(5000)
+                }
+            }
+        }
     }
 
     Scaffold(
