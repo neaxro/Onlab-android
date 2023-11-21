@@ -78,7 +78,7 @@ class ShiftScreenViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    _screenState.value = ScreenState.Error(message = result.message!!)
+                    _screenState.value = ScreenState.Error(message = result.message!!, show = false)
                     _shiftState.update {
                         it.copy(
                             isActive = false,
